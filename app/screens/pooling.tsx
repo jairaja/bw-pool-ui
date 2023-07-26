@@ -1,31 +1,29 @@
 import { View, Text } from "@/app/components/Themed";
 import React from "react";
 import { StyleSheet, ScrollView, GestureResponderEvent } from "react-native";
-import { DataGrid } from "../components/DataGrid";
+import DataGrid from "../components/DataGrid";
 import test from "./../testData";
 
 //betterworldbits.com
 
 type PoolingProps = {};
 const Pooling: React.FunctionComponent<PoolingProps> = () => {
-  const [page, setPage] = React.useState<number>(0);
-  const numberOfItemsPerPageList = [5, 10, 15, 20];
-  const [itemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[0]
-  );
-
-  const [items, setItems] = React.useState();
-
-  const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, items.length);
-
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
+  const [items, setItems] = React.useState(test.items);
 
   return (
     <View style={styles.view}>
-      <Text style={styles.text}>Pooling</Text>
+      {/* <Text style={styles.text}>Pooling</Text> */}
+      {/* Filters */}
+
+      <DataGrid
+        items={items}
+        firstColMinWidhtFifty
+        columnsDef={[
+          { title: "Description", numberOfLines: 4, key: "desc" },
+          { title: "Share PP", numeric: true, key: "sharePp" },
+          { title: "Start Time", numeric: true, key: "startTime" },
+        ]}
+      />
     </View>
   );
 };

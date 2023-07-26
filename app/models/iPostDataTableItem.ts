@@ -1,9 +1,8 @@
 export default interface iPostDataTableItem{
-  key: number;
-  highlight: string;
-  share: number;
+  desc: string;
+  sharePp: number;
   startTime: number;
   startDate: string;
-  desc: string;
+  details: string;
   fromTo: string;
 };
