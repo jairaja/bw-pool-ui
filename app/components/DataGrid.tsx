@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { DataTable } from "react-native-paper";
 import iPostDataTableItem from "../models/iPostDataTableItem";
 
-type IDataGridHeader = {
+type DataGridHeaderProp = {
   sortDirection?: "ascending" | "descending";
   title: string;
   key: string;
@@ -11,20 +12,23 @@ type IDataGridHeader = {
   numberOfLines?: number;
 };
 
-interface IDataGridProps {
+interface DataGridProps {
   items: iPostDataTableItem[];
-  columnsDef: IDataGridHeader[];
+  columnsDef: DataGridHeaderProp[];
   firstColMinWidhtFifty?: boolean;
+  onRowPress?: (item: iPostDataTableItem) => void;
+  onScroll?: (nativeEvent: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
 
-const DataGrid = (props: IDataGridProps) => {
+const DataGrid = (props: DataGridProps) => {
   const [page, setPage] = React.useState<number>(0);
   const numberOfItemsPerPageList = [5, 10, 15, 20];
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
 
-  const items = props.items;
+  const { items, columnsDef, firstColMinWidhtFifty, onRowPress, onScroll } =
+    props;
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, items.length);
@@ -34,17 +38,16 @@ const DataGrid = (props: IDataGridProps) => {
   }, [itemsPerPage]);
 
   return (
-    <DataTable style={{ height: "100%" }}>
+    <DataTable style={styles.dataGrid}>
       <DataTable.Header>
-        {props.columnsDef.map((columnDef, index) => {
+        {columnsDef.map((columnDef, index) => {
           return (
             <DataTable.Title
               key={index}
               numeric={columnDef.numeric ?? false}
               numberOfLines={columnDef.numberOfLines ?? 1}
               style={{
-                minWidth:
-                  index === 0 && props.firstColMinWidhtFifty ? "50%" : "auto",
+                minWidth: index === 0 && firstColMinWidhtFifty ? "50%" : "auto",
               }}
             >
               {columnDef.title}
@@ -52,24 +55,24 @@ const DataGrid = (props: IDataGridProps) => {
           );
         })}
       </DataTable.Header>
-      <ScrollView>
+      <ScrollView onScroll={onScroll}>
         {items.slice(from, to).map((item, rowIndex) => (
           <DataTable.Row
             key={rowIndex}
             onPress={() => {
-              console.log("8888888888888 " + JSON.stringify(item));
+              if (onRowPress) {
+                onRowPress(item);
+              }
             }}
           >
-            {props.columnsDef.map((columnDef, colIndex) => {
+            {columnsDef.map((columnDef, colIndex) => {
               return (
                 <DataTable.Cell
                   key={colIndex}
                   numeric={columnDef.numeric ?? false}
                   style={{
                     minWidth:
-                      colIndex === 0 && props.firstColMinWidhtFifty
-                        ? "50%"
-                        : "auto",
+                      colIndex === 0 && firstColMinWidhtFifty ? "50%" : "auto",
                   }}
                 >
                   {item[columnDef.key]}
@@ -93,5 +96,11 @@ const DataGrid = (props: IDataGridProps) => {
     </DataTable>
   );
 };
+
+const styles = StyleSheet.create({
+  dataGrid: {
+    height: "100%",
+  },
+});
 
 export default DataGrid;
