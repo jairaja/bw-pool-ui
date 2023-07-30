@@ -3,11 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 // import { useTheme } from '@rneui/themed';
 import DrawerNavigator from './DrawerNavigator';
-import Pooling from '../views/pooling';
-import About from '../views/about';
-import Announcements from '../views/announcements';
-import Settings from '../views/settings';
-import Profile from '../views/profile';
+import Pooling from '../screens/pooling';
+import About from '../screens/about';
+import Announcements from '../screens/announcements';
+import Settings from '../screens/settings';
+import Profile from '../screens/profile';
 
 const Drawer = createDrawerNavigator();
 
