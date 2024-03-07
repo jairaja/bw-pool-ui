@@ -23,6 +23,8 @@ web-build/
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+MBAMSI.log
+*localappdata*/
 
 # macOS
 .DS_Store

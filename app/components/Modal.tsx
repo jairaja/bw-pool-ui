@@ -5,13 +5,14 @@ import { Divider, Portal, Modal as RNModal } from "react-native-paper";
 export type IModalProps = {
   visible: boolean;
   modalType?: "contact" | "info";
-  message: string;
+  message?: string;
+  component?: React.JSX.Element;
   heading?: string;
   onClose: () => void;
 };
 
 const Modal = (props: IModalProps) => {
-  const { visible, modalType, message, heading, onClose } = props;
+  const { visible, modalType, message, component, heading, onClose } = props;
 
   const [modalVisible, setModalVisible] = React.useState(false);
   const containerStyle = { padding: 20 };
@@ -41,7 +42,7 @@ const Modal = (props: IModalProps) => {
         ) : (
           <></>
         )}
-        <Text>{message}</Text>
+        {component ?? <Text>{message}</Text>}
       </RNModal>
     </Portal>
   );

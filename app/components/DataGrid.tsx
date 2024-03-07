@@ -1,5 +1,5 @@
 import React from "react";
-import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import type { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { ScrollView, StyleSheet } from "react-native";
 import { DataTable } from "react-native-paper";
 import iPostDataTableItem from "../models/iPostDataTableItem";
@@ -18,6 +18,7 @@ interface DataGridProps {
   firstColMinWidhtFifty?: boolean;
   onRowPress?: (item: iPostDataTableItem) => void;
   onScroll?: (nativeEvent: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onLayout?: (nativeEvent: LayoutChangeEvent) => void;
 }
 
 const DataGrid = (props: DataGridProps) => {
@@ -27,7 +28,7 @@ const DataGrid = (props: DataGridProps) => {
     numberOfItemsPerPageList[0]
   );
 
-  const { items, columnsDef, firstColMinWidhtFifty, onRowPress, onScroll } =
+  const { items, columnsDef, firstColMinWidhtFifty, onRowPress, onScroll, onLayout } =
     props;
 
   const from = page * itemsPerPage;
@@ -38,7 +39,7 @@ const DataGrid = (props: DataGridProps) => {
   }, [itemsPerPage]);
 
   return (
-    <DataTable style={styles.dataGrid}>
+    <DataTable style={styles.dataGrid} onLayout={onLayout}>
       <DataTable.Header>
         {columnsDef.map((columnDef, index) => {
           return (
