@@ -18,13 +18,13 @@ interface ChoiceButtonsProps {
   density?: "regular" | "small" | "medium" | "high";
   buttons: ButtonForChoiceButtons[];
   value: string | string[];
-  onValueChange: (value: string[]) => void;
+  onValueChange: (value: string | string[]) => void;
 }
 
 const ChoiceButtons = (props: ChoiceButtonsProps) => {
   const { buttons, isMultiSelect, density, value, onValueChange } = props;
 
-  const setValueSingleSelect = (value: string) => onValueChange([value]);
+  const setValueSingleSelect = (value: string) => onValueChange(value);
 
   const singleSelectChoiceButtons = (props: string) => {
     const [singleSelectValue, setSingleSelectValue] =
@@ -34,6 +34,7 @@ const ChoiceButtons = (props: ChoiceButtonsProps) => {
 
     return (
       <SegmentedButtons
+        multiSelect={false}
         value={singleSelectValue}
         onValueChange={setValueSingleSelect}
         density={density ?? "regular"}

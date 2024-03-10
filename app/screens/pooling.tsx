@@ -41,11 +41,17 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
 
   useEffect(() => {
     let getData = async function () {
-      let fetchPosts = await fetch(
-        "https://mocki.io/v1/cf332720-3b21-4c42-952a-aa41cd212520"
-      );
-      let posts = await fetchPosts.json();
-      setItems(posts ?? [...items]);
+      try {
+        // ToDo - move all network requests to one place
+        let fetchPosts = await fetch(
+          "https://mocki.io/v1/cf332720-3b21-4c42-952a-aa41cd212520"
+        );
+        let posts = await fetchPosts.json();
+        setItems(posts ?? [...items]);
+      } catch (error) {
+        // ToDo - show some error message / blocking or Ribbon or something
+        console.error(error);
+      }
     };
     getData();
   }, []);
@@ -60,9 +66,9 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     });
   };
 
-  const filtersChanged = (values: string[]) => {
+  const filtersChanged = (values: string | string[]) => {
     console.log(JSON.stringify(values));
-    setFilters(values);
+    setFilters(values as string[]);
   };
 
   const onScroll = (nativeEvent: NativeSyntheticEvent<NativeScrollEvent>) => {

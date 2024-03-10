@@ -1,6 +1,10 @@
 import React from "react";
-import type { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import { ScrollView, StyleSheet } from "react-native";
+import type {
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from "react-native";
+import { ScrollView, StyleSheet, Text } from "react-native";
 import { DataTable } from "react-native-paper";
 import iPostDataTableItem from "../models/iPostDataTableItem";
 
@@ -28,8 +32,14 @@ const DataGrid = (props: DataGridProps) => {
     numberOfItemsPerPageList[0]
   );
 
-  const { items, columnsDef, firstColMinWidhtFifty, onRowPress, onScroll, onLayout } =
-    props;
+  const {
+    items,
+    columnsDef,
+    firstColMinWidhtFifty,
+    onRowPress,
+    onScroll,
+    onLayout,
+  } = props;
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, items.length);
@@ -48,10 +58,14 @@ const DataGrid = (props: DataGridProps) => {
               numeric={columnDef.numeric ?? false}
               numberOfLines={columnDef.numberOfLines ?? 1}
               style={{
-                minWidth: index === 0 && firstColMinWidhtFifty ? "50%" : "auto",
+                ...{
+                  minWidth:
+                    index === 0 && firstColMinWidhtFifty ? "40%" : "auto",
+                },
+                ...styles.dataGridHeader,
               }}
             >
-              {columnDef.title}
+              <Text style={styles.dataGridHeaderText}>{columnDef.title}</Text>
             </DataTable.Title>
           );
         })}
@@ -60,6 +74,7 @@ const DataGrid = (props: DataGridProps) => {
         {items.slice(from, to).map((item, rowIndex) => (
           <DataTable.Row
             key={rowIndex}
+            style={styles.dataGridRow}
             onPress={() => {
               if (onRowPress) {
                 onRowPress(item);
@@ -72,11 +87,18 @@ const DataGrid = (props: DataGridProps) => {
                   key={colIndex}
                   numeric={columnDef.numeric ?? false}
                   style={{
+                    flexDirection: "row",
                     minWidth:
-                      colIndex === 0 && firstColMinWidhtFifty ? "50%" : "auto",
+                      colIndex === 0 && firstColMinWidhtFifty ? "43%" : "auto",
                   }}
                 >
-                  {item[columnDef.key]}
+                  <Text
+                    style={styles.dataGridRowText}
+                    numberOfLines={0}
+                    ellipsizeMode="tail"
+                  >
+                    {item[columnDef.key]}
+                  </Text>
                 </DataTable.Cell>
               );
             })}
@@ -101,6 +123,21 @@ const DataGrid = (props: DataGridProps) => {
 const styles = StyleSheet.create({
   dataGrid: {
     height: "100%",
+  },
+  dataGridHeader: {
+    height: 80,
+  },
+  dataGridHeaderText: {
+    flex: 1,
+    flexWrap: "wrap",
+  },
+  dataGridRow: {
+    height: 100,
+  },
+  dataGridRowText: {
+    flexWrap: "wrap",
+    height: "auto",
+    width: "40%",
   },
 });
 
