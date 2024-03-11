@@ -40,6 +40,11 @@ const Settings: React.FunctionComponent<SettingsProps> = () => {
               label: "Dark",
               showSelectedCheck: true,
             },
+            {
+              value: "systemTheme",
+              label: "System",
+              showSelectedCheck: true,
+            },
           ]}
         />
       </View>

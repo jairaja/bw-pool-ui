@@ -1,4 +1,4 @@
-import { Text } from "@/app/components/Themed";
+import { Button, Text } from "@/app/components/Themed";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Divider, Portal, Modal as RNModal } from "react-native-paper";
@@ -22,7 +22,6 @@ const Modal = (props: IModalProps) => {
     setModalVisible(visible);
   }, [visible]);
 
-
   //TODO add themed buttons
   const getModalFooter = function (modalType: IModalProps["modalType"]) {
     switch (modalType) {
@@ -35,7 +34,15 @@ const Modal = (props: IModalProps) => {
       case "yesNo":
         return <Text>yesNo</Text>;
       default:
-        return <Text>Ok</Text>;
+        return (
+          <Button
+            title="Cancel"
+            onPress={() => {
+              onClose();
+              setModalVisible(false);
+            }}
+          />
+        );
     }
   };
 
@@ -53,9 +60,7 @@ const Modal = (props: IModalProps) => {
         </View>
         <View style={styles.body}>{component ?? <Text>{message}</Text>}</View>
         <Divider style={styles.divider} />
-        <View style={styles.footer}>
-          {getModalFooter(modalType)}
-        </View>
+        <View style={styles.footer}>{getModalFooter(modalType)}</View>
       </RNModal>
     </Portal>
   );
@@ -70,7 +75,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "gray",
     top: "10%",
-
   },
   header: {
     height: "10%",

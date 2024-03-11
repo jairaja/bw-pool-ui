@@ -7,6 +7,7 @@ import type {
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { DataTable } from "react-native-paper";
 import iPostDataTableItem from "../models/iPostDataTableItem";
+import { View } from "./Themed";
 
 type DataGridHeaderProp = {
   sortDirection?: "ascending" | "descending";
@@ -87,15 +88,18 @@ const DataGrid = (props: DataGridProps) => {
                   key={colIndex}
                   numeric={columnDef.numeric ?? false}
                   style={{
-                    flexDirection: "row",
+                    // backgroundColor:'green',
+                    // flexDirection: "row",
+                    // justifyContent: "center",
+                    // flex: 1,
                     minWidth:
                       colIndex === 0 && firstColMinWidhtFifty ? "43%" : "auto",
                   }}
                 >
                   <Text
                     style={styles.dataGridRowText}
-                    numberOfLines={0}
-                    ellipsizeMode="tail"
+                    // numberOfLines={2}
+                    // ellipsizeMode="tail"
                   >
                     {item[columnDef.key]}
                   </Text>
@@ -135,9 +139,12 @@ const styles = StyleSheet.create({
     height: 100,
   },
   dataGridRowText: {
+    // textAlign: "center",
+    // marginVertical: 8,
     flexWrap: "wrap",
-    height: "auto",
-    width: "40%",
+    // backgroundColor: "red",
+    // height:200,
+    // width: "40%",
   },
 });
 
