@@ -1,17 +1,20 @@
 import { View, Text } from "@/app/components/Themed";
-import React, { useState } from "react";
+import React from "react";
 import ChoiceButtons from "../components/ChoiceButtons";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemeType } from "../models/themeType";
 
-type SettingsProps = {};
-const Settings: React.FunctionComponent<SettingsProps> = () => {
-  const [theme, setTheme] = useState("lightTheme");
-
+type SettingsPropsType = {
+  currentTheme: ThemeType;
+  updateTheme: (theme: ThemeType) => void;
+};
+const Settings: React.FunctionComponent<SettingsPropsType> = (
+  SettingsProps
+) => {
   const onThemeChanged = (value: string | string[]) => {
-    console.log(value);
     if (!Array.isArray(value)) {
-      setTheme(value);
+      SettingsProps.updateTheme(value as ThemeType);
     }
   };
 
@@ -27,21 +30,21 @@ const Settings: React.FunctionComponent<SettingsProps> = () => {
         <Text style={styles.text}>Theme : </Text>
         <ChoiceButtons
           density="small"
-          value={theme}
+          value={SettingsProps.currentTheme}
           onValueChange={onThemeChanged}
           buttons={[
             {
-              value: "lightTheme",
+              value: "light",
               label: "Light",
               showSelectedCheck: true,
             },
             {
-              value: "darkTheme",
+              value: "dark",
               label: "Dark",
               showSelectedCheck: true,
             },
             {
-              value: "systemTheme",
+              value: "system",
               label: "System",
               showSelectedCheck: true,
             },

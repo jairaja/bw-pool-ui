@@ -1,14 +1,8 @@
 import "react-native-gesture-handler";
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
-import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootNavigator from "./navigation/RootNavigator";
 import { Provider as PaperProvider } from "react-native-paper";
@@ -59,16 +53,10 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
     <PaperProvider>
       <SafeAreaProvider>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <RootNavigator />
-        </ThemeProvider>
+        <RootNavigator />
       </SafeAreaProvider>
     </PaperProvider>
   );

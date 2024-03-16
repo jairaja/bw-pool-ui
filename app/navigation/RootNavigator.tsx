@@ -1,56 +1,64 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-// import { useTheme } from '@rneui/themed';
-import DrawerNavigator from './DrawerNavigator';
-import Pooling from '../screens/pooling';
-import About from '../screens/about';
-import Announcements from '../screens/announcements';
-import Settings from '../screens/settings';
-import Profile from '../screens/profile';
+import React, { useState } from "react";
+import {
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import DrawerNavigator from "./DrawerNavigator";
+import Pooling from "../screens/pooling";
+import About from "../screens/about";
+import Announcements from "../screens/announcements";
+import Settings from "../screens/settings";
+import Profile from "../screens/profile";
+import { useColorScheme } from "react-native";
+import { ThemeType } from "../models/themeType";
 
 const Drawer = createDrawerNavigator();
 
 function RootNavigator() {
-//   const { theme } = useTheme();
+  // TODO - pick last saved theme value or from user's preferences
+  const systemTheme = useColorScheme() ?? "light";
+
+  const [themeValueForSettingsScreen, setThemeValueForSettingsScreen] =
+    useState<ThemeType>(systemTheme);
+
+  const [currentTheme, setCurrentTheme] =
+    useState<Exclude<ThemeType, "system">>(systemTheme);
+
+  const updateTheme = function (newTheme: ThemeType) {
+    const selectedTheme = newTheme === "system" ? systemTheme : newTheme;
+    setCurrentTheme(selectedTheme);
+    setThemeValueForSettingsScreen(newTheme);
+  };
 
   return (
-    <NavigationContainer independent
-    //   theme={{
-    //     colors: {
-    //       background: theme?.colors.background,
-    //       primary: '',
-    //       card: '',
-    //       text: '',
-    //       border: '',
-    //       notification: '',
-    //     },
-    //     dark: theme.mode === 'dark',
-    //   }}
+    <NavigationContainer
+      independent
+      theme={currentTheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <Drawer.Navigator
-        drawerContent={DrawerNavigator}
-
-        // drawerContentOptions={{
-        //   activeTintColor: theme?.colors?.secondary,
-        //   activeBackgroundColor: 'transparent',
-        //   inactiveTintColor: theme?.colors?.grey0,
-        //   inactiveBackgroundColor: 'transparent',
-        //   labelStyle: {
-        //     fontSize: 15,
-        //     marginLeft: 0,
-        //   },
-        // }}
-        // drawerStyle={{
-        //   backgroundColor: theme?.colors?.grey4,
-        // }}
-      >
+      <Drawer.Navigator drawerContent={DrawerNavigator}>
         <Drawer.Screen name="Pooling" component={Pooling} />
         <Drawer.Screen name="Announcements" component={Announcements} />
-        <Drawer.Screen name="Settings" component={Settings} />
+        {/* <Drawer.Screen name="Settings">
+          {() => (
+            <Settings
+              currentTheme={themeValueForSettingsScreen}
+              updateTheme={updateTheme}
+            />
+          )}
+        </Drawer.Screen> */}
+        <Drawer.Screen
+          name="Settings"
+          children={() => (
+            <Settings
+              currentTheme={themeValueForSettingsScreen}
+              updateTheme={updateTheme}
+            />
+          )}
+        />
         <Drawer.Screen name="Profile" component={Profile} />
         <Drawer.Screen name="About" component={About} />
-
       </Drawer.Navigator>
     </NavigationContainer>
   );
