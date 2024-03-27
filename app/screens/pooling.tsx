@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
 import { IsIOS } from "../utils/helpers";
-import test from "../utils/testData";
+// import test from "../utils/testData";
 import ChoiceButtons from "../components/ChoiceButtons";
-import DataGrid from "../components/DataGrid";
-import FloatingButton from "../components/FloatingButton";
+import DataGrid from "../components/dataGrid/dataGrid";
+import FloatingButton from "../components/floatingButton/floatingButton";
 import Modal, { IModalProps } from "../components/Modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import iPostDataTableItem from "../models/iPostDataTableItem";
@@ -65,6 +65,15 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
       heading: item.fromTo,
     });
   };
+
+  const createNewPost = ()=>{
+    setModalProps({
+      ...modalProps,
+      visible: true,
+      message: 'New Post Form here',
+      heading: "New Post",
+    });
+  }
 
   const filtersChanged = (values: string | string[]) => {
     console.log(JSON.stringify(values));
@@ -149,6 +158,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
           label={"Post"}
           animateFrom={"left"}
           iconMode={"dynamic"}
+          onPress={createNewPost}
           style={styles.addPostButton}
         />
 

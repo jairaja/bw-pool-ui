@@ -5,14 +5,14 @@ import {
   DefaultTheme,
 } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import DrawerNavigator from "./DrawerNavigator";
-import Pooling from "../screens/pooling";
-import About from "../screens/about";
-import Announcements from "../screens/announcements";
-import Settings from "../screens/settings";
-import Profile from "../screens/profile";
+import DrawerNavigator from "../DrawerNavigator";
+import Pooling from "../../screens/pooling";
+import About from "../../screens/about";
+import Announcements from "../../screens/announcements";
+import Settings from "../../screens/settings";
+import Profile from "../../screens/profile";
 import { useColorScheme } from "react-native";
-import { ThemeType } from "../models/themeType";
+import { ThemeType } from "../../models/themeType";
 
 const Drawer = createDrawerNavigator();
 

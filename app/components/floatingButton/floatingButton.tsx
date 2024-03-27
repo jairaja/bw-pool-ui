@@ -1,7 +1,13 @@
 import React from "react";
-import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import {
+  Animated,
+  GestureResponderEvent,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 import { AnimatedFAB, useTheme } from "react-native-paper";
-import { IsIOS } from "../utils/helpers";
+import { IsIOS } from "../../utils/helpers";
+import styles from "./floatingButton.style";
 
 type FloatingButtonProps = {
   animatedValue: Animated.Value;
@@ -11,6 +17,7 @@ type FloatingButtonProps = {
   animateFrom: "left" | "right";
   iconMode?: "static" | "dynamic";
   style?: StyleProp<ViewStyle>;
+  onPress?: (e: GestureResponderEvent) => void;
   // iconName?: string;
 };
 
@@ -22,6 +29,7 @@ const FloatingButton = ({
   animateFrom,
   style,
   iconMode,
+  onPress,
 }: FloatingButtonProps) => {
   const [isExtended, setIsExtended] = React.useState(true);
   const { isV3 } = useTheme();
@@ -42,7 +50,7 @@ const FloatingButton = ({
       label={label}
       extended={isExtended}
       uppercase={!isV3}
-      onPress={() => console.log("Pressed")}
+      onPress={onPress}
       visible={visible}
       animateFrom={animateFrom}
       iconMode={iconMode}
@@ -53,10 +61,3 @@ const FloatingButton = ({
 };
 
 export default FloatingButton;
-
-const styles = StyleSheet.create({
-  fabStyle: {
-    bottom: 80,
-    position: "absolute",
-  },
-});

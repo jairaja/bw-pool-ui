@@ -41,3 +41,7 @@ MBAMSI.log
 
 expo-env.d.ts
 # @end expo-cli
+
+coverage/**/*
+
+# **/__snapshots__

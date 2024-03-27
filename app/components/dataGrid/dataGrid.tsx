@@ -4,10 +4,11 @@ import type {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from "react-native";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { DataTable } from "react-native-paper";
-import iPostDataTableItem from "../models/iPostDataTableItem";
-import { View } from "./Themed";
+import iPostDataTableItem from "../../models/iPostDataTableItem";
+// import { View } from "../Themed";
+import styles from "./dataGrid.style";
 
 type DataGridHeaderProp = {
   sortDirection?: "ascending" | "descending";
@@ -28,7 +29,8 @@ interface DataGridProps {
 
 const DataGrid = (props: DataGridProps) => {
   const [page, setPage] = React.useState<number>(0);
-  const numberOfItemsPerPageList = [5, 10, 15, 20];
+  const numberOfItemsPerPageList = [4, 8, 12, 16];
+  // const numberOfItemsPerPageList = [5, 10, 15, 20];
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
@@ -123,29 +125,5 @@ const DataGrid = (props: DataGridProps) => {
     </DataTable>
   );
 };
-
-const styles = StyleSheet.create({
-  dataGrid: {
-    height: "100%",
-  },
-  dataGridHeader: {
-    height: 80,
-  },
-  dataGridHeaderText: {
-    flex: 1,
-    flexWrap: "wrap",
-  },
-  dataGridRow: {
-    height: 100,
-  },
-  dataGridRowText: {
-    // textAlign: "center",
-    // marginVertical: 8,
-    flexWrap: "wrap",
-    // backgroundColor: "red",
-    // height:200,
-    // width: "40%",
-  },
-});
 
 export default DataGrid;
