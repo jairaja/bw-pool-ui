@@ -23,6 +23,8 @@ web-build/
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+MBAMSI.log
+*localappdata*/
 
 # macOS
 .DS_Store
@@ -39,3 +41,7 @@ yarn-error.*
 
 expo-env.d.ts
 # @end expo-cli
+
+coverage/**/*
+
+# **/__snapshots__
