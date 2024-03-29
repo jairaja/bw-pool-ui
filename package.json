@@ -11,7 +11,8 @@
     "testDebug": "jest -o --watch --coverage=false",
     "testFinal": "jest",
     "updateSnapshots": "jest -u --coverage=false",
-    "server": "node server/postData.js"
+    "server": "node server/postData.js",
+    "serveFromWebServer":"serve -s build -l 8080"
   },
   "jest": {
     "preset": "jest-expo",

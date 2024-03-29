@@ -5,71 +5,38 @@
 
 import {
   Text as DefaultText,
-  useColorScheme,
   View as DefaultView,
   Switch as DefaultSwitch,
   Button as DefaultButton,
 } from "react-native";
+import React from "react";
+import { useThemeColor } from "../utils/themeHelper";
 
-import Colors from "@/app/constants/Colors";
+// export type TextProps = ThemeProps & DefaultText["props"];
 
-type ThemeProps = {
-  lightColor?: string;
-  darkColor?: string;
-};
 
-export type TextProps = ThemeProps & DefaultText["props"];
-export type ViewProps = ThemeProps & DefaultView["props"];
-export type SwitchProps = ThemeProps & DefaultSwitch["props"];
-export type ButttonProps = ThemeProps & DefaultButton["props"];
-
-export function useThemeColor(
-  props: { light?: string; dark?: string },
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark
-) {
-  const theme = useColorScheme() ?? "light";
-  const colorFromProps = props[theme];
-
-  if (colorFromProps) {
-    return colorFromProps;
-  } else {
-    return Colors[theme][colorName];
-  }
-}
-
-export function Text(props: TextProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-
+export function Text(props: DefaultText["props"]) {
+  const { style, ...otherProps } = props;
+  const color = useThemeColor("text");
   return <DefaultText style={[{ color }, style]} {...otherProps} />;
 }
 
-export function View(props: ViewProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background"
-  );
+export function View(props: DefaultView["props"]) {
+  const { style, ...otherProps } = props;
+  const backgroundColor = useThemeColor("background");
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
-export function Switch(props: SwitchProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background"
-  );
+export function Switch(props: DefaultSwitch["props"]) {
+  const { style, ...otherProps } = props;
+  const backgroundColor = useThemeColor("background");
 
   return <DefaultSwitch style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
-export function Button(props: ButttonProps) {
-  const { lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background"
-  );
-
-  return <DefaultButton color={ backgroundColor } {...otherProps} />;
+export function Button(props: DefaultButton["props"]) {
+  const { color, ...otherProps } = props;
+  const themeColor = useThemeColor("text");
+  return <DefaultButton color={themeColor} {...otherProps} />;
 }

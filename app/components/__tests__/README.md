@@ -1,0 +1,2 @@
+1. Tests for smaller / atomic components go in this folder. If the component code increases and has its own folder, then a new __test__ folder should be added and tests from this folder moves to local test folder.
+2. Tests for larger / complex components go in their respective test folder.

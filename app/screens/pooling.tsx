@@ -3,14 +3,14 @@ import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
 import { IsIOS } from "../utils/helpers";
-// import test from "../utils/testData";
-import ChoiceButtons from "../components/ChoiceButtons";
 import DataGrid from "../components/dataGrid/dataGrid";
 import FloatingButton from "../components/floatingButton/floatingButton";
-import Modal, { IModalProps } from "../components/Modal";
+import Modal, { ModalPropsType } from "../components/Modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import iPostDataTableItem from "../models/iPostDataTableItem";
-import { Button } from "react-native-paper";
+import { Button as ButtonWithIcon } from "react-native-paper";
+import MultiSelect from "../components/choiceButtons/multiSelect";
+import { themePrimaryColorOverridden } from "../utils/themeHelper";
 
 //betterworldbits.com
 //bwapps.com
@@ -18,10 +18,9 @@ import { Button } from "react-native-paper";
 type PoolingProps = {};
 
 const Pooling: React.FunctionComponent<PoolingProps> = () => {
-  // const [items, setItems] = useState(test.items);
   const [items, setItems] = useState([]);
   const onModalClose = () => {
-    setModalProps({ ...modalProps, visible: false, message: "" });
+    setModalProps({ ...modalProps, visible: false });
   };
 
   const { current: velocity } = React.useRef<Animated.Value>(
@@ -30,12 +29,12 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
 
   const [extended, setExtended] = useState<boolean>(true);
 
-  const [modalProps, setModalProps] = useState({
+  const [modalProps, setModalProps] = useState<ModalPropsType>({
     visible: false,
     message: "",
     component: undefined,
     onClose: onModalClose,
-  } as IModalProps);
+  });
 
   const [filters, setFilters] = useState([] as string[]);
 
@@ -66,14 +65,14 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     });
   };
 
-  const createNewPost = ()=>{
+  const createNewPost = () => {
     setModalProps({
       ...modalProps,
       visible: true,
-      message: 'New Post Form here',
+      message: "New Post Form here",
       heading: "New Post",
     });
-  }
+  };
 
   const filtersChanged = (values: string | string[]) => {
     console.log(JSON.stringify(values));
@@ -103,8 +102,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
       <View style={styles.view}>
         <View style={styles.filters}>
           <Text style={styles.text}>Filters : </Text>
-          <ChoiceButtons
-            isMultiSelect
+          <MultiSelect
             density="small"
             value={filters}
             onValueChange={filtersChanged}
@@ -121,19 +119,21 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
               },
             ]}
           />
-          <Button
+          <ButtonWithIcon
             icon="filter-variant"
             onTouchStart={() => {
               setModalProps({
                 ...modalProps,
                 visible: true,
-                component: <Button>"Filters Modal Body ToDo"</Button>,
+                message: "Filters Modal Body ToDo",
+                // component: <Button>"Filters Modal Body ToDo"</Button>,
                 heading: "Select Filters:",
               });
             }}
+            theme={themePrimaryColorOverridden("text")}
           >
             {" "}
-          </Button>
+          </ButtonWithIcon>
         </View>
 
         {items.length > 0 && (

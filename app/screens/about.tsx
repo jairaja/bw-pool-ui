@@ -1,27 +1,33 @@
-import { View, Text } from '@/app/components/Themed';
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Text, View } from "@/app/components/Themed";
+import React from "react";
+import { StyleSheet } from "react-native";
+// import { useTheme } from "@react-navigation/native";
 
 type AboutProps = {};
+// const { colors } = useTheme();
+// function GetThemeColor() {
+//   return useTheme().colors;
+// }
+
 const About: React.FunctionComponent<AboutProps> = () => {
+  // const { colors } = useTheme();
+
+  // console.log(colors);
 
   return (
-    <>
-      <View style={styles.view}>
-        <Text style={styles.text} >
-          About screen
-        </Text>
-      </View>
-    </>
+    <View style={styles.view}>
+      <Text style={styles.text}>About screen</Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   view: {
     margin: 10,
+    // backgroundColor: GetThemeColor().card,
   },
   text: {
-    textAlign: 'center',
+    textAlign: "center",
     padding: 5,
   },
   more: {
@@ -29,8 +35,8 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 120,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
 

@@ -1,9 +1,9 @@
 import { View, Text } from "@/app/components/Themed";
 import React from "react";
-import ChoiceButtons from "../components/ChoiceButtons";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeType } from "../models/themeType";
+import SingleSelect from "../components/choiceButtons/singleSelect";
 
 type SettingsPropsType = {
   currentTheme: ThemeType;
@@ -28,7 +28,7 @@ const Settings: React.FunctionComponent<SettingsPropsType> = (
     >
       <View style={styles.view}>
         <Text style={styles.text}>Theme : </Text>
-        <ChoiceButtons
+        <SingleSelect
           density="small"
           value={SettingsProps.currentTheme}
           onValueChange={onThemeChanged}

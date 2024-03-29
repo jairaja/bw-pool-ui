@@ -4,7 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import RootNavigator from "./navigation/rootNavigator/rootNavigator";
+import RootNavigator from "./navigation/rootNavigator";
 import { Provider as PaperProvider } from "react-native-paper";
 
 export {
