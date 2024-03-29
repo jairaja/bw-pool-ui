@@ -1,4 +1,4 @@
-import { Text, View } from "@/app/components/Themed";
+import { Text, View } from "@/app/components/themed";
 import React from "react";
 import { Button as ButtonWithIcon } from "react-native-paper";
 import { StyleSheet } from "react-native";
@@ -8,21 +8,13 @@ import { themePrimaryColorOverridden } from "../utils/themeHelper";
 export type ModalPropsType = {
   visible: boolean;
   modalType?: "contact" | "info" | "confirmCancel" | "yesNo";
-  message?: string;
-  component?: React.JSX.Element;
+  componentOrMessage?: React.ReactNode | string;
   heading?: string;
   onClose: () => void;
 };
 
 const Modal = (props: ModalPropsType) => {
-  const { visible, modalType, message, component, heading, onClose } = props;
-
-  const [modalVisible, setModalVisible] = React.useState(visible);
-  const containerStyle = { padding: 20 };
-
-  React.useEffect(() => {
-    setModalVisible(visible);
-  }, [visible]);
+  const { visible, modalType, componentOrMessage, heading, onClose } = props;
 
   //TODO add themed buttons
   const getModalFooter = function (modalType: ModalPropsType["modalType"]) {
@@ -50,22 +42,25 @@ const Modal = (props: ModalPropsType) => {
     }
   };
 
-  console.log("rendering modal" + heading);
-
   return (
     <Portal>
       <RNModal
         // theme={useTheme()}
         style={styles.rnModal}
-        visible={modalVisible}
+        visible={visible}
         onDismiss={onClose}
-        contentContainerStyle={containerStyle}
       >
         <View style={styles.header}>
           <Text style={styles.headerText}>{heading ?? "Info"}</Text>
           <Divider style={styles.divider} />
         </View>
-        <View style={styles.body}>{component ?? <Text>{message}</Text>}</View>
+        <View style={styles.body}>
+          {typeof componentOrMessage === "string" ? (
+            <Text>{componentOrMessage}</Text>
+          ) : (
+            componentOrMessage
+          )}
+        </View>
         <Divider style={styles.divider} />
         <View style={styles.footer}>{getModalFooter(modalType)}</View>
       </RNModal>
@@ -79,6 +74,7 @@ const styles = StyleSheet.create({
   rnModal: {
     height: "75%",
     margin: 10,
+    padding: 20,
     borderRadius: 5,
     backgroundColor: "rgb(240,240,240)",
     top: "10%",

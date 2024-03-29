@@ -1,16 +1,17 @@
-import { Text, View } from "@/app/components/Themed";
+import { Text, View } from "@/app/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
 import { IsIOS } from "../utils/helpers";
-import DataGrid from "../components/dataGrid/dataGrid";
-import FloatingButton from "../components/floatingButton/floatingButton";
-import Modal, { ModalPropsType } from "../components/Modal";
+import DataGrid from "../components/dataGrid/_layout";
+import FloatingButton from "../components/floatingButton/_layout";
+import Modal, { ModalPropsType } from "../components/modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import iPostDataTableItem from "../models/iPostDataTableItem";
 import { Button as ButtonWithIcon } from "react-native-paper";
 import MultiSelect from "../components/choiceButtons/multiSelect";
 import { themePrimaryColorOverridden } from "../utils/themeHelper";
+import NewPost from "./smartComponents/newPost";
 
 //betterworldbits.com
 //bwapps.com
@@ -31,8 +32,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
 
   const [modalProps, setModalProps] = useState<ModalPropsType>({
     visible: false,
-    message: "",
-    component: undefined,
+    componentOrMessage: "",
     onClose: onModalClose,
   });
 
@@ -60,7 +60,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     setModalProps({
       ...modalProps,
       visible: true,
-      message: item.desc,
+      componentOrMessage: item.desc,
       heading: item.fromTo,
     });
   };
@@ -69,7 +69,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     setModalProps({
       ...modalProps,
       visible: true,
-      message: "New Post Form here",
+      componentOrMessage: <NewPost />,
       heading: "New Post",
     });
   };
@@ -125,7 +125,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
               setModalProps({
                 ...modalProps,
                 visible: true,
-                message: "Filters Modal Body ToDo",
+                componentOrMessage: "Filters Modal Body ToDo",
                 // component: <Button>"Filters Modal Body ToDo"</Button>,
                 heading: "Select Filters:",
               });
@@ -164,7 +164,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
 
         <Modal
           visible={modalProps.visible}
-          message={modalProps.message}
+          componentOrMessage={modalProps.componentOrMessage}
           onClose={modalProps.onClose}
           heading={modalProps.heading}
         />

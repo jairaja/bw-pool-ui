@@ -5,7 +5,7 @@ import type {
   NativeSyntheticEvent,
 } from "react-native";
 import { ScrollView } from "react-native";
-import { Text } from "@/app/components/Themed";
+import { Text } from "@/app/components/themed";
 
 import { DataTable } from "react-native-paper";
 import iPostDataTableItem from "../../models/iPostDataTableItem";
@@ -124,7 +124,7 @@ const DataGrid = (props: DataGridProps) => {
         showFastPaginationControls
         selectPageDropdownLabel={<Text>Rows per page</Text>}
         style={{ backgroundColor: useThemeColor("themedGray") }}
-        theme={themePrimaryColorOverridden('text')}
+        theme={themePrimaryColorOverridden("text")}
       />
     </DataTable>
   );

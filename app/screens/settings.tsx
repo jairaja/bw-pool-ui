@@ -1,4 +1,4 @@
-import { View, Text } from "@/app/components/Themed";
+import { View, Text } from "@/app/components/themed";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
