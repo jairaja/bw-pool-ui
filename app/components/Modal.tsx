@@ -1,9 +1,11 @@
-import { Button, Text } from "@/app/components/Themed";
+import { Text, View } from "@/app/components/Themed";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Button as ButtonWithIcon } from "react-native-paper";
+import { StyleSheet } from "react-native";
 import { Divider, Portal, Modal as RNModal } from "react-native-paper";
+import { themePrimaryColorOverridden } from "../utils/themeHelper";
 
-export type IModalProps = {
+export type ModalPropsType = {
   visible: boolean;
   modalType?: "contact" | "info" | "confirmCancel" | "yesNo";
   message?: string;
@@ -12,10 +14,10 @@ export type IModalProps = {
   onClose: () => void;
 };
 
-const Modal = (props: IModalProps) => {
+const Modal = (props: ModalPropsType) => {
   const { visible, modalType, message, component, heading, onClose } = props;
 
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [modalVisible, setModalVisible] = React.useState(visible);
   const containerStyle = { padding: 20 };
 
   React.useEffect(() => {
@@ -23,7 +25,7 @@ const Modal = (props: IModalProps) => {
   }, [visible]);
 
   //TODO add themed buttons
-  const getModalFooter = function (modalType: IModalProps["modalType"]) {
+  const getModalFooter = function (modalType: ModalPropsType["modalType"]) {
     switch (modalType) {
       case "contact":
         return <Text>Contact</Text>;
@@ -35,20 +37,25 @@ const Modal = (props: IModalProps) => {
         return <Text>yesNo</Text>;
       default:
         return (
-          <Button
-            title="Cancel"
+          <ButtonWithIcon
+            theme={themePrimaryColorOverridden("gray")}
+            // style
             onPress={() => {
               onClose();
-              setModalVisible(false);
             }}
-          />
+          >
+            Cancel
+          </ButtonWithIcon>
         );
     }
   };
 
+  console.log("rendering modal" + heading);
+
   return (
     <Portal>
       <RNModal
+        // theme={useTheme()}
         style={styles.rnModal}
         visible={modalVisible}
         onDismiss={onClose}
@@ -73,7 +80,7 @@ const styles = StyleSheet.create({
     height: "75%",
     margin: 10,
     borderRadius: 5,
-    backgroundColor: "gray",
+    backgroundColor: "rgb(240,240,240)",
     top: "10%",
   },
   header: {

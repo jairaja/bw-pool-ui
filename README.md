@@ -1,5 +1,24 @@
 # bw-pool-ui
 
+/\*\*
+
+- The idea is around creating a car-pooling app for small communities, etc.
+  \*/
+
+/\*\*
+
+- This file contains the README for the BetterWorld Pool UI project.
+-
+- The code in this file, including any parts of it, can be used, reproduced, and modified
+- for personal, professional, or commercial purposes without needing the consent of the owner.
+-
+- Please note that while the code can be freely used, the owner of the code may not be liable
+- for any damages or issues that may arise from its use. It is always recommended to review and
+- test the code thoroughly before using it in any production environment.
+-
+- Thank you for using the BetterWorld Pool UI code!
+  \*/
+
 ### `Clone the Project`
 
 Clone the project on your local machine.
@@ -17,6 +36,7 @@ For mobile, get mock data from - https://mocki.io/v1/cf332720-3b21-4c42-952a-aa4
 ### `Run app(expo)`
 
 Start Expo bundler for android, ios apps and web - Run `npm start`
+Got Expo mobile app from respective app store, scan the QR code (_generated in terminal_) to launch the app
 
 ### `Run Tests`
 

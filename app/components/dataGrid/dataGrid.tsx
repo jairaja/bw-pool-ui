@@ -4,11 +4,16 @@ import type {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from "react-native";
-import { ScrollView, Text } from "react-native";
+import { ScrollView } from "react-native";
+import { Text } from "@/app/components/Themed";
+
 import { DataTable } from "react-native-paper";
 import iPostDataTableItem from "../../models/iPostDataTableItem";
-// import { View } from "../Themed";
 import styles from "./dataGrid.style";
+import {
+  themePrimaryColorOverridden,
+  useThemeColor,
+} from "@/app/utils/themeHelper";
 
 type DataGridHeaderProp = {
   sortDirection?: "ascending" | "descending";
@@ -31,7 +36,7 @@ const DataGrid = (props: DataGridProps) => {
   const [page, setPage] = React.useState<number>(0);
   const numberOfItemsPerPageList = [4, 8, 12, 16];
   // const numberOfItemsPerPageList = [5, 10, 15, 20];
-  const [itemsPerPage, onItemsPerPageChange] = React.useState(
+  const [itemsPerPage, setItemsPerPage] = React.useState(
     numberOfItemsPerPageList[0]
   );
 
@@ -61,10 +66,7 @@ const DataGrid = (props: DataGridProps) => {
               numeric={columnDef.numeric ?? false}
               numberOfLines={columnDef.numberOfLines ?? 1}
               style={{
-                ...{
-                  minWidth:
-                    index === 0 && firstColMinWidhtFifty ? "40%" : "auto",
-                },
+                minWidth: index === 0 && firstColMinWidhtFifty ? "40%" : "auto",
                 ...styles.dataGridHeader,
               }}
             >
@@ -115,12 +117,14 @@ const DataGrid = (props: DataGridProps) => {
         page={page}
         numberOfPages={Math.ceil(items.length / itemsPerPage)}
         onPageChange={(page) => setPage(page)}
-        label={`${from + 1}-${to} of ${items.length}`}
+        label={<Text>{`${from + 1}-${to} of ${items.length}`}</Text>}
         numberOfItemsPerPageList={numberOfItemsPerPageList}
         numberOfItemsPerPage={itemsPerPage}
-        onItemsPerPageChange={onItemsPerPageChange}
+        onItemsPerPageChange={setItemsPerPage}
         showFastPaginationControls
-        selectPageDropdownLabel={"Rows per page"}
+        selectPageDropdownLabel={<Text>Rows per page</Text>}
+        style={{ backgroundColor: useThemeColor("themedGray") }}
+        theme={themePrimaryColorOverridden('text')}
       />
     </DataTable>
   );

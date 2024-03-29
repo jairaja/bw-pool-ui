@@ -1,5 +1,4 @@
 import React from "react";
-// import renderer, { TestRendererOptions } from "react-test-renderer";
 import renderer from "react-test-renderer";
 import { Provider as PaperProvider } from "react-native-paper";
 
