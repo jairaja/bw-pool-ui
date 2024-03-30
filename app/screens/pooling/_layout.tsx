@@ -2,16 +2,16 @@ import { Text, View } from "@/app/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
-import { IsIOS } from "../utils/helpers";
-import DataGrid from "../components/dataGrid/_layout";
-import FloatingButton from "../components/floatingButton/_layout";
-import Modal, { ModalPropsType } from "../components/modal";
+import { IsIOS } from "../../utils/helpers";
+import DataGrid from "../../components/dataGrid/_layout";
+import FloatingButton from "../../components/floatingButton/_layout";
+import Modal, { ModalPropsType } from "../../components/modal";
 import { SafeAreaView } from "react-native-safe-area-context";
-import iPostDataTableItem from "../models/iPostDataTableItem";
+import iPostDataTableItem from "../../models/iPostDataTableItem";
 import { Button as ButtonWithIcon } from "react-native-paper";
-import MultiSelect from "../components/choiceButtons/multiSelect";
-import { themePrimaryColorOverridden } from "../utils/themeHelper";
-import NewPost from "./smartComponents/newPost";
+import MultiSelect from "../../components/choiceButtons/multiSelect";
+import { themePrimaryColorOverridden } from "../../utils/themeHelper";
+import NewPost from "./newPost";
 
 //betterworldbits.com
 //bwapps.com
@@ -39,13 +39,22 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
   const [filters, setFilters] = useState([] as string[]);
 
   useEffect(() => {
-    let getData = async function () {
+    const getData = async function () {
       try {
         // ToDo - move all network requests to one place
-        let fetchPosts = await fetch(
-          "https://mocki.io/v1/cf332720-3b21-4c42-952a-aa41cd212520"
+        const fetchPosts = await fetch(
+          "https://mocki.io/v1/cf332720-3b21-4c42-952a-aa41cd212520",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
         );
-        let posts = await fetchPosts.json();
+        console.log(fetchPosts);
+        const posts = await fetchPosts.json();
+        console.log(posts);
         setItems(posts ?? [...items]);
       } catch (error) {
         // ToDo - show some error message / blocking or Ribbon or something

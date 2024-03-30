@@ -8,7 +8,7 @@ import { themePrimaryColorOverridden } from "../utils/themeHelper";
 export type ModalPropsType = {
   visible: boolean;
   modalType?: "contact" | "info" | "confirmCancel" | "yesNo";
-  componentOrMessage?: React.ReactNode | string;
+  componentOrMessage: React.ReactNode;
   heading?: string;
   onClose: () => void;
 };
@@ -55,12 +55,15 @@ const Modal = (props: ModalPropsType) => {
           <Divider style={styles.divider} />
         </View>
         <View style={styles.body}>
-          {typeof componentOrMessage === "string" ? (
+          {/* {typeof componentOrMessage === "string" ? (
             <Text>{componentOrMessage}</Text>
           ) : (
             componentOrMessage
-          )}
+          )} */}
+          componentOrMessage
         </View>
+
+        
         <Divider style={styles.divider} />
         <View style={styles.footer}>{getModalFooter(modalType)}</View>
       </RNModal>

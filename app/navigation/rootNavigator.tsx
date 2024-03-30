@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerNavigator from "./drawerNavigator";
-import Pooling from "../screens/pooling";
+import Pooling from "../screens/pooling/_layout";
 import About from "../screens/about";
 import Announcements from "../screens/announcements";
 import Settings from "../screens/settings";
@@ -64,7 +64,7 @@ function RootNavigator() {
       <Drawer.Navigator
         drawerContent={DrawerNavigator}
         initialRouteName="Pooling"
-        backBehavior="history"
+        // backBehavior="history"
         screenOptions={{
           headerStyle: {
             backgroundColor: currentThemeColors.colors.themedGray,

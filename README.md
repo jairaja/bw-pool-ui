@@ -1,23 +1,12 @@
 # bw-pool-ui
 
-/\*\*
 
-- The idea is around creating a car-pooling app for small communities, etc.
-  \*/
 
-/\*\*
+- BetterWorld-Pool => The idea is about creating a free and simple car-pooling app for small communities, etc.
+- The code in this repo, including any parts of it, can be used, and reproduced for personal, professional, or commercial purposes without needing the consent of the owner.
+- Please note that while the code can be freely used, the owner of the code may not be liable for any damages or issues that may arise from its use. It is always recommended to review and test the code thoroughly before using it in any production environment.
+- Thank you for using the bw-pool-ui code!
 
-- This file contains the README for the BetterWorld Pool UI project.
--
-- The code in this file, including any parts of it, can be used, reproduced, and modified
-- for personal, professional, or commercial purposes without needing the consent of the owner.
--
-- Please note that while the code can be freely used, the owner of the code may not be liable
-- for any damages or issues that may arise from its use. It is always recommended to review and
-- test the code thoroughly before using it in any production environment.
--
-- Thank you for using the BetterWorld Pool UI code!
-  \*/
 
 ### `Clone the Project`
 
