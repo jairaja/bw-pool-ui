@@ -10,11 +10,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import iPostDataTableItem from "../../models/iPostDataTableItem";
 import { Button as ButtonWithIcon } from "react-native-paper";
 import MultiSelect from "../../components/choiceButtons/multiSelect";
-import { themePrimaryColorOverridden } from "../../utils/themeHelper";
+import {
+  useThemeColor,
+} from "../../utils/themeHelper";
 import NewPost from "./newPost";
-
-//betterworldbits.com
-//bwapps.com
 
 type PoolingProps = {};
 
@@ -110,9 +109,29 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     >
       <View style={styles.view}>
         <View style={styles.filters}>
+          {/* <View style={styles.staticFilters}>
+            <TextWithChoiceButtons
+              label="Filters : "
+              mode="inline"
+              value={filters}
+              onValueChange={filtersChanged}
+              buttons={[
+                {
+                  value: "g2r",
+                  label: "Ggn2Rtk",
+                  showSelectedCheck: true,
+                },
+                {
+                  value: "r2g",
+                  label: "Rtk2Ggn",
+                  showSelectedCheck: true,
+                },
+              ]}
+              multiSelect
+            />
+          </View> */}
           <Text style={styles.text}>Filters : </Text>
           <MultiSelect
-            density="small"
             value={filters}
             onValueChange={filtersChanged}
             buttons={[
@@ -127,6 +146,8 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
                 showSelectedCheck: true,
               },
             ]}
+            //TODO - remove this multiSelect
+            multiSelect
           />
           <ButtonWithIcon
             icon="filter-variant"
@@ -139,7 +160,8 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
                 heading: "Select Filters:",
               });
             }}
-            theme={themePrimaryColorOverridden("text")}
+            textColor={useThemeColor("text")}
+            // theme={themePrimaryColorOverridden("text")}
           >
             {" "}
           </ButtonWithIcon>
@@ -169,6 +191,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
           iconMode={"dynamic"}
           onPress={createNewPost}
           style={styles.addPostButton}
+          icon={"plus"}
         />
 
         <Modal
@@ -183,34 +206,39 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
 };
 
 const styles = StyleSheet.create({
+  addPostButton: {
+    bottom: 40,
+    position: "absolute",
+  },
+  button: {
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: 120,
+  },
+  filters: {
+    alignItems: "center",
+    flexDirection: "row",
+    // justifyContent: "space-between",
+    marginBottom: 10,
+    marginTop: 10,
+    width: "75%",
+  },
+  more: {
+    marginVertical: 20,
+  },
+  staticFilters: {
+    backgroundColor: "red",
+    width: "85%",
+  },
+  text: {
+    padding: 5,
+    textAlign: "center",
+  },
   view: {
     // margin: 10,
     padding: 5,
     height: "100%",
     width: "100%",
-  },
-  text: {
-    textAlign: "center",
-    padding: 5,
-  },
-  more: {
-    marginVertical: 20,
-  },
-  button: {
-    width: 120,
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  addPostButton: {
-    bottom: 40,
-    position: "absolute",
-  },
-  filters: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    marginTop: 10,
-    marginBottom: 10,
   },
 });
 

@@ -1,12 +1,9 @@
 # bw-pool-ui
 
-
-
-- BetterWorld-Pool => The idea is about creating a free and simple car-pooling app for small communities, etc.
+- Better World Pool => The idea is about creating a simple and free car-pooling app for small communities, etc.
 - The code in this repo, including any parts of it, can be used, and reproduced for personal, professional, or commercial purposes without needing the consent of the owner.
 - Please note that while the code can be freely used, the owner of the code may not be liable for any damages or issues that may arise from its use. It is always recommended to review and test the code thoroughly before using it in any production environment.
 - Thank you for using the bw-pool-ui code!
-
 
 ### `Clone the Project`
 
@@ -32,3 +29,5 @@ Got Expo mobile app from respective app store, scan the QR code (_generated in t
 All tests, with watchall and coverage report - Run `npm test`
 
 Directory structure is tricky. For complex (react) component, make a folder and add all component related files (i.e. tests, style, sub-component, etc) there. For simpler/smaller component, single component file should be there and tests can go to **tests** folder in the parent folder.
+
+![screen_grab](https://github.com/jairaja/bw-pool-ui/blob/main/app/assets/screen-20240331-182755.gif)

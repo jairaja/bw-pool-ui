@@ -55,15 +55,13 @@ const Modal = (props: ModalPropsType) => {
           <Divider style={styles.divider} />
         </View>
         <View style={styles.body}>
-          {/* {typeof componentOrMessage === "string" ? (
+          {typeof componentOrMessage === "string" ? (
             <Text>{componentOrMessage}</Text>
           ) : (
             componentOrMessage
-          )} */}
-          componentOrMessage
+          )}
         </View>
 
-        
         <Divider style={styles.divider} />
         <View style={styles.footer}>{getModalFooter(modalType)}</View>
       </RNModal>
@@ -74,30 +72,30 @@ const Modal = (props: ModalPropsType) => {
 export default Modal;
 
 const styles = StyleSheet.create({
-  rnModal: {
-    height: "75%",
-    margin: 10,
-    padding: 20,
-    borderRadius: 5,
-    backgroundColor: "rgb(240,240,240)",
-    top: "10%",
-  },
-  header: {
-    height: "10%",
-  },
   body: {
     height: "80%",
   },
+  divider: {
+    backgroundColor: "lightgray",
+    height: 1,
+  },
   footer: {
-    height: "10%",
     alignItems: "center",
+    height: "10%",
+  },
+  header: {
+    height: "10%",
   },
   headerText: {
     height: "90%",
     textAlign: "center",
   },
-  divider: {
-    height: 1,
-    backgroundColor: "lightgray",
+  rnModal: {
+    backgroundColor: "rgb(240,240,240)",
+    borderRadius: 5,
+    height: "75%",
+    margin: 10,
+    padding: 20,
+    top: "10%",
   },
 });

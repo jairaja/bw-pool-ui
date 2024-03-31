@@ -1,38 +1,32 @@
 import React from "react";
-import { GestureResponderEvent } from "react-native";
 import SingleSelect from "./singleSelect";
 import MultiSelect from "./multiSelect";
+import { Props } from "react-native-paper/lib/typescript/src/components/SegmentedButtons/SegmentedButtons";
 
-type ButtonForChoiceButtons = {
-  value: string;
-  label: string;
-  icon?: string;
-  disabled?: boolean;
-  checkedColor?: string;
-  uncheckedColor?: string;
-  onPress?: (event: GestureResponderEvent) => void;
-  showSelectedCheck?: boolean;
-};
-
-export type ChoiceButtonsProps = {
-  isMultiSelect?: boolean;
-  density?: "regular" | "small" | "medium" | "high";
-  buttons: ButtonForChoiceButtons[];
-  value: string | string[];
-  onValueChange: (value: string | string[]) => void;
-};
+export type ChoiceButtonsProps = Props;
 
 const ChoiceButtons: React.FunctionComponent<ChoiceButtonsProps> = ({
   value,
-  isMultiSelect,
+  multiSelect,
+  onValueChange,
   ...otherProps
 }) => {
   return (
     <>
-      {isMultiSelect ? (
-        <MultiSelect value={value as string[]} {...otherProps} />
+      {multiSelect ? (
+        <MultiSelect
+          multiSelect={true}
+          value={value as string[]}
+          onValueChange={onValueChange as (value: string[]) => void}
+          {...otherProps}
+        />
       ) : (
-        <SingleSelect value={value as string} {...otherProps} />
+        <SingleSelect
+          multiSelect={false}
+          value={value as string}
+          onValueChange={onValueChange as (value: string) => void}
+          {...otherProps}
+        />
       )}
     </>
   );

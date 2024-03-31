@@ -36,7 +36,6 @@ export function Switch(props: DefaultSwitch["props"]) {
 }
 
 export function Button(props: DefaultButton["props"]) {
-  const { color, ...otherProps } = props;
   const themeColor = useThemeColor("text");
-  return <DefaultButton color={themeColor} {...otherProps} />;
+  return <DefaultButton {...props} color={themeColor} />;
 }
