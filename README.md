@@ -1,6 +1,6 @@
 # bw-pool-ui
 
-- Better World Pool => The idea is about creating a simple and free car-pooling app for small communities, etc.
+- Better World Pool => The concept involves developing a simple and free carpooling app tailored to small communities, etc.
 - The code in this repo, including any parts of it, can be used, and reproduced for personal, professional, or commercial purposes without needing the consent of the owner.
 - Please note that while the code can be freely used, the owner of the code may not be liable for any damages or issues that may arise from its use. It is always recommended to review and test the code thoroughly before using it in any production environment.
 - Thank you for using the bw-pool-ui code!
