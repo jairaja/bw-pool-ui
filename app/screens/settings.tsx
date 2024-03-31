@@ -1,4 +1,4 @@
-import { View, Text } from "@/app/components/Themed";
+import { View, Text } from "@/app/components/themed";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,16 +20,12 @@ const Settings: React.FunctionComponent<SettingsPropsType> = (
 
   return (
     <SafeAreaView
-      style={{
-        flex: 1,
-        height: "100%",
-      }}
+      style={styles.safeAreaContainer}
       edges={["right", "left", "bottom"]}
     >
       <View style={styles.view}>
         <Text style={styles.text}>Theme : </Text>
         <SingleSelect
-          density="small"
           value={SettingsProps.currentTheme}
           onValueChange={onThemeChanged}
           buttons={[
@@ -56,21 +52,18 @@ const Settings: React.FunctionComponent<SettingsPropsType> = (
 };
 
 const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1,
+    height: "100%",
+  },
+
+  text: {
+    marginBottom: 5,
+    padding: 5,
+    textAlign: "left",
+  },
   view: {
     margin: 10,
-  },
-  text: {
-    textAlign: "left",
-    padding: 5,
-    marginBottom: 5,
-  },
-  more: {
-    marginVertical: 20,
-  },
-  button: {
-    width: 120,
-    marginLeft: "auto",
-    marginRight: "auto",
   },
 });
 

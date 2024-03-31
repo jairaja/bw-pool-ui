@@ -1,16 +1,13 @@
-import { View, Text } from '@/app/components/Themed';
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import { View, Text } from "@/app/components/themed";
+import React from "react";
+import { StyleSheet } from "react-native";
 
 type ProfileProps = {};
 const Profile: React.FunctionComponent<ProfileProps> = () => {
-
   return (
     <>
       <View style={styles.view}>
-        <Text style={styles.text} >
-          Profile
-        </Text>
+        <Text style={styles.text}>Profile</Text>
       </View>
     </>
   );
@@ -21,7 +18,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   text: {
-    textAlign: 'center',
+    textAlign: "center",
     padding: 5,
   },
   more: {
@@ -29,8 +26,8 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 120,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
 

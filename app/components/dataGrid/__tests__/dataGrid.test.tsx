@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import DataGrid from "../dataGrid";
+import DataGrid from "../_layout";
 
 describe("DataGrid", () => {
   // const items = [

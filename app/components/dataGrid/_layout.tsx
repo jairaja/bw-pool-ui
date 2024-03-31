@@ -3,9 +3,11 @@ import type {
   LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import { ScrollView } from "react-native";
-import { Text } from "@/app/components/Themed";
+import { Text } from "@/app/components/themed";
 
 import { DataTable } from "react-native-paper";
 import iPostDataTableItem from "../../models/iPostDataTableItem";
@@ -56,6 +58,13 @@ const DataGrid = (props: DataGridProps) => {
     setPage(0);
   }, [itemsPerPage]);
 
+  const calculatedStyle = function (index: number): StyleProp<ViewStyle> {
+    return {
+      ...styles.dataGridHeader,
+      minWidth: index === 0 && firstColMinWidhtFifty ? "40%" : "auto",
+    };
+  };
+
   return (
     <DataTable style={styles.dataGrid} onLayout={onLayout}>
       <DataTable.Header>
@@ -65,10 +74,7 @@ const DataGrid = (props: DataGridProps) => {
               key={index}
               numeric={columnDef.numeric ?? false}
               numberOfLines={columnDef.numberOfLines ?? 1}
-              style={{
-                minWidth: index === 0 && firstColMinWidhtFifty ? "40%" : "auto",
-                ...styles.dataGridHeader,
-              }}
+              style={calculatedStyle(index)}
             >
               <Text style={styles.dataGridHeaderText}>{columnDef.title}</Text>
             </DataTable.Title>
@@ -124,7 +130,7 @@ const DataGrid = (props: DataGridProps) => {
         showFastPaginationControls
         selectPageDropdownLabel={<Text>Rows per page</Text>}
         style={{ backgroundColor: useThemeColor("themedGray") }}
-        theme={themePrimaryColorOverridden('text')}
+        theme={themePrimaryColorOverridden("text")}
       />
     </DataTable>
   );

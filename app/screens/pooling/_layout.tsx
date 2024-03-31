@@ -1,19 +1,19 @@
-import { Text, View } from "@/app/components/Themed";
+import { Text, View } from "@/app/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
-import { IsIOS } from "../utils/helpers";
-import DataGrid from "../components/dataGrid/dataGrid";
-import FloatingButton from "../components/floatingButton/floatingButton";
-import Modal, { ModalPropsType } from "../components/Modal";
+import { IsIOS } from "../../utils/helpers";
+import DataGrid from "../../components/dataGrid/_layout";
+import FloatingButton from "../../components/floatingButton/_layout";
+import Modal, { ModalPropsType } from "../../components/modal";
 import { SafeAreaView } from "react-native-safe-area-context";
-import iPostDataTableItem from "../models/iPostDataTableItem";
+import iPostDataTableItem from "../../models/iPostDataTableItem";
 import { Button as ButtonWithIcon } from "react-native-paper";
-import MultiSelect from "../components/choiceButtons/multiSelect";
-import { themePrimaryColorOverridden } from "../utils/themeHelper";
-
-//betterworldbits.com
-//bwapps.com
+import MultiSelect from "../../components/choiceButtons/multiSelect";
+import {
+  useThemeColor,
+} from "../../utils/themeHelper";
+import NewPost from "./newPost";
 
 type PoolingProps = {};
 
@@ -31,21 +31,29 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
 
   const [modalProps, setModalProps] = useState<ModalPropsType>({
     visible: false,
-    message: "",
-    component: undefined,
+    componentOrMessage: "",
     onClose: onModalClose,
   });
 
   const [filters, setFilters] = useState([] as string[]);
 
   useEffect(() => {
-    let getData = async function () {
+    const getData = async function () {
       try {
         // ToDo - move all network requests to one place
-        let fetchPosts = await fetch(
-          "https://mocki.io/v1/cf332720-3b21-4c42-952a-aa41cd212520"
+        const fetchPosts = await fetch(
+          "https://mocki.io/v1/cf332720-3b21-4c42-952a-aa41cd212520",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
         );
-        let posts = await fetchPosts.json();
+        console.log(fetchPosts);
+        const posts = await fetchPosts.json();
+        console.log(posts);
         setItems(posts ?? [...items]);
       } catch (error) {
         // ToDo - show some error message / blocking or Ribbon or something
@@ -60,7 +68,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     setModalProps({
       ...modalProps,
       visible: true,
-      message: item.desc,
+      componentOrMessage: item.desc,
       heading: item.fromTo,
     });
   };
@@ -69,7 +77,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     setModalProps({
       ...modalProps,
       visible: true,
-      message: "New Post Form here",
+      componentOrMessage: <NewPost />,
       heading: "New Post",
     });
   };
@@ -101,9 +109,29 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     >
       <View style={styles.view}>
         <View style={styles.filters}>
+          {/* <View style={styles.staticFilters}>
+            <TextWithChoiceButtons
+              label="Filters : "
+              mode="inline"
+              value={filters}
+              onValueChange={filtersChanged}
+              buttons={[
+                {
+                  value: "g2r",
+                  label: "Ggn2Rtk",
+                  showSelectedCheck: true,
+                },
+                {
+                  value: "r2g",
+                  label: "Rtk2Ggn",
+                  showSelectedCheck: true,
+                },
+              ]}
+              multiSelect
+            />
+          </View> */}
           <Text style={styles.text}>Filters : </Text>
           <MultiSelect
-            density="small"
             value={filters}
             onValueChange={filtersChanged}
             buttons={[
@@ -118,6 +146,8 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
                 showSelectedCheck: true,
               },
             ]}
+            //TODO - remove this multiSelect
+            multiSelect
           />
           <ButtonWithIcon
             icon="filter-variant"
@@ -125,12 +155,13 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
               setModalProps({
                 ...modalProps,
                 visible: true,
-                message: "Filters Modal Body ToDo",
+                componentOrMessage: "Filters Modal Body ToDo",
                 // component: <Button>"Filters Modal Body ToDo"</Button>,
                 heading: "Select Filters:",
               });
             }}
-            theme={themePrimaryColorOverridden("text")}
+            textColor={useThemeColor("text")}
+            // theme={themePrimaryColorOverridden("text")}
           >
             {" "}
           </ButtonWithIcon>
@@ -160,11 +191,12 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
           iconMode={"dynamic"}
           onPress={createNewPost}
           style={styles.addPostButton}
+          icon={"plus"}
         />
 
         <Modal
           visible={modalProps.visible}
-          message={modalProps.message}
+          componentOrMessage={modalProps.componentOrMessage}
           onClose={modalProps.onClose}
           heading={modalProps.heading}
         />
@@ -174,34 +206,39 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
 };
 
 const styles = StyleSheet.create({
+  addPostButton: {
+    bottom: 40,
+    position: "absolute",
+  },
+  button: {
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: 120,
+  },
+  filters: {
+    alignItems: "center",
+    flexDirection: "row",
+    // justifyContent: "space-between",
+    marginBottom: 10,
+    marginTop: 10,
+    width: "75%",
+  },
+  more: {
+    marginVertical: 20,
+  },
+  staticFilters: {
+    backgroundColor: "red",
+    width: "85%",
+  },
+  text: {
+    padding: 5,
+    textAlign: "center",
+  },
   view: {
     // margin: 10,
     padding: 5,
     height: "100%",
     width: "100%",
-  },
-  text: {
-    textAlign: "center",
-    padding: 5,
-  },
-  more: {
-    marginVertical: 20,
-  },
-  button: {
-    width: 120,
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  addPostButton: {
-    bottom: 40,
-    position: "absolute",
-  },
-  filters: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    marginTop: 10,
-    marginBottom: 10,
   },
 });
 

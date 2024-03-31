@@ -1,27 +1,23 @@
 import React from "react";
-import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { Animated } from "react-native";
 import { AnimatedFAB, useTheme } from "react-native-paper";
-import { IsIOS } from "../common/helpers";
+import { IsIOS } from "../../utils/helpers";
+import { Props } from "react-native-paper/lib/typescript/src/components/FAB/AnimatedFAB";
+
+import {
+  useThemeColor,
+} from "@/app/utils/themeHelper";
 
 type FloatingButtonProps = {
   animatedValue: Animated.Value;
-  visible: boolean;
-  extended: boolean;
-  label: string;
-  animateFrom: "left" | "right";
-  iconMode?: "static" | "dynamic";
-  style?: StyleProp<ViewStyle>;
-  // iconName?: string;
-};
+} & Props;
 
 const FloatingButton = ({
   animatedValue,
-  visible,
   extended,
-  label,
   animateFrom,
   style,
-  iconMode,
+  ...rest
 }: FloatingButtonProps) => {
   const [isExtended, setIsExtended] = React.useState(true);
   const { isV3 } = useTheme();
@@ -34,29 +30,24 @@ const FloatingButton = ({
     } else setIsExtended(extended);
   }, [animatedValue, extended, IsIOS]);
 
-  const fabStyle = { [animateFrom]: 16 };
+  const fabStyle = { [animateFrom ?? "left"]: 16 };
 
   return (
     <AnimatedFAB
-      icon={"plus"}
-      label={label}
       extended={isExtended}
       uppercase={!isV3}
-      onPress={() => console.log("Pressed")}
-      visible={visible}
       animateFrom={animateFrom}
-      iconMode={iconMode}
-      // style={[styles.fabStyle, style, fabStyle]}
-      style={[style, fabStyle]}
+      color={useThemeColor("text")}
+      style={[
+        style,
+        fabStyle,
+        {
+          backgroundColor: useThemeColor("themedGray"),
+        },
+      ]}
+      {...rest}
     />
   );
 };
 
 export default FloatingButton;
-
-const styles = StyleSheet.create({
-  fabStyle: {
-    bottom: 80,
-    position: "absolute",
-  },
-});
