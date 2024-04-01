@@ -1,4 +1,4 @@
-# bw-pool-ui (work in progress, completion ratio 30-40%)
+# bw-pool-ui (_work in progress, current completion: 30-40%_)
 
 - Better World Pool => The concept involves developing a simple and free carpooling app tailored to small communities, etc.
 - The code in this repo, including any parts of it, can be used, and reproduced for personal, professional, or commercial purposes without needing the consent of the owner.
@@ -30,4 +30,9 @@ All tests, with watchall and coverage report - Run `npm test`
 
 Directory structure is tricky. For complex (react) component, make a folder and add all component related files (i.e. tests, style, sub-component, etc) there. For simpler/smaller component, single component file should be there and tests can go to **tests** folder in the parent folder.
 
+### `Tech Stack`
+- UI - React Native, Expo, React, Typescript, Javascript
+- Svc and DB - Node.js, GraphQL, MongoDB
+
+### `Preview`
 ![screen_grab](https://github.com/jairaja/bw-pool-ui/blob/main/app/assets/screen-20240331-182755.gif)
