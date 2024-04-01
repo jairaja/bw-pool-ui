@@ -1,4 +1,4 @@
-# bw-pool-ui
+# bw-pool-ui (work in progress, completion ratio 30-40%)
 
 - Better World Pool => The concept involves developing a simple and free carpooling app tailored to small communities, etc.
 - The code in this repo, including any parts of it, can be used, and reproduced for personal, professional, or commercial purposes without needing the consent of the owner.
