@@ -7,7 +7,7 @@ import {
   DrawerNavigationOptions,
   //   DrawerContentOptions,
 } from "@react-navigation/drawer";
-import { Text } from "@/app/components/themed";
+import { Text } from "@/app/common/components/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { APP_NAME } from "@/config";
 

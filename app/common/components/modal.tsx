@@ -1,9 +1,9 @@
-import { Text, View } from "@/app/components/themed";
+import { Text, View } from "@/app/common/components/themed";
 import React from "react";
 import { Button as ButtonWithIcon } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { Divider, Portal, Modal as RNModal } from "react-native-paper";
-import { themePrimaryColorOverridden } from "../utils/themeHelper";
+import { themePrimaryColorOverridden } from "../../utils/themeHelper";
 
 export type ModalPropsType = {
   visible: boolean;

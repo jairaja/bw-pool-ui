@@ -1,9 +1,9 @@
-import { View, Text } from "@/app/components/themed";
+import { View, Text } from "@/app/common/components/themed";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemeType } from "../models/themeType";
-import SingleSelect from "../components/choiceButtons/singleSelect";
+import { ThemeType } from "../common/models/themeType";
+import SingleSelect from "../common/components/choiceButtons/singleSelect";
 
 type SettingsPropsType = {
   currentTheme: ThemeType;

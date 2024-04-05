@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import { ThemeColorsType } from "../models/themeType";
+import { ThemeColorsType } from "../common/models/themeType";
 import { IsAndroid, IsIOS } from "./helpers";
 
 export function useThemeColor(colorName: keyof ThemeColorsType["colors"]) {
@@ -17,25 +17,26 @@ export function themePrimaryColorOverridden(
   };
 }
 
-export type BoxShadowStyleType= { xOffset?: number;
+export type BoxShadowStyleType = {
+  xOffset?: number;
   shadowColor?: string;
   shadowOpacity?: number;
   shadowRadius?: number;
-  elevation?: number;}
+  elevation?: number;
+};
 
 export const generateBoxShadowStyle = ({
-  xOffset=-2,
-  shadowColor="#171717",
-  shadowOpacity=0.2,
-  shadowRadius=3,
-  elevation=4,
-}:BoxShadowStyleType) => {
-
-  const themedShadowColor = useTheme().dark?"#fff":shadowColor;
+  xOffset = -2,
+  shadowColor = "#171717",
+  shadowOpacity = 0.2,
+  shadowRadius = 3,
+  elevation = 4,
+}: BoxShadowStyleType) => {
+  const themedShadowColor = useTheme().dark ? "#fff" : shadowColor;
 
   if (IsIOS) {
     return {
-      shadowColor:themedShadowColor,
+      shadowColor: themedShadowColor,
       shadowOffset: { width: xOffset, height: elevation },
       shadowOpacity,
       shadowRadius,
@@ -43,7 +44,7 @@ export const generateBoxShadowStyle = ({
   } else if (IsAndroid) {
     return {
       elevation,
-      shadowColor:themedShadowColor,
+      shadowColor: themedShadowColor,
     };
   }
 };

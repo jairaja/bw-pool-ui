@@ -1,23 +1,22 @@
-import { Text, View } from "@/app/components/themed";
+import { Text, View } from "@/app/common/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
 import { IsIOS } from "../../utils/helpers";
-import DataGrid from "../../components/dataGrid/_layout";
-import FloatingButton from "../../components/floatingButton/_layout";
-import Modal, { ModalPropsType } from "../../components/modal";
+import DataGrid from "../../common/components/dataGrid/_layout";
+import FloatingButton from "../../common/components/floatingButton/_layout";
+import Modal, { ModalPropsType } from "../../common/components/modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import iPostDataTableItem from "../../models/iPostDataTableItem";
 import { Button as ButtonWithIcon } from "react-native-paper";
-import MultiSelect from "../../components/choiceButtons/multiSelect";
-import {
-  useThemeColor,
-} from "../../utils/themeHelper";
-import NewPost from "./newPost";
+import MultiSelect from "../../common/components/choiceButtons/multiSelect";
+import { useThemeColor } from "../../utils/themeHelper";
+import NewPost from "./newPost/_layout";
+import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 
-type PoolingProps = {};
+// type PoolingProps = {};
 
-const Pooling: React.FunctionComponent<PoolingProps> = () => {
+const Pooling = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const onModalClose = () => {
     setModalProps({ ...modalProps, visible: false });
@@ -51,9 +50,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
             },
           }
         );
-        console.log(fetchPosts);
         const posts = await fetchPosts.json();
-        console.log(posts);
         setItems(posts ?? [...items]);
       } catch (error) {
         // ToDo - show some error message / blocking or Ribbon or something
@@ -74,12 +71,13 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
   };
 
   const createNewPost = () => {
-    setModalProps({
-      ...modalProps,
-      visible: true,
-      componentOrMessage: <NewPost />,
-      heading: "New Post",
-    });
+    navigation.navigate("New Post");
+    // setModalProps({
+    //   ...modalProps,
+    //   visible: true,
+    //   componentOrMessage: <NewPost />,
+    //   heading: "New Post",
+    // });
   };
 
   const filtersChanged = (values: string | string[]) => {
@@ -109,8 +107,8 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
     >
       <View style={styles.view}>
         <View style={styles.filters}>
-          {/* <View style={styles.staticFilters}>
-            <TextWithChoiceButtons
+          <View style={styles.staticFilters}>
+            <LabeledChoiceButtons
               label="Filters : "
               mode="inline"
               value={filters}
@@ -129,26 +127,7 @@ const Pooling: React.FunctionComponent<PoolingProps> = () => {
               ]}
               multiSelect
             />
-          </View> */}
-          <Text style={styles.text}>Filters : </Text>
-          <MultiSelect
-            value={filters}
-            onValueChange={filtersChanged}
-            buttons={[
-              {
-                value: "g2r",
-                label: "Ggn2Rtk",
-                showSelectedCheck: true,
-              },
-              {
-                value: "r2g",
-                label: "Rtk2Ggn",
-                showSelectedCheck: true,
-              },
-            ]}
-            //TODO - remove this multiSelect
-            multiSelect
-          />
+          </View>
           <ButtonWithIcon
             icon="filter-variant"
             onTouchStart={() => {
@@ -218,7 +197,6 @@ const styles = StyleSheet.create({
   filters: {
     alignItems: "center",
     flexDirection: "row",
-    // justifyContent: "space-between",
     marginBottom: 10,
     marginTop: 10,
     width: "75%",
@@ -227,8 +205,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   staticFilters: {
-    backgroundColor: "red",
-    width: "85%",
+    // backgroundColor: "red",
+    // width: "85%",
   },
   text: {
     padding: 5,

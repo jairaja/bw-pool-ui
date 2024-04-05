@@ -7,10 +7,10 @@ import type {
   ViewStyle,
 } from "react-native";
 import { ScrollView } from "react-native";
-import { Text } from "@/app/components/themed";
+import { Text } from "@/app/common/components/themed";
 
 import { DataTable } from "react-native-paper";
-import iPostDataTableItem from "../../models/iPostDataTableItem";
+import iPostDataTableItem from "../../../models/iPostDataTableItem";
 import styles from "./dataGrid.style";
 import {
   themePrimaryColorOverridden,

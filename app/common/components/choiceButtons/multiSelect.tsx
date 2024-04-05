@@ -8,7 +8,7 @@ type MultiSelectTypes = ChoiceButtonsProps & { multiSelect: true };
 const MultiSelect: React.FunctionComponent<MultiSelectTypes> = ({
   buttons,
   ...rest
-}) => {
+}:MultiSelectTypes) => {
   const { colors } = useTheme();
   const styledButtons = buttons.map((button) => {
     return {

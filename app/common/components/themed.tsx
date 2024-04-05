@@ -10,10 +10,9 @@ import {
   Button as DefaultButton,
 } from "react-native";
 import React from "react";
-import { useThemeColor } from "../utils/themeHelper";
+import { useThemeColor } from "../../utils/themeHelper";
 
 // export type TextProps = ThemeProps & DefaultText["props"];
-
 
 export function Text(props: DefaultText["props"]) {
   const { style, ...otherProps } = props;

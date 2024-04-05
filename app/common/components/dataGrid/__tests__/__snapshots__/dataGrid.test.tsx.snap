@@ -42,7 +42,9 @@ exports[`DataGrid renders correctly 1`] = `
           "justifyContent": "flex-end",
           "paddingLeft": 16,
         },
-        undefined,
+        {
+          "backgroundColor": undefined,
+        },
       ]
     }
   >
@@ -85,7 +87,18 @@ exports[`DataGrid renders correctly 1`] = `
           ]
         }
       >
-        Rows per page
+        <Text
+          style={
+            [
+              {
+                "color": "rgb(28, 28, 30)",
+              },
+              undefined,
+            ]
+          }
+        >
+          Rows per page
+        </Text>
       </Text>
       <View
         collapsable={false}
@@ -240,7 +253,7 @@ exports[`DataGrid renders correctly 1`] = `
                           undefined,
                           false,
                           {
-                            "color": "rgba(103, 80, 164, 1)",
+                            "color": "rgb(28, 28, 30)",
                             "fontFamily": "System",
                             "fontSize": 14,
                             "fontWeight": "500",
@@ -291,7 +304,18 @@ exports[`DataGrid renders correctly 1`] = `
         ]
       }
     >
-      1-0 of 0
+      <Text
+        style={
+          [
+            {
+              "color": "rgb(28, 28, 30)",
+            },
+            undefined,
+          ]
+        }
+      >
+        1-0 of 0
+      </Text>
     </Text>
     <View
       style={

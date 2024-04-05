@@ -1,14 +1,17 @@
-const SERVER_URL = 'http://localhost:3000'; // dev
+const SERVER_URL = "http://localhost:3000"; // dev
 // const SERVER_URL = 'https://my-staging-server.com'; // staging
 // const SERVER URL = 'https://my-prod-server.com'; // production
 
-const GOOGLE_API_KEY = '1234'; // dev
+const GOOGLE_API_KEY = "1234"; // dev
 // const GOOGLE_API_KEY = '5678'; // staging
 // const GOOGLE_API_KEY = '9101'; // production
 
-const APP_NAME = 'Rohtak Eco Club (REC)';
+const APP_NAME = "Rohtak Eco Club (REC)";
 
-const ROUTE_INFO = ["Rohtak to Gurgaon", "Gurgaon to Rohtak"];
+const ROUTE_INFO = [
+  { value: "Rohtak to Gurgaon", key: "rtk2ggn" },
+  { value: "Tomorrow", key: "ggn2rtk" },
+];
 
 const VEHICLE_TYPE_FOR_RIDER = ["Car"];
 // const VEHICLE_TYPE_FOR_RIDER = ["Car", "Bike", "Any"];
@@ -22,7 +25,10 @@ const FUEL_TYPE = ["Petrol", "Diesel", "CNG"];
 
 const REFUELING_OPTION_REQUIRED = true;
 
-const TOD_TOM = ["Today", "Tomorrow"];
+const TOD_TOM = [
+  { value: "Today", key: "today" },
+  { value: "Tomorrow", key: "tomorrow" },
+];
 
 export {
   SERVER_URL,
@@ -36,4 +42,3 @@ export {
   VEHICLE_TYPE_FOR_VEHICLE_OWNER,
   REFUELING_OPTION_REQUIRED,
 };
-

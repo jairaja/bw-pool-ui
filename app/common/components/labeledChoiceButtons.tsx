@@ -5,16 +5,16 @@ import ChoiceButtons, {
 import { View, Text } from "./themed";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 
-type TextWithChoiceButtonsPropsType = {
+type LabeledChoiceButtonsPropsType = {
   label: string;
   mode?: "inline" | "block";
 } & ChoiceButtonsProps;
 
-const TextWithChoiceButtons = ({
+const LabeledChoiceButtons = ({
   label,
   mode = "block",
   ...rest
-}: TextWithChoiceButtonsPropsType) => {
+}: LabeledChoiceButtonsPropsType) => {
   const calculatedStyle: StyleProp<ViewStyle> = {
     ...styles.filters,
     flexDirection: mode === "inline" ? "row" : "column",
@@ -22,19 +22,23 @@ const TextWithChoiceButtons = ({
 
   return (
     <View style={calculatedStyle}>
-      <Text>{label}</Text>
-      <ChoiceButtons {...rest} />
+      <Text style={styles.text}>{label}</Text>
+      <ChoiceButtons {...rest} style={styles.buttons} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttons: {
+    flexShrink: 2,
+  },
   filters: {
     alignItems: "center",
-    marginBottom: 10,
-    marginTop: 10,
+    display: "flex",
+  },
+  text: {
     width: "auto",
   },
 });
 
-export default TextWithChoiceButtons;
+export default LabeledChoiceButtons;

@@ -10,7 +10,7 @@ const ChoiceButtons: React.FunctionComponent<ChoiceButtonsProps> = ({
   multiSelect,
   onValueChange,
   ...otherProps
-}) => {
+}: ChoiceButtonsProps) => {
   return (
     <>
       {multiSelect ? (
