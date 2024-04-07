@@ -1,3 +1,5 @@
+// Environment constants should be coming from server
+
 const SERVER_URL = "http://localhost:3000"; // dev
 // const SERVER_URL = 'https://my-staging-server.com'; // staging
 // const SERVER URL = 'https://my-prod-server.com'; // production
@@ -6,11 +8,12 @@ const GOOGLE_API_KEY = "1234"; // dev
 // const GOOGLE_API_KEY = '5678'; // staging
 // const GOOGLE_API_KEY = '9101'; // production
 
-const APP_NAME = "Rohtak Eco Club (REC)";
+const APP_NAME = "Go Green";
+const APP_NAME_Slogan = "Save Environment and Money";
 
 const ROUTE_INFO = [
-  { value: "Rohtak to Gurgaon", key: "rtk2ggn" },
-  { value: "Tomorrow", key: "ggn2rtk" },
+  { value: "Hatfield to London", key: "hatf2lndn" },
+  { value: "London to Hatfield", key: "lndn2hatf" },
 ];
 
 const VEHICLE_TYPE_FOR_RIDER = ["Car"];
@@ -34,6 +37,7 @@ export {
   SERVER_URL,
   GOOGLE_API_KEY,
   APP_NAME,
+  APP_NAME_Slogan,
   ROUTE_INFO,
   VEHICLE_TYPE_FOR_RIDER,
   TOD_TOM,

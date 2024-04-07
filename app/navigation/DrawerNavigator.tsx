@@ -1,5 +1,4 @@
 import React from "react";
-import { Image, View } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -7,9 +6,9 @@ import {
   DrawerNavigationOptions,
   //   DrawerContentOptions,
 } from "@react-navigation/drawer";
-import { Text } from "@/app/common/components/themed";
+import { Text , View} from "@/app/common/components/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { APP_NAME } from "@/config";
+import { APP_NAME, APP_NAME_Slogan } from "@/config";
 
 function CustomContentComponent(props: DrawerContentComponentProps) {
   return (
@@ -30,13 +29,8 @@ function CustomContentComponent(props: DrawerContentComponentProps) {
           alignItems: "center",
         }}
       >
-        <Text
-          style={{
-            marginTop: 3,
-          }}
-        >
-          {APP_NAME}
-        </Text>
+        <Text style={{ fontWeight: "bold", marginTop: 3 }}>{APP_NAME}</Text>
+        <Text style={{ fontStyle:"italic", fontSize:12, marginTop: 3 }}>{APP_NAME_Slogan}</Text>
       </View>
 
       {/* <View style={{ marginLeft: 10, width: "100%", }}> */}

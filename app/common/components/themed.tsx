@@ -9,8 +9,12 @@ import {
   Switch as DefaultSwitch,
   Button as DefaultButton,
 } from "react-native";
+import { Button as DefaultButtonIcon } from "react-native-paper";
+// import { Button as DefaultButtonIcon, TextInput as DefaultTextInput } from "react-native-paper";
 import React from "react";
-import { useThemeColor } from "../../utils/themeHelper";
+import { Props as RNPButtonProps } from "react-native-paper/lib/typescript/src/components/Button/Button";
+// import { Props as RNPTextInputProps } from "react-native-paper/lib/typescript/src/components/TextInput/TextInput";
+import { useThemeColor } from "../utils/themeHelper";
 
 // export type TextProps = ThemeProps & DefaultText["props"];
 
@@ -35,6 +39,16 @@ export function Switch(props: DefaultSwitch["props"]) {
 }
 
 export function Button(props: DefaultButton["props"]) {
-  const themeColor = useThemeColor("text");
-  return <DefaultButton {...props} color={themeColor} />;
+  const textThemeColor = useThemeColor("text");
+  return <DefaultButton {...props} color={textThemeColor} />;
 }
+
+export function ButtonIcon(props: RNPButtonProps) {
+  const textThemeColor = useThemeColor("text");
+  return <DefaultButtonIcon {...props} textColor={textThemeColor} />;
+}
+
+// export function TextInput(props: RNPTextInputProps) {
+//   const textThemeColor = useThemeColor("text");
+//   return <DefaultTextInput {...props} contentStyle />;
+// }

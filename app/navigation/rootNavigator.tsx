@@ -13,15 +13,13 @@ import About from "../screens/about";
 import Announcements from "../screens/announcements";
 import Settings from "../screens/settings";
 import Profile from "../screens/profile";
-import { useColorScheme } from "react-native";
+import { useColorScheme, StyleSheet } from "react-native";
 import { ThemeType } from "../common/models/themeType";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import NewPost from "../screens/pooling/newPost/_layout";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CarOwnerNewPost from "../screens/pooling/newPost/carOwnerNewPost";
 import RiderNewPost from "../screens/pooling/newPost/riderNewPost";
-import { Button as ButtonWithIcon } from "react-native-paper";
-import { useThemeColor } from "../utils/themeHelper";
+import { IconButton } from "react-native-paper";
 
 const Drawer = createDrawerNavigator();
 const StackNavigator = createNativeStackNavigator();
@@ -93,16 +91,14 @@ function RootNavigator() {
             headerShown: true,
             headerLeft: () => {
               return (
-                <ButtonWithIcon
-                  icon="filter-variant"
-                  onTouchStart={() => {
+                <IconButton
+                  icon="menu"
+                  style={styles.stackHeaderIconStyle}
+                  onPress={() => {
                     navigation.dispatch(DrawerActions.openDrawer());
                   }}
-                  textColor={useThemeColor("text")}
-                  // theme={themePrimaryColorOverridden("text")}
-                >
-                  {" "}
-                </ButtonWithIcon>
+                  size={25}
+                />
               );
             },
           }}
@@ -149,3 +145,5 @@ function RootNavigator() {
 }
 
 export default RootNavigator;
+
+const styles = StyleSheet.create({ stackHeaderIconStyle: { right: 20 } });

@@ -15,7 +15,7 @@ import styles from "./dataGrid.style";
 import {
   themePrimaryColorOverridden,
   useThemeColor,
-} from "@/app/utils/themeHelper";
+} from "@/app/common/utils/themeHelper";
 
 type DataGridHeaderProp = {
   sortDirection?: "ascending" | "descending";

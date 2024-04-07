@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { generateBoxShadowStyle } from "../../utils/themeHelper";
+import { generateBoxShadowStyle } from "../utils/themeHelper";
 import { View, Text } from "./themed";
 
 type SimpleCardPropsType = {

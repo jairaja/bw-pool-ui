@@ -1,9 +1,9 @@
 import { Text, View } from "@/app/common/components/themed";
 import React from "react";
-import { Button as ButtonWithIcon } from "react-native-paper";
+import { ButtonIcon } from "./themed";
+
 import { StyleSheet } from "react-native";
 import { Divider, Portal, Modal as RNModal } from "react-native-paper";
-import { themePrimaryColorOverridden } from "../../utils/themeHelper";
 
 export type ModalPropsType = {
   visible: boolean;
@@ -29,15 +29,16 @@ const Modal = (props: ModalPropsType) => {
         return <Text>yesNo</Text>;
       default:
         return (
-          <ButtonWithIcon
-            theme={themePrimaryColorOverridden("gray")}
+          <ButtonIcon
+            // theme={themePrimaryColorOverridden("gray")}
             // style
             onPress={() => {
               onClose();
             }}
           >
+            {/* <Text>Cancel</Text> */}
             Cancel
-          </ButtonWithIcon>
+          </ButtonIcon>
         );
     }
   };

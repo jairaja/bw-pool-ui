@@ -1,1 +1,3 @@
-export type keyValue = { key: string; value: string };
+export type KeyValue = { key: string|number; value: string };
+
+export type LocalTime = KeyValue;

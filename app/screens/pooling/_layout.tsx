@@ -2,15 +2,15 @@ import { Text, View } from "@/app/common/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
-import { IsIOS } from "../../utils/helpers";
+import { IsIOS } from "../../common/utils/helpers";
 import DataGrid from "../../common/components/dataGrid/_layout";
 import FloatingButton from "../../common/components/floatingButton/_layout";
 import Modal, { ModalPropsType } from "../../common/components/modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import iPostDataTableItem from "../../models/iPostDataTableItem";
-import { Button as ButtonWithIcon } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import MultiSelect from "../../common/components/choiceButtons/multiSelect";
-import { useThemeColor } from "../../utils/themeHelper";
+import { useThemeColor } from "../../common/utils/themeHelper";
 import NewPost from "./newPost/_layout";
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 
@@ -41,7 +41,7 @@ const Pooling = ({ navigation }) => {
       try {
         // ToDo - move all network requests to one place
         const fetchPosts = await fetch(
-          "https://mocki.io/v1/cf332720-3b21-4c42-952a-aa41cd212520",
+          "https://mocki.io/v1/d26edb2f-a288-4574-ab60-17746997c38e",
           {
             method: "GET",
             headers: {
@@ -109,7 +109,7 @@ const Pooling = ({ navigation }) => {
         <View style={styles.filters}>
           <View style={styles.staticFilters}>
             <LabeledChoiceButtons
-              label="Filters : "
+              label="Filters :   "
               mode="inline"
               value={filters}
               onValueChange={filtersChanged}
@@ -128,9 +128,11 @@ const Pooling = ({ navigation }) => {
               multiSelect
             />
           </View>
-          <ButtonWithIcon
+          <IconButton
             icon="filter-variant"
-            onTouchStart={() => {
+            size={30}
+            style={{ alignSelf: "auto" }}
+            onPress={() => {
               setModalProps({
                 ...modalProps,
                 visible: true,
@@ -139,11 +141,7 @@ const Pooling = ({ navigation }) => {
                 heading: "Select Filters:",
               });
             }}
-            textColor={useThemeColor("text")}
-            // theme={themePrimaryColorOverridden("text")}
-          >
-            {" "}
-          </ButtonWithIcon>
+          />
         </View>
 
         {items.length > 0 && (

@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import { ThemeColorsType } from "../common/models/themeType";
+import { ThemeColorsType } from "../models/themeType";
 import { IsAndroid, IsIOS } from "./helpers";
 
 export function useThemeColor(colorName: keyof ThemeColorsType["colors"]) {

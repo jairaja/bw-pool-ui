@@ -1,10 +1,10 @@
 import React from "react";
 import { Animated } from "react-native";
 import { AnimatedFAB, useTheme } from "react-native-paper";
-import { IsIOS } from "../../../utils/helpers";
+import { IsIOS } from "../../utils/helpers";
 import { Props } from "react-native-paper/lib/typescript/src/components/FAB/AnimatedFAB";
 
-import { useThemeColor } from "@/app/utils/themeHelper";
+import { useThemeColor } from "@/app/common/utils/themeHelper";
 
 type FloatingButtonProps = {
   animatedValue: Animated.Value;
