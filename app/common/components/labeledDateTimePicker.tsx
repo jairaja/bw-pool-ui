@@ -8,7 +8,7 @@ import { ButtonIcon, View, Text } from "./themed";
 import { StyleSheet } from "react-native";
 import { LocalTime } from "../models/types";
 
-type DateTimePropsType = {
+type LabeledDateTimePropsType = {
   mode: "date" | "time";
   label?: string;
   labelLaunchButton: LocalTime | string;
@@ -24,7 +24,7 @@ const LabeledDateTimePicker = function ({
   label,
   labelLaunchButton,
   ...rest
-}: DateTimePropsType) {
+}: LabeledDateTimePropsType) {
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
 
   const labelForLaunchButton =

@@ -1,32 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import { View } from "@/app/common/components/themed";
 import { ROUTE_INFO, TOD_TOM } from "@/config";
-import { KeyValue, LocalTime } from "@/app/common/models/types";
+import { KeyValue } from "@/app/common/models/types";
 import { StyleSheet } from "react-native";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import LabeledDateTimePicker from "@/app/common/components/labeledDateTimePicker";
-import { FromDateToTime } from "@/app/common/utils/dateTimeHelper";
+import { FromTimeNumberToDisplayTime } from "@/app/common/utils/dateTimeHelper";
 
-type FromAndWhenType = {
-  from: string;
-  whenDay: string;
-  whenTime?: LocalTime;
+type FromAndWhenPropType = {
+  from?: string;
+  whenDay?: string;
+  whenTime?: number;
+  onChange: (key: string, value: string | number) => void;
 };
 
-const Timelines = function () {
+const Timelines = function ({
+  from,
+  whenDay,
+  whenTime,
+  onChange,
+}: FromAndWhenPropType) {
   const routeInfo = useRef<KeyValue[]>([]);
   const dayInfo = useRef<KeyValue[]>([]);
 
-  const [fromAndWhen, setFromAndWhen] = useState<FromAndWhenType>({
-    from: "",
-    whenDay: "",
-    whenTime: undefined,
-  });
-
   const updateTime = (event: DateTimePickerEvent, date?: Date) => {
     if (date) {
-      updateTimelines("whenTime", FromDateToTime(date));
+      onChange("whenTime", date.getTime());
     }
   };
 
@@ -41,41 +41,28 @@ const Timelines = function () {
         dayInfo.current.push({ key: day.key, value: day.value });
       });
     }
-    setFromAndWhen({
-      ...fromAndWhen,
-      from: routeInfo.current[0].key,
-      whenDay: dayInfo.current[0].key,
-    });
+    onChange("from", routeInfo.current[0].key);
+    onChange("whenDay", dayInfo.current[0].key);
   }, []);
-
-  const updateTimelines = function (
-    key: string,
-    value: string | KeyValue
-  ): void {
-    setFromAndWhen({
-      ...fromAndWhen,
-      [key]: value,
-    });
-  };
 
   return (
     <View>
       <View style={styles.marginAmongComponents}>
         <LabeledChoiceButtons
           label="From:   "
-          value={fromAndWhen.from ?? ""}
+          value={from ?? ""}
           mode="inline"
           onValueChange={(value) => {
-            updateTimelines("from", value);
+            onChange("from", value);
           }}
           buttons={[
             {
-              value: routeInfo.current[0]?.key,
+              value: routeInfo.current[0]?.key as string,
               label: routeInfo.current[0]?.value,
               showSelectedCheck: true,
             },
             {
-              value: routeInfo.current[1]?.key,
+              value: routeInfo.current[1]?.key as string,
               label: routeInfo.current[1]?.value,
               showSelectedCheck: true,
             },
@@ -87,19 +74,19 @@ const Timelines = function () {
       <View style={styles.marginAmongComponents}>
         <LabeledChoiceButtons
           label="When:   "
-          value={fromAndWhen.whenDay ?? ""}
+          value={whenDay ?? ""}
           mode="inline"
           onValueChange={(value) => {
-            updateTimelines("whenDay", value);
+            onChange("whenDay", value);
           }}
           buttons={[
             {
-              value: dayInfo.current[0]?.key,
+              value: dayInfo.current[0]?.key as string,
               label: dayInfo.current[0]?.value,
               showSelectedCheck: true,
             },
             {
-              value: dayInfo.current[1]?.key,
+              value: dayInfo.current[1]?.key as string,
               label: dayInfo.current[1]?.value,
               showSelectedCheck: true,
             },
@@ -110,14 +97,14 @@ const Timelines = function () {
       <View style={styles.marginAmongComponents}>
         <LabeledDateTimePicker
           label="Time:   "
-          labelLaunchButton={fromAndWhen.whenTime ?? "Show Time Picker"}
+          labelLaunchButton={
+            whenTime
+              ? FromTimeNumberToDisplayTime(whenTime)
+              : "Show Time Picker"
+          }
           mode="time"
           onChange={updateTime}
-          value={
-            fromAndWhen.whenTime
-              ? new Date(fromAndWhen.whenTime.key)
-              : new Date()
-          }
+          value={whenTime ? new Date(whenTime) : new Date()}
         />
       </View>
     </View>

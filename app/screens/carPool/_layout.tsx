@@ -1,4 +1,4 @@
-import { Text, View } from "@/app/common/components/themed";
+import { View } from "@/app/common/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { Animated, StyleSheet } from "react-native";
@@ -9,14 +9,11 @@ import Modal, { ModalPropsType } from "../../common/components/modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import iPostDataTableItem from "../../models/iPostDataTableItem";
 import { IconButton } from "react-native-paper";
-import MultiSelect from "../../common/components/choiceButtons/multiSelect";
-import { useThemeColor } from "../../common/utils/themeHelper";
-import NewPost from "./newPost/_layout";
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 
 // type PoolingProps = {};
 
-const Pooling = ({ navigation }) => {
+const CarPool = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const onModalClose = () => {
     setModalProps({ ...modalProps, visible: false });
@@ -115,13 +112,13 @@ const Pooling = ({ navigation }) => {
               onValueChange={filtersChanged}
               buttons={[
                 {
-                  value: "g2r",
-                  label: "Ggn2Rtk",
+                  value: "findRide",
+                  label: "Find Ride",
                   showSelectedCheck: true,
                 },
                 {
-                  value: "r2g",
-                  label: "Rtk2Ggn",
+                  value: "findRiders",
+                  label: "Find Riders",
                   showSelectedCheck: true,
                 },
               ]}
@@ -218,4 +215,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Pooling;
+export default CarPool;

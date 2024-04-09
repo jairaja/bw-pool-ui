@@ -8,7 +8,7 @@ import {
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerNavigator from "./drawerNavigator";
 import { DrawerActions } from "@react-navigation/native";
-import Pooling from "../screens/pooling/_layout";
+import CarPool from "../screens/carPool/_layout";
 import About from "../screens/about";
 import Announcements from "../screens/announcements";
 import Settings from "../screens/settings";
@@ -17,8 +17,8 @@ import { useColorScheme, StyleSheet } from "react-native";
 import { ThemeType } from "../common/models/themeType";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import CarOwnerNewPost from "../screens/pooling/newPost/carOwnerNewPost";
-import RiderNewPost from "../screens/pooling/newPost/riderNewPost";
+import CarOwnerNewPost from "../screens/carPool/newPost/carOwnerNewPost";
+import RiderNewPost from "../screens/carPool/newPost/riderNewPost";
 import { IconButton } from "react-native-paper";
 
 const Drawer = createDrawerNavigator();
@@ -85,8 +85,8 @@ function RootNavigator() {
     return (
       <StackNavigator.Navigator>
         <StackNavigator.Screen
-          name="Pooling"
-          component={Pooling}
+          name="Car Pool"
+          component={CarPool}
           options={{
             headerShown: true,
             headerLeft: () => {

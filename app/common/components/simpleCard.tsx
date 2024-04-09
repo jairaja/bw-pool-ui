@@ -30,9 +30,10 @@ const styles = StyleSheet.create({
   card: {
     // backgroundColor: "white",
     borderRadius: 8,
-    marginVertical: 10,
+    margin: 5,
+    // marginVertical: 10,
     paddingHorizontal: 25,
     paddingVertical: 45,
-    width: "100%",
+    width: "95%",
   },
 });
