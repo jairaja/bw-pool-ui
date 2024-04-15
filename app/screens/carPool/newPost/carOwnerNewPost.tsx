@@ -12,14 +12,11 @@ import {
 } from "@/config";
 import LabeledSwitch from "@/app/common/components/labeledSwitch";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
-import { LabeledSlider } from "@/app/common/components/labeledSlider";
+import LabeledSlider from "@/app/common/components/labeledSlider";
 import { IsIOS } from "@/app/common/utils/helpers";
 import { TextInput } from "@/app/common/components/themed";
 import ActionButtons from "./actionButtons";
-import {
-  ChildButtonProps,
-  GetChildButtons,
-} from "@/app/common/components/choiceButtons/choiceButtons";
+import { GetChildButtons } from "@/app/common/components/choiceButtons/choiceButtons";
 import { IsTimeUpdated } from "@/app/common/utils/dateTimeHelper";
 
 // type CarOwnerNewPostPropsType = {};
@@ -41,9 +38,7 @@ export type CarOwnerNewPostType = {
   communicationMode?: string;
 };
 
-const CarOwnerNewPost: React.FunctionComponent<CarOwnerNewPostType> = ({
-  navigation,
-}) => {
+const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
   const fuelTypeButtonsRef = useRef<string[]>([]);
   const communicationModeRef = useRef<string[]>([]);
@@ -95,12 +90,14 @@ const CarOwnerNewPost: React.FunctionComponent<CarOwnerNewPostType> = ({
           componentOrMessage={
             <>
               <Timelines
+                forRiderOrOwner="Owner"
                 from={newPost.from}
                 when={newPost.when}
                 onChange={update}
               />
               <Divider />
               <Locations
+                forRiderOrOwner="Owner"
                 onChange={update}
                 destination={newPost.destination}
                 startingPoint={newPost.startingPoint}
@@ -146,7 +143,7 @@ const CarOwnerNewPost: React.FunctionComponent<CarOwnerNewPostType> = ({
                 multiSelect={false}
               />
               <LabeledSlider
-                label="Pool share per seat: "
+                label="Pool share per rider: "
                 minimumValue={poolShareRef.current[0]}
                 maximumValue={
                   poolShareRef.current[poolShareRef.current.length - 1]
@@ -176,6 +173,8 @@ const CarOwnerNewPost: React.FunctionComponent<CarOwnerNewPostType> = ({
                 }
                 multiSelect={false}
               />
+
+              <Divider />
 
               <ActionButtons
                 reset={reset}

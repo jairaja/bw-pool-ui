@@ -1,5 +1,6 @@
 import LabeledDropDownPicker from "@/app/common/components/labeledDropDownPicker";
 import { View } from "@/app/common/components/themed";
+import { RiderOwner } from "@/app/common/models/types";
 import React, { useState, useEffect } from "react";
 import { ItemType, ValueType } from "react-native-dropdown-picker";
 
@@ -9,6 +10,7 @@ type LocationsPropsType = {
   startingPoint?: string;
   pickupPoints?: string[];
   dropPoints?: string[];
+  forRiderOrOwner: RiderOwner;
 };
 
 const Locations = ({
@@ -17,6 +19,7 @@ const Locations = ({
   pickupPoints,
   dropPoints,
   destination,
+  forRiderOrOwner,
 }: LocationsPropsType) => {
   // Need this state due to a bug in Picker with multiple values. OnChange event is not fired if local state is not set
   // On selection change is fired. But it will take away the functionality of removing selected items in a closed picker
@@ -48,20 +51,26 @@ const Locations = ({
 
   return (
     <View>
+      {forRiderOrOwner === "Owner" && (
+        <LabeledDropDownPicker
+          label="Starting Point: "
+          open={startingPointDropDownOpen}
+          setOpen={setStartingPointDropDownOpen}
+          value={startingPoint as string}
+          items={items}
+          onSelectItem={(item) => {
+            onChange("startingPoint", item.value as string);
+          }}
+          multiple={false}
+          placeholder="Select your starting point"
+        />
+      )}
       <LabeledDropDownPicker
-        label="Starting Point: "
-        open={startingPointDropDownOpen}
-        setOpen={setStartingPointDropDownOpen}
-        value={startingPoint as string}
-        items={items}
-        onSelectItem={(item) => {
-          onChange("startingPoint", item.value as string);
-        }}
-        multiple={false}
-        placeholder="Select your starting point"
-      />
-      <LabeledDropDownPicker
-        label="Pickup Points: "
+        label={
+          forRiderOrOwner === "Owner"
+            ? "Pickup Points: "
+            : "Preferred Pickup Points: "
+        }
         open={pickupPointsDropDownOpen}
         setOpen={setPickupPointsDropDownOpen}
         value={pickupPoints as ValueType[]}
@@ -86,7 +95,11 @@ const Locations = ({
         mode="BADGE"
       />
       <LabeledDropDownPicker
-        label="Drop Points: "
+        label={
+          forRiderOrOwner === "Owner"
+            ? "Drop Points: "
+            : "Preferred Drop Points: "
+        }
         open={dropPointsDropDownOpen}
         setOpen={setDropPointsDropDownOpen}
         value={dropPoints as ValueType[]}
@@ -110,18 +123,20 @@ const Locations = ({
         multiple
         mode="BADGE"
       />
-      <LabeledDropDownPicker
-        label="Destination: "
-        open={destinationDropDownOpen}
-        setOpen={setDestinationDropDownOpen}
-        value={destination as string}
-        items={items}
-        onSelectItem={(item: ItemType<ValueType>) => {
-          onChange("destination", item.value as string);
-        }}
-        multiple={false}
-        placeholder="Select your destination"
-      />
+      {forRiderOrOwner === "Owner" && (
+        <LabeledDropDownPicker
+          label="Destination: "
+          open={destinationDropDownOpen}
+          setOpen={setDestinationDropDownOpen}
+          value={destination as string}
+          items={items}
+          onSelectItem={(item: ItemType<ValueType>) => {
+            onChange("destination", item.value as string);
+          }}
+          multiple={false}
+          placeholder="Select your destination"
+        />
+      )}
     </View>
   );
 };

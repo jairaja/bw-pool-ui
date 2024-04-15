@@ -3,7 +3,7 @@ import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import { GetChildButtons } from "@/app/common/components/choiceButtons/choiceButtons";
 
 import { ROUTE_INFO } from "@/config";
-import { TodTom } from "@/app/common/models/types";
+import { RiderOwner, TodTom } from "@/app/common/models/types";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import LabeledDateTimePicker from "@/app/common/components/labeledDateTimePicker";
 import {
@@ -14,12 +14,18 @@ import {
 } from "@/app/common/utils/dateTimeHelper";
 
 type FromAndWhenPropType = {
+  forRiderOrOwner: RiderOwner;
   from?: string;
   when?: Date;
   onChange: (key: string, value: string | number | Date) => void;
 };
 
-const Timelines = function ({ from, when, onChange }: FromAndWhenPropType) {
+const Timelines = function ({
+  forRiderOrOwner,
+  from,
+  when,
+  onChange,
+}: FromAndWhenPropType) {
   const routeInfoRef = useRef<string[]>([]);
 
   const updateTime = (event: DateTimePickerEvent, date?: Date) => {
@@ -97,7 +103,7 @@ const Timelines = function ({ from, when, onChange }: FromAndWhenPropType) {
       />
 
       <LabeledDateTimePicker
-        label="Time:   "
+        label={forRiderOrOwner === "Rider" ? "Preferred Time: " : "Time:   "}
         labelLaunchButton={getDisplayTime(when) ?? "Show Time Picker"}
         mode="time"
         resetTime={resetTime}
