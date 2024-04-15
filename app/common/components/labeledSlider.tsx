@@ -10,7 +10,7 @@ type LabeledSliderPropsType = {
 
 // Slider is not a controlled component. Value will set bu sliding.
 // Value can be updated programmetically, this wont fire onValueChange event.
-export function LabeledSlider({
+export default function LabeledSlider({
   label,
   displayValue,
   ...rest
