@@ -1,4 +1,4 @@
-import { View, Text } from "@/app/components/themed";
+import { View, Text } from "@/app/common/components/themed";
 import React from "react";
 import { StyleSheet } from "react-native";
 

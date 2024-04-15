@@ -2,19 +2,29 @@ import React, { useState } from "react";
 import {
   NavigationContainer,
   DarkTheme,
+  useNavigation,
   DefaultTheme,
 } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerNavigator from "./drawerNavigator";
-import Pooling from "../screens/pooling/_layout";
+import { DrawerActions } from "@react-navigation/native";
+import CarPool from "../screens/carPool/_layout";
 import About from "../screens/about";
 import Announcements from "../screens/announcements";
 import Settings from "../screens/settings";
 import Profile from "../screens/profile";
-import { useColorScheme } from "react-native";
-import { ThemeType } from "../models/themeType";
+import { useColorScheme, StyleSheet } from "react-native";
+import { ThemeType } from "../common/models/themeType";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import CarOwnerNewPost from "../screens/carPool/newPost/carOwnerNewPost";
+import RiderNewPost from "../screens/carPool/newPost/riderNewPost";
+import { IconButton } from "react-native-paper";
 
 const Drawer = createDrawerNavigator();
+const StackNavigator = createNativeStackNavigator();
+const TabNavigator = createMaterialTopTabNavigator();
+
 const HtmlGrayColors = {
   dimGray: "rgb(105,105,105)",
   gray: "rgb(128,128,128)",
@@ -38,8 +48,6 @@ function RootNavigator() {
     setThemeValueForSettingsScreen(newTheme);
   };
 
-  // const updated;
-
   const currentThemeColors =
     currentTheme === "dark"
       ? {
@@ -48,6 +56,7 @@ function RootNavigator() {
             ...DarkTheme.colors,
             ...HtmlGrayColors,
             themedGray: HtmlGrayColors.dimGray,
+            white: "rgb(255,255,255)",
           },
         }
       : {
@@ -56,14 +65,56 @@ function RootNavigator() {
             ...DefaultTheme.colors,
             ...HtmlGrayColors,
             themedGray: HtmlGrayColors.lightGray,
+            white: "rgb(255,255,255)",
           },
         };
+
+  function NewPostsTabs() {
+    return (
+      <TabNavigator.Navigator>
+        <TabNavigator.Screen
+          name="I am Car Owner"
+          component={CarOwnerNewPost}
+        />
+        <TabNavigator.Screen name="I am Rider" component={RiderNewPost} />
+      </TabNavigator.Navigator>
+    );
+  }
+
+  // function PoolingStack({navigation}) {
+  function PoolingStack() {
+    const navigation = useNavigation();
+    return (
+      <StackNavigator.Navigator>
+        <StackNavigator.Screen
+          name="Car Pool"
+          component={CarPool}
+          options={{
+            headerShown: true,
+            headerLeft: () => {
+              return (
+                <IconButton
+                  icon="menu"
+                  style={styles.stackHeaderIconStyle}
+                  onPress={() => {
+                    navigation.dispatch(DrawerActions.openDrawer());
+                  }}
+                  size={25}
+                />
+              );
+            },
+          }}
+        />
+        <StackNavigator.Screen name="New Post" component={NewPostsTabs} />
+      </StackNavigator.Navigator>
+    );
+  }
 
   return (
     <NavigationContainer independent theme={currentThemeColors}>
       <Drawer.Navigator
         drawerContent={DrawerNavigator}
-        initialRouteName="Pooling"
+        initialRouteName="PoolingScreen"
         // backBehavior="history"
         screenOptions={{
           headerStyle: {
@@ -73,7 +124,11 @@ function RootNavigator() {
           },
         }}
       >
-        <Drawer.Screen name="Pooling" component={Pooling} />
+        <Drawer.Screen
+          name="PoolingScreen"
+          component={PoolingStack}
+          options={{ headerShown: false }}
+        />
         <Drawer.Screen name="Announcements" component={Announcements} />
         <Drawer.Screen
           name="Settings"
@@ -92,3 +147,5 @@ function RootNavigator() {
 }
 
 export default RootNavigator;
+
+const styles = StyleSheet.create({ stackHeaderIconStyle: { right: 20 } });
