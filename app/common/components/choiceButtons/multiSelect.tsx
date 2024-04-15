@@ -7,6 +7,7 @@ type MultiSelectTypes = ChoiceButtonsProps & { multiSelect: true };
 
 const MultiSelect: React.FunctionComponent<MultiSelectTypes> = ({
   buttons,
+  disabled,
   ...rest
 }:MultiSelectTypes) => {
   const { colors } = useTheme();
@@ -15,6 +16,7 @@ const MultiSelect: React.FunctionComponent<MultiSelectTypes> = ({
       ...button,
       uncheckedColor: button.uncheckedColor ?? colors.text,
       checkedColor: button.checkedColor ?? colors.background,
+      disabled: disabled
     };
   });
 

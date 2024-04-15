@@ -12,8 +12,8 @@ type SettingsPropsType = {
 const Settings: React.FunctionComponent<SettingsPropsType> = (
   SettingsProps
 ) => {
-  const onThemeChanged = (value: string | string[]) => {
-    if (!Array.isArray(value)) {
+  const onThemeChanged = (value: string | undefined) => {
+    if (value) {
       SettingsProps.updateTheme(value as ThemeType);
     }
   };

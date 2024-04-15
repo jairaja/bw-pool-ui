@@ -2167,6 +2167,11 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-community/slider@^4.5.1":
+  version "4.5.1"
+  resolved "https://registry.npmjs.org/@react-native-community/slider/-/slider-4.5.1.tgz"
+  integrity sha512-s3PChKU3tj/7i3z+VjxeO6n9YkoCg2omW9EYmN66bFjqsi4/aynX/nbPbFun1K97Zz8/eP5dl9YTeS0l2sLmNA==
+
 "@react-native/assets-registry@~0.73.1", "@react-native/assets-registry@0.73.1":
   version "0.73.1"
   resolved "https://registry.npmjs.org/@react-native/assets-registry/-/assets-registry-0.73.1.tgz"

@@ -15,14 +15,19 @@ const LabeledChoiceButtons = ({
   mode = "block",
   ...rest
 }: LabeledChoiceButtonsPropsType) => {
-  const calculatedStyle: StyleProp<ViewStyle> = {
-    ...styles.filters,
+  const calculatedContainerStyle: StyleProp<ViewStyle> = {
+    ...styles.container,
     flexDirection: mode === "inline" ? "row" : "column",
   };
 
+  const calculatedLabelStyle = {
+    ...styles.label,
+    marginBottom: mode === "inline" ? 0 : 5,
+  };
+
   return (
-    <View style={calculatedStyle}>
-      <Text style={styles.text}>{label}</Text>
+    <View style={calculatedContainerStyle}>
+      <Text style={calculatedLabelStyle}>{label}</Text>
       <ChoiceButtons {...rest} style={styles.buttons} />
     </View>
   );
@@ -32,11 +37,13 @@ const styles = StyleSheet.create({
   buttons: {
     flexShrink: 2,
   },
-  filters: {
-    alignItems: "center",
+  container: {
+    alignItems: "flex-start",
     display: "flex",
+    marginBottom: 10,
+    marginTop: 10,
   },
-  text: {
+  label: {
     width: "auto",
   },
 });

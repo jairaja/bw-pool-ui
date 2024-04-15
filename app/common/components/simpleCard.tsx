@@ -28,12 +28,11 @@ export default SimpleCard;
 
 const styles = StyleSheet.create({
   card: {
-    // backgroundColor: "white",
     borderRadius: 8,
+    flex: 1,
     margin: 5,
-    // marginVertical: 10,
     paddingHorizontal: 25,
-    paddingVertical: 45,
-    width: "95%",
+    paddingVertical: 20,
+    width: "98.6%",
   },
 });

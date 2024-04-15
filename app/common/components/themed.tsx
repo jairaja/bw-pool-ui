@@ -8,13 +8,17 @@ import {
   View as DefaultView,
   Switch as DefaultSwitch,
   Button as DefaultButton,
+  StyleSheet,
 } from "react-native";
-import { Button as DefaultButtonIcon } from "react-native-paper";
-// import { Button as DefaultButtonIcon, TextInput as DefaultTextInput } from "react-native-paper";
+import {
+  Button as DefaultButtonIcon,
+  TextInput as DefaultTextInput,
+} from "react-native-paper";
 import React from "react";
 import { Props as RNPButtonProps } from "react-native-paper/lib/typescript/src/components/Button/Button";
-// import { Props as RNPTextInputProps } from "react-native-paper/lib/typescript/src/components/TextInput/TextInput";
+import { Props as RNPTextInputProps } from "react-native-paper/lib/typescript/src/components/TextInput/TextInput";
 import { useThemeColor } from "../utils/themeHelper";
+import DefaultSlider, { SliderProps } from "@react-native-community/slider";
 
 // export type TextProps = ThemeProps & DefaultText["props"];
 
@@ -31,11 +35,37 @@ export function View(props: DefaultView["props"]) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
-export function Switch(props: DefaultSwitch["props"]) {
-  const { style, ...otherProps } = props;
+export function Switch({ style, ...otherProps }: DefaultSwitch["props"]) {
   const backgroundColor = useThemeColor("background");
+  const thumbColor = useThemeColor("themedGray");
+  const offColor = useThemeColor("gray");
+  const borderColor = useThemeColor("border");
+  const onColor = useThemeColor("white");
 
-  return <DefaultSwitch style={[{ backgroundColor }, style]} {...otherProps} />;
+  return (
+    <DefaultSwitch
+      style={[{ backgroundColor, borderColor: borderColor }, style]}
+      thumbColor={thumbColor}
+      trackColor={{ false: offColor, true: onColor }}
+      {...otherProps}
+    />
+  );
+}
+
+export function Slider({ style, ...otherProps }: SliderProps) {
+  const thumbColor = useThemeColor("themedGray");
+  const minTrackColor = useThemeColor("gray");
+  const maxTrackColor = useThemeColor("text");
+
+  return (
+    <DefaultSlider
+      style={[styles.slider, style]}
+      thumbTintColor={thumbColor}
+      minimumTrackTintColor={minTrackColor}
+      maximumTrackTintColor={maxTrackColor}
+      {...otherProps}
+    />
+  );
 }
 
 export function Button(props: DefaultButton["props"]) {
@@ -43,12 +73,42 @@ export function Button(props: DefaultButton["props"]) {
   return <DefaultButton {...props} color={textThemeColor} />;
 }
 
-export function ButtonIcon(props: RNPButtonProps) {
+export function ButtonIcon({ style, disabled, ...props }: RNPButtonProps) {
   const textThemeColor = useThemeColor("text");
-  return <DefaultButtonIcon {...props} textColor={textThemeColor} />;
+  const backgroundColor = useThemeColor("themedGray");
+  const calculatedStyle = disabled ? [{ backgroundColor }, style] : style;
+  return (
+    <DefaultButtonIcon
+      style={calculatedStyle}
+      disabled={disabled}
+      mode="outlined"
+      textColor={textThemeColor}
+      {...props}
+    />
+  );
 }
 
-// export function TextInput(props: RNPTextInputProps) {
-//   const textThemeColor = useThemeColor("text");
-//   return <DefaultTextInput {...props} contentStyle />;
-// }
+export function TextInput(props: RNPTextInputProps) {
+  const textThemeColor = useThemeColor("text");
+  const outlineColor = useThemeColor("themedGray");
+  return (
+    <DefaultTextInput
+      numberOfLines={2}
+      maxLength={100}
+      mode="outlined"
+      textColor={textThemeColor}
+      activeOutlineColor={outlineColor}
+      {...props}
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  slider: {
+    height: 25,
+    // transform: IsIOS
+    //   ? [{ scaleY: 1 }, { scaleX: 1 }]
+    //   : [{ scaleY: 2 }, { scaleX: 2 }],
+    width: "40%",
+  },
+});

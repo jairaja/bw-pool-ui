@@ -56,6 +56,7 @@ function RootNavigator() {
             ...DarkTheme.colors,
             ...HtmlGrayColors,
             themedGray: HtmlGrayColors.dimGray,
+            white: "rgb(255,255,255)",
           },
         }
       : {
@@ -64,6 +65,7 @@ function RootNavigator() {
             ...DefaultTheme.colors,
             ...HtmlGrayColors,
             themedGray: HtmlGrayColors.lightGray,
+            white: "rgb(255,255,255)",
           },
         };
 

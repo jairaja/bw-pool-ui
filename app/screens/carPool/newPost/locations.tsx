@@ -18,8 +18,13 @@ const Locations = ({
   dropPoints,
   destination,
 }: LocationsPropsType) => {
-  const [pickupPointsState, setPickupPointsState] = useState(pickupPoints); //Need this state due to a bug in Picker with multiple values. Same for DropPOints Picker
-  const [dropPointsState, setDropPointsState] = useState(dropPoints);
+  // Need this state due to a bug in Picker with multiple values. OnChange event is not fired if local state is not set
+  // On selection change is fired. But it will take away the functionality of removing selected items in a closed picker
+  // In closed picker, on removing items, on change will be fired only if 'setValue' of the picker has setstate function
+  // Same for DropPoints Picker
+
+  // const [pickupPointsState, setPickupPointsState] = useState(pickupPoints);
+  // const [dropPointsState, setDropPointsState] = useState(dropPoints);
   const [items, setItems] = useState([]);
   const [startingPointDropDownOpen, setStartingPointDropDownOpen] =
     useState(false);
@@ -34,10 +39,8 @@ const Locations = ({
         "https://mocki.io/v1/5759a4f7-b5c7-460e-a78e-e23b7222e029"
       );
       const response = await fetchData.json();
-      // console.log(response);
-
-      // const paarsedresponse = JSON.parse(response);
-      // console.log(paarsedresponse);
+      // TODO - seprate lists for starting point and pickup points....and drop points and destination
+      // These lists to check for source and destination in "From" field
       setItems(response);
     };
     getData();
@@ -48,85 +51,76 @@ const Locations = ({
       <LabeledDropDownPicker
         label="Starting Point: "
         open={startingPointDropDownOpen}
-        value={startingPoint}
-        items={items}
         setOpen={setStartingPointDropDownOpen}
+        value={startingPoint as string}
+        items={items}
         onSelectItem={(item) => {
           onChange("startingPoint", item.value as string);
         }}
         multiple={false}
-        placeholder="Select the starting point"
-        zIndex={1000}
-        // zIndexInverse={4000}
-        elevation={1000}
+        placeholder="Select your starting point"
       />
       <LabeledDropDownPicker
         label="Pickup Points: "
         open={pickupPointsDropDownOpen}
-        value={pickupPointsState as ValueType[]}
-        items={items}
         setOpen={setPickupPointsDropDownOpen}
-        setValue={setPickupPointsState}
+        value={pickupPoints as ValueType[]}
+        // value={pickupPointsState as ValueType[]}
+        items={items}
+        // setValue={setPickupPointsState}
         min={0}
         max={5}
-        // onSelectItem={(item) => {
-        //   console.log("seelct item" + item);
-        // }}
-        // onChangeValue={(newValue) => {
-        //   console.log("change" + newValue);
-        //   onChange("pickupPoints", newValue as string[]);
+        onSelectItem={(newValues: ItemType<ValueType>[]) => {
+          if (newValues.length <= 5) {
+            onChange(
+              "pickupPoints",
+              newValues.map((newValue) => newValue.value) as string[]
+            );
+          }
+        }}
+        // onChangeValue={(newValues) => {
+        //   onChange("pickupPoints", newValues as string[]);
         // }}
         placeholder="Select upto 5"
         multiple
         mode="BADGE"
-        badgeDotColors={[
-          "#e76f51",
-          "#00b4d8",
-          "#e9c46a",
-          "#e76f51",
-          "#8ac926",
-          "#00b4d8",
-          "#e9c46a",
-        ]}
-        zIndex={2000}
-        zIndexInverse={3000}
       />
       <LabeledDropDownPicker
         label="Drop Points: "
         open={dropPointsDropDownOpen}
-        value={dropPointsState as ValueType[]}
-        items={items}
         setOpen={setDropPointsDropDownOpen}
-        setValue={setDropPointsState}
-        // onSelectItem={(items: ItemType<ValueType>[]) => {
-        //   console.log(items);
-        //   onChange(
-        //     "dropPoints",
-        //     items.map((item) => item.value as string)
-        //   );
-        // }}
-        // onChangeValue={(value) => console.log(value)}
+        value={dropPoints as ValueType[]}
+        // value={dropPointsState as ValueType[]}
+        items={items}
+        // setValue={setDropPointsState}
         min={0}
         max={5}
+        onSelectItem={(newValues: ItemType<ValueType>[]) => {
+          if (newValues.length <= 5) {
+            onChange(
+              "dropPoints",
+              newValues.map((newValue) => newValue.value) as string[]
+            );
+          }
+        }}
+        // onChangeValue={(newValues) => {
+        //   onChange("dropPoints", newValues as string[]);
+        // }}
         placeholder="Select upto 5"
         multiple
         mode="BADGE"
-        zIndex={3000}
-        zIndexInverse={2000}
       />
       <LabeledDropDownPicker
         label="Destination: "
         open={destinationDropDownOpen}
-        value={destination}
+        setOpen={setDestinationDropDownOpen}
+        value={destination as string}
         items={items}
         onSelectItem={(item: ItemType<ValueType>) => {
           onChange("destination", item.value as string);
         }}
-        setOpen={setDestinationDropDownOpen}
         multiple={false}
-        placeholder="Select your last stop of the journey"
-        zIndex={4000}
-        zIndexInverse={1000}
+        placeholder="Select your destination"
       />
     </View>
   );

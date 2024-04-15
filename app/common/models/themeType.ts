@@ -14,5 +14,6 @@ export type ThemeColorsType = {
     text: string;
     border: string;
     notification: string;
+    white: string;
   };
 };

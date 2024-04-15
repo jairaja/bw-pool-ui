@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import DateTimePicker, {
   AndroidNativeProps,
   DateTimePickerEvent,
@@ -6,16 +6,16 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { ButtonIcon, View, Text } from "./themed";
 import { StyleSheet } from "react-native";
-import { LocalTime } from "../models/types";
+import { IconButton } from "react-native-paper";
 
 type LabeledDateTimePropsType = {
   mode: "date" | "time";
   label?: string;
-  labelLaunchButton: LocalTime | string;
+  labelLaunchButton: string;
+  disabled?: boolean;
+  resetTime?: () => void;
   onChange: (event: DateTimePickerEvent, date?: Date) => void;
 } & (IOSNativeProps | AndroidNativeProps);
-// } & FC<Omit<IOSNativeProps | AndroidNativeProps, "mode">>;
-// Omit<IOSNativeProps, "mode">;
 
 const LabeledDateTimePicker = function ({
   mode,
@@ -23,14 +23,11 @@ const LabeledDateTimePicker = function ({
   value,
   label,
   labelLaunchButton,
+  disabled,
+  resetTime,
   ...rest
 }: LabeledDateTimePropsType) {
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-
-  const labelForLaunchButton =
-    typeof labelLaunchButton === "string"
-      ? labelLaunchButton
-      : labelLaunchButton.value;
 
   return (
     <View style={styles.container}>
@@ -41,8 +38,9 @@ const LabeledDateTimePicker = function ({
             setShowDateTimePicker(true);
           }}
           icon={"clock-time-four"}
+          disabled={disabled}
         >
-          {labelForLaunchButton}
+          {labelLaunchButton}
         </ButtonIcon>
       )}
       {showDateTimePicker && (
@@ -57,6 +55,15 @@ const LabeledDateTimePicker = function ({
           // is24Hour
         />
       )}
+      {!showDateTimePicker && (
+        <IconButton
+          icon="backup-restore"
+          disabled={disabled}
+          size={15}
+          style={styles.resetButton}
+          onPress={resetTime}
+        />
+      )}
     </View>
   );
 };
@@ -67,5 +74,8 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
+    marginBottom: 10,
+    marginTop: 10,
   },
+  resetButton: { alignSelf: "auto" },
 });

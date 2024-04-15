@@ -11,10 +11,7 @@ const GOOGLE_API_KEY = "1234"; // dev
 const APP_NAME = "Go Green";
 const APP_NAME_Slogan = "Save Environment and Money";
 
-const ROUTE_INFO = [
-  { value: "Hatfield to London", key: "hatf2lndn" },
-  { value: "London to Hatfield", key: "lndn2hatf" },
-];
+const ROUTE_INFO = ["Hatfield to London", "London to Hatfield"];
 
 const VEHICLE_TYPE_FOR_RIDER = ["Car"];
 // const VEHICLE_TYPE_FOR_RIDER = ["Car", "Bike", "Any"];
@@ -24,23 +21,23 @@ const VEHICLE_TYPE_FOR_VEHICLE_OWNER = ["Car"];
 
 const COMMUNICATION_MODE = ["WhatsApp", "Call", "Any"];
 
-const FUEL_TYPE = ["Petrol", "Diesel", "CNG"];
+const FUEL_TYPE = ["Petrol", "Diesel", "CNG", "Electric"];
+
+const SHARE_PER_SEAT = [150, 160, 170, 180, 190, 200];
 
 const REFUELING_OPTION_REQUIRED = true;
 
-const TOD_TOM = [
-  { value: "Today", key: "today" },
-  { value: "Tomorrow", key: "tomorrow" },
-];
+const CURRENCY_SYMBOL = "₹";
 
 export {
   SERVER_URL,
+  CURRENCY_SYMBOL,
+  SHARE_PER_SEAT,
   GOOGLE_API_KEY,
   APP_NAME,
   APP_NAME_Slogan,
   ROUTE_INFO,
   VEHICLE_TYPE_FOR_RIDER,
-  TOD_TOM,
   FUEL_TYPE,
   COMMUNICATION_MODE,
   VEHICLE_TYPE_FOR_VEHICLE_OWNER,
