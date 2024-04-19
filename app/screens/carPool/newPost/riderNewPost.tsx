@@ -1,20 +1,18 @@
-import { GetChildButtons } from "@/app/common/components/choiceButtons/choiceButtons";
-import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
-import LabeledSlider from "@/app/common/components/labeledSlider";
-import LabeledSwitch from "@/app/common/components/labeledSwitch";
 import SimpleCard from "@/app/common/components/simpleCard";
 import { IsTimeUpdated } from "@/app/common/utils/dateTimeHelper";
 import { IsIOS } from "@/app/common/utils/helpers";
-import { SHARE_PER_SEAT, COMMUNICATION_MODE, CURRENCY_SYMBOL } from "@/config";
+import { SHARE_PER_SEAT } from "@/config";
 import React, { useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
-import { Divider } from "react-native-paper";
-import ActionButtons from "./actionButtons";
 import Locations from "./locations";
 import Timelines from "./timelines";
-import { TextInput } from "@/app/common/components/themed";
+import CarDetails from "./carDetails";
+import { ModalPropsType } from "@/app/common/components/modal";
+import { GetSummary } from "@/app/common/utils/summaryHelper";
+import ActionsAndMisc from "./actionsAndMisc";
+import { Divider } from "@/app/common/components/themed";
 
-type RiderNewPostType = {
+export type RiderNewPostValuesType = {
   from?: string;
   when?: Date;
   pickupPoints?: string[];
@@ -26,12 +24,27 @@ type RiderNewPostType = {
   communicationMode?: string;
 };
 
-// const NewPost: React.FunctionComponent<NewPostPropsType> = ({}) => {
-const RiderNewPost = ({ navigation }) => {
+type RiderNewPostType = RiderNewPostValuesType & {
+  actionSummaryModal: ModalPropsType;
+};
+
+const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
-  const communicationModeRef = useRef<string[]>([]);
+
+  const onModalClose = () => {
+    update("actionSummaryModal", {
+      ...newPost.actionSummaryModal,
+      visible: false,
+    });
+  };
+
   const initialState = {
     poolShare: poolShareRef?.current[0],
+    actionSummaryModal: {
+      visible: false,
+      componentOrMessage: "",
+      onClose: onModalClose,
+    },
   };
   const [newPost, setNewPost] = useState<RiderNewPostType>(initialState);
 
@@ -39,27 +52,45 @@ const RiderNewPost = ({ navigation }) => {
     newPost.from &&
     IsTimeUpdated(newPost.when) &&
     newPost.pickupPoints &&
+    newPost.pickupPoints.length > 0 &&
     newPost.dropPoints &&
+    newPost.dropPoints.length > 0 &&
     newPost.communicationMode &&
     newPost.poolShare;
 
   const update = function (
     key: string,
-    value: string | number | string[] | undefined | boolean | Date
+    value:
+      | string
+      | number
+      | string[]
+      | undefined
+      | boolean
+      | Date
+      | ModalPropsType
   ): void {
     setNewPost((prevState) => ({ ...prevState, [key]: value }));
   };
+
   const reset = function () {
     setNewPost(initialState);
   };
-  const post = function () {};
+
+  const post = function () {
+    update("actionSummaryModal", {
+      ...newPost.actionSummaryModal,
+      visible: true,
+      componentOrMessage: GetSummary({
+        riderOwner: "Rider",
+        ...newPost,
+      }),
+      heading: "Rider New Post",
+    });
+  };
+
   useEffect(() => {
     if (Array.isArray(SHARE_PER_SEAT)) {
       poolShareRef.current = [...SHARE_PER_SEAT];
-      update("poolShare", poolShareRef.current[0]);
-    }
-    if (Array.isArray(COMMUNICATION_MODE)) {
-      communicationModeRef.current = [...COMMUNICATION_MODE];
     }
   }, []);
 
@@ -83,62 +114,23 @@ const RiderNewPost = ({ navigation }) => {
                 dropPoints={newPost.dropPoints}
               />
               <Divider />
-              <LabeledSwitch
-                label="Bootspace required: "
-                value={newPost.bootspace}
-                onValueChange={(newValue: boolean) => {
-                  update("bootspace", newValue);
-                }}
-              />
-              <LabeledChoiceButtons
-                label="Space required for (optional):   "
-                value={newPost.luggage ?? ""}
-                mode="block"
-                nullable
-                disabled={!newPost.bootspace}
-                onValueChange={(value) => {
-                  update("luggage", value);
-                }}
-                buttons={GetChildButtons(["Small Bag", "Medium Bag", "More"])}
-                multiSelect={false}
-              />
-              <LabeledSlider
-                label="Preferred pool share per seat: "
-                minimumValue={poolShareRef.current[0]}
-                maximumValue={
-                  poolShareRef.current[poolShareRef.current.length - 1]
-                }
-                value={newPost.poolShare}
-                step={10}
-                displayValue={`${CURRENCY_SYMBOL ?? ""} ${newPost.poolShare}`}
-                onValueChange={(newValue) => update("poolShare", newValue)}
-              />
-              <TextInput
-                label="Optional Notes (max 100 chars)"
-                value={newPost.notes}
-                multiline
-                placeholder="Any special request, etc.."
-                onChangeText={(newNotes) => update("notes", newNotes)}
+              <CarDetails
+                forRiderOrOwner="Rider"
+                onChange={update}
+                bootspace={newPost.bootspace}
+                luggage={newPost.luggage}
+                poolShare={newPost.poolShare}
               />
 
-              <LabeledChoiceButtons
-                buttons={GetChildButtons(communicationModeRef.current)}
-                label="Preferred communication mode:"
-                mode="block"
-                nullable
-                value={newPost.communicationMode ?? ""}
-                onValueChange={(newValue) =>
-                  update("communicationMode", newValue)
-                }
-                multiSelect={false}
-              />
-
-              <Divider />
-
-              <ActionButtons
+              <ActionsAndMisc
+                onChange={update}
+                notes={newPost.notes}
+                forRiderOrOwner="Rider"
+                communicationMode={newPost.communicationMode}
                 reset={reset}
                 post={post}
-                disablePosting={!allMandatoryFieldsHaveValues}
+                postingDisabled={!allMandatoryFieldsHaveValues}
+                actionSummaryModal={newPost.actionSummaryModal}
               />
             </>
           }
