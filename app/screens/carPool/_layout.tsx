@@ -58,7 +58,6 @@ const CarPool = ({ navigation }) => {
   }, []);
 
   const onRowPress = (item: iPostDataTableItem) => {
-    console.log(JSON.stringify(item));
     setModalProps({
       ...modalProps,
       visible: true,

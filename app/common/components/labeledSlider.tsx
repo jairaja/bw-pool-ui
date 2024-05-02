@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 5,
-    marginTop: 5,
+    marginBottom: 10,
+    marginTop: 10,
   },
 });

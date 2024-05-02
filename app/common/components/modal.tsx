@@ -1,9 +1,9 @@
 import { Text, View } from "@/app/common/components/themed";
 import React from "react";
-import { ButtonIcon } from "./themed";
+import { ButtonIcon, Divider } from "./themed";
 
 import { StyleSheet } from "react-native";
-import { Divider, Portal, Modal as RNModal } from "react-native-paper";
+import { Portal, Modal as RNModal } from "react-native-paper";
 
 export type ModalPropsType = {
   visible: boolean;
@@ -11,11 +11,16 @@ export type ModalPropsType = {
   componentOrMessage: React.ReactNode;
   heading?: string;
   onClose: () => void;
+  onAction?: (message?: string) => void;
 };
 
-const Modal = (props: ModalPropsType) => {
-  const { visible, modalType, componentOrMessage, heading, onClose } = props;
-
+const Modal = ({
+  visible,
+  modalType,
+  componentOrMessage,
+  heading,
+  onClose,
+}: ModalPropsType) => {
   //TODO add themed buttons
   const getModalFooter = function (modalType: ModalPropsType["modalType"]) {
     switch (modalType) {
@@ -30,13 +35,10 @@ const Modal = (props: ModalPropsType) => {
       default:
         return (
           <ButtonIcon
-            // theme={themePrimaryColorOverridden("gray")}
-            // style
             onPress={() => {
               onClose();
             }}
           >
-            {/* <Text>Cancel</Text> */}
             Cancel
           </ButtonIcon>
         );
@@ -53,8 +55,8 @@ const Modal = (props: ModalPropsType) => {
       >
         <View style={styles.header}>
           <Text style={styles.headerText}>{heading ?? "Info"}</Text>
-          <Divider style={styles.divider} />
         </View>
+        <Divider />
         <View style={styles.body}>
           {typeof componentOrMessage === "string" ? (
             <Text>{componentOrMessage}</Text>
@@ -63,7 +65,7 @@ const Modal = (props: ModalPropsType) => {
           )}
         </View>
 
-        <Divider style={styles.divider} />
+        <Divider />
         <View style={styles.footer}>{getModalFooter(modalType)}</View>
       </RNModal>
     </Portal>
@@ -75,10 +77,6 @@ export default Modal;
 const styles = StyleSheet.create({
   body: {
     height: "80%",
-  },
-  divider: {
-    backgroundColor: "lightgray",
-    height: 1,
   },
   footer: {
     alignItems: "center",
@@ -92,8 +90,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   rnModal: {
-    backgroundColor: "rgb(240,240,240)",
-    borderRadius: 5,
+    // backgroundColor: "rgb(240,240,240)",
+    // borderRadius: 50,
     height: "75%",
     margin: 10,
     padding: 20,
