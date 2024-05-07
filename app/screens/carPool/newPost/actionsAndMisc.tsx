@@ -70,6 +70,7 @@ export default function ActionsAndMisc({
         visible={actionSummaryModal.visible}
         componentOrMessage={actionSummaryModal.componentOrMessage}
         onClose={actionSummaryModal.onClose}
+        modalType={"CONFIRMCANCEL"}
         heading={actionSummaryModal.heading}
       />
     </>

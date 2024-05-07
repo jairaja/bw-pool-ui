@@ -34,7 +34,7 @@ const CarPool = ({ navigation }) => {
   const [filters, setFilters] = useState([] as string[]);
 
   useEffect(() => {
-    const getData = async function () {
+    const getPoolingPosts = async function () {
       try {
         // ToDo - move all network requests to one place
         const fetchPosts = await fetch(
@@ -54,7 +54,7 @@ const CarPool = ({ navigation }) => {
         console.error(error);
       }
     };
-    getData();
+    getPoolingPosts();
   }, []);
 
   const onRowPress = (item: iPostDataTableItem) => {

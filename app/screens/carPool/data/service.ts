@@ -1,10 +1,28 @@
 import { db } from "@/firebase-config";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 
-//Temp
-async function getCities() {
-  const citiesCol = collection(db, "cities");
-  const citySnapshot = await getDocs(citiesCol);
-  const cityList = citySnapshot.docs.map((doc) => doc.data());
-  return cityList;
+const PoolingPostsDB = "poolingPosts";
+
+async function GetAllPoolingPosts() {
+  const docRef = collection(db, PoolingPostsDB);
+  const docSnap = await getDocs(docRef);
+
+  console.log("******");
+  console.log(docSnap.docs);
+  docSnap.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+  });
+
+  // const docRef = doc(db, "poolingPosts", "YXDGUBulZ33huc6f2H43");
+
+  // const data = await db.collection("poolingPosts").get();
+  // const data = await getDocs(collection(db, "poolingPosts"));
+
+  // console.log(JSON.parse(`${docSnap.data()}`));
 }
+
+async function name(params: type) {}
+
+export { GetAllPoolingPosts };

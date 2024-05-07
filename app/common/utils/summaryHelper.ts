@@ -20,11 +20,11 @@ export function GetSummary({ riderOwner, ...post }: SummaryType) {
 }
 
 export function GetRiderPostSummary(post: RiderNewPostValuesType) {
-  let riderSummary = `from  ${post.from}.`;
+  let riderSummary = `from  ${post.startingFrom}.`;
 
-  const todTom = GetTodTomFromDate(post.when) as string;
-  const dayAndDate = GetDayAndDate(post.when, "\\");
-  const displayTime = FromDateToDisplayTime(post.when);
+  const todTom = GetTodTomFromDate(post.startingWhen) as string;
+  const dayAndDate = GetDayAndDate(post.startingWhen, "\\");
+  const displayTime = FromDateToDisplayTime(post.startingWhen);
 
   riderSummary += `\n${todTom} - ${dayAndDate} - around ${displayTime}.`;
 
@@ -82,11 +82,11 @@ export function GetRiderPostSummary(post: RiderNewPostValuesType) {
 }
 
 export function GetCarOwnerPostSummary(post: CarOwnerNewPostValuesType) {
-  let ownerSummary = `from ${post.from}.`;
+  let ownerSummary = `from ${post.startingFrom}.`;
 
-  const todTom = GetTodTomFromDate(post.when) as string;
-  const dayAndDate = GetDayAndDate(post.when, "\\");
-  const displayTime = FromDateToDisplayTime(post.when);
+  const todTom = GetTodTomFromDate(post.startingWhen) as string;
+  const dayAndDate = GetDayAndDate(post.startingWhen, "\\");
+  const displayTime = FromDateToDisplayTime(post.startingWhen);
 
   ownerSummary += `\n${todTom} - ${dayAndDate} - at ${displayTime}.`;
 
