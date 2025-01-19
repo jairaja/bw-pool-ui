@@ -1,6 +1,6 @@
 import { db } from "@/firebase-config";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { getDoc, collection, getDocs } from "firebase/firestore";
 
 const PoolingPostsDB = "poolingPosts";
 
