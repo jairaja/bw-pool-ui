@@ -13,7 +13,7 @@ const firebaseConfig = {
   storageBucket: "bw-pool-baas.appspot.com",
   messagingSenderId: "515835263431",
   appId: "1:515835263431:web:a7b422dd015de79d6401e2",
-  // measurementId: "G-ZY15H6EHGT",
+  measurementId: "G-ZY15H6EHGT",
 };
 
 // Initialize Firebase

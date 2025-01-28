@@ -75,6 +75,7 @@ export function Slider({ style, ...otherProps }: SliderProps) {
   );
 }
 
+//TODO - Wrong colors in Dark theme. The text is white on white background. Test for light theme.
 export function Button(props: DefaultButton["props"]) {
   const textThemeColor = useThemeColor("text");
   return <DefaultButton {...props} color={textThemeColor} />;

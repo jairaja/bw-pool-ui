@@ -1,6 +1,6 @@
 import LabeledDropDownPicker from "@/app/common/components/labeledDropDownPicker";
 import { View } from "@/app/common/components/themed";
-import { RiderOwner } from "@/app/common/models/types";
+import { RiderOwner } from "@/app/common/models/basic";
 import React, { useState, useEffect } from "react";
 import { ItemType, ValueType } from "react-native-dropdown-picker";
 

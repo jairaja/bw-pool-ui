@@ -1,6 +1,6 @@
 import { CarOwnerNewPostValuesType } from "@/app/screens/carPool/newPost/carOwnerNewPost";
 import { RiderNewPostValuesType } from "@/app/screens/carPool/newPost/riderNewPost";
-import { RiderOwner } from "../models/types";
+import { RiderOwner } from "../models/basic";
 import {
   FromDateToDisplayTime,
   GetDayAndDate,

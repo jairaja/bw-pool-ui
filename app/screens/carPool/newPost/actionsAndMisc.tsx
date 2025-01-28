@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from "react";
 import { Divider, TextInput } from "@/app/common/components/themed";
 import ActionButtons from "./actionButtons";
 import { COMMUNICATION_MODE } from "@/config";
-import { RiderOwner } from "@/app/common/models/types";
+import { RiderOwner } from "@/app/common/models/basic";
 
 type ActionAndMiscPropType = {
   onChange: (key: string, value: string) => void;

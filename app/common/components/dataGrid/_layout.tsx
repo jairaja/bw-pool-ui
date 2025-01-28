@@ -10,7 +10,7 @@ import { ScrollView } from "react-native";
 import { Text } from "@/app/common/components/themed";
 
 import { DataTable } from "react-native-paper";
-import iPostDataTableItem from "../../../models/iPostDataTableItem";
+// import iPostDataTableItem from "../../../models/iPostDataTableItem";
 import styles from "./dataGrid.style";
 import {
   themePrimaryColorOverridden,
@@ -25,6 +25,16 @@ type DataGridHeaderProp = {
   numberOfLines?: number;
 };
 
+export interface iPostDataTableItem extends Record<string, any> {
+  summary?: string;
+  sharePp?: number;
+  startTime?: string;
+  // startDate: string;
+  details?: string;
+  fromTo?: string;
+  // [k: string]: any;
+}
+
 interface DataGridProps {
   items: iPostDataTableItem[];
   columnsDef: DataGridHeaderProp[];
@@ -34,22 +44,20 @@ interface DataGridProps {
   onLayout?: (nativeEvent: LayoutChangeEvent) => void;
 }
 
-const DataGrid = (props: DataGridProps) => {
+const DataGrid = ({
+  items,
+  columnsDef,
+  firstColMinWidhtFifty,
+  onRowPress,
+  onScroll,
+  onLayout,
+}: DataGridProps) => {
   const [page, setPage] = React.useState<number>(0);
   const numberOfItemsPerPageList = [4, 8, 12, 16];
   // const numberOfItemsPerPageList = [5, 10, 15, 20];
   const [itemsPerPage, setItemsPerPage] = React.useState(
     numberOfItemsPerPageList[0]
   );
-
-  const {
-    items,
-    columnsDef,
-    firstColMinWidhtFifty,
-    onRowPress,
-    onScroll,
-    onLayout,
-  } = props;
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, items.length);

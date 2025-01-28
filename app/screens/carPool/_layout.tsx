@@ -1,20 +1,32 @@
-import { View } from "@/app/common/components/themed";
+import { Button, View } from "@/app/common/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import { Animated, StyleSheet } from "react-native";
+import { ActivityIndicator, Animated, StyleSheet } from "react-native";
 import { IsIOS } from "../../common/utils/helpers";
-import DataGrid from "../../common/components/dataGrid/_layout";
+import DataGrid, {
+  iPostDataTableItem,
+} from "../../common/components/dataGrid/_layout";
 import FloatingButton from "../../common/components/floatingButton/_layout";
 import Modal, { ModalPropsType } from "../../common/components/modal";
 import { SafeAreaView } from "react-native-safe-area-context";
-import iPostDataTableItem from "../../models/iPostDataTableItem";
 import { IconButton } from "react-native-paper";
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
+import type { NavigationProp } from "@react-navigation/native";
+import GetAllPoolingPosts from "../../service/service";
+import { Resource } from "@/app/common/models/basic";
+import { CarOwnerNewPostValuesType } from "./newPost/carOwnerNewPost";
 
-// type PoolingProps = {};
+const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
+  const [allPoolingPosts, setAllPoolingPosts] = useState<
+    Resource<CarOwnerNewPostValuesType[]>
+  >({
+    loadingState: "not-loaded",
+  });
 
-const CarPool = ({ navigation }) => {
-  const [items, setItems] = useState([]);
+  const [allPoolingPostsForTable, setAllPoolingPostsForTable] = useState<
+    iPostDataTableItem[]
+  >([]);
+
   const onModalClose = () => {
     setModalProps({ ...modalProps, visible: false });
   };
@@ -31,29 +43,56 @@ const CarPool = ({ navigation }) => {
     onClose: onModalClose,
   });
 
-  const [filters, setFilters] = useState([] as string[]);
+  const [filters, setFilters] = useState<string[]>([]);
+
+  const getItemsForTable = (
+    items: CarOwnerNewPostValuesType[]
+  ): iPostDataTableItem[] => {
+    return items.map((item) => {
+      return {
+        shortSummary: item.startingFrom ?? "Short Sumary to be fixed",
+        sharePp: item.poolShare,
+        startTime: item.startingWhen?.toString(),
+      };
+    });
+  };
+
+  const getPoolingPosts = async function () {
+    try {
+      // ToDo - move all network requests to one place
+      // const fetchPosts = await fetch(
+      //   "https://mocki.io/v1/d26edb2f-a288-4574-ab60-17746997c38e",
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       Accept: "application/json",
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      // const posts = await fetchPosts.json();
+      setAllPoolingPosts({ loadingState: "loading" });
+      const allPoolingPosts = await GetAllPoolingPosts();
+      const posts = allPoolingPosts.docs.map(
+        (doc) => doc.data() as CarOwnerNewPostValuesType
+      );
+      setAllPoolingPostsForTable(getItemsForTable(posts));
+      console.log(JSON.stringify(posts));
+      console.log("########");
+      console.log(JSON.stringify(getItemsForTable(posts)));
+      // setItems({loadingState: 'loaded', data: posts});
+      setAllPoolingPosts({ loadingState: "loaded", data: posts });
+    } catch (error) {
+      // ToDo - show some error message / blocking or Ribbon or something
+      console.error(error);
+      setAllPoolingPosts({
+        loadingState: "failed",
+        errorMessage: JSON.stringify(error),
+      });
+    }
+  };
 
   useEffect(() => {
-    const getPoolingPosts = async function () {
-      try {
-        // ToDo - move all network requests to one place
-        const fetchPosts = await fetch(
-          "https://mocki.io/v1/d26edb2f-a288-4574-ab60-17746997c38e",
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const posts = await fetchPosts.json();
-        setItems(posts ?? [...items]);
-      } catch (error) {
-        // ToDo - show some error message / blocking or Ribbon or something
-        console.error(error);
-      }
-    };
     getPoolingPosts();
   }, []);
 
@@ -61,7 +100,7 @@ const CarPool = ({ navigation }) => {
     setModalProps({
       ...modalProps,
       visible: true,
-      componentOrMessage: item.desc,
+      componentOrMessage: item.summary,
       heading: item.fromTo,
     });
   };
@@ -140,19 +179,27 @@ const CarPool = ({ navigation }) => {
           />
         </View>
 
-        {items.length > 0 && (
-          <DataGrid
-            items={items}
-            onRowPress={onRowPress}
-            firstColMinWidhtFifty
-            // onLayout={() => console.log(`Items ${items}`)}
-            columnsDef={[
-              { title: "Description", key: "desc" },
-              { title: "Share PP", numeric: true, key: "sharePp" },
-              { title: "Start Time", numeric: true, key: "startTime" },
-            ]}
-            onScroll={onScroll}
-          />
+        {allPoolingPosts.loadingState === "failed" ? (
+          <Button onPress={getPoolingPosts} title="Please try again!" />
+        ) : (
+          <>
+            {allPoolingPosts.loadingState === "loaded" ? (
+              <DataGrid
+                items={allPoolingPosts.data}
+                onRowPress={onRowPress}
+                firstColMinWidhtFifty
+                // onLayout={() => console.log(`Items ${items}`)}
+                columnsDef={[
+                  { title: "Description", key: "description" },
+                  { title: "Share PP", numeric: true, key: "sharePp" },
+                  { title: "Start Time", numeric: true, key: "startTime" },
+                ]}
+                onScroll={onScroll}
+              />
+            ) : (
+              <ActivityIndicator />
+            )}
+          </>
         )}
 
         <FloatingButton

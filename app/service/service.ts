@@ -4,17 +4,18 @@ import { getDoc, collection, getDocs } from "firebase/firestore";
 
 const PoolingPostsDB = "poolingPosts";
 
-async function GetAllPoolingPosts() {
+export default async function GetAllPoolingPosts() {
   const docRef = collection(db, PoolingPostsDB);
   const docSnap = await getDocs(docRef);
 
-  console.log("******");
-  console.log(docSnap.docs);
-  docSnap.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
-  });
+  // console.log("******");
+  // console.log(docSnap.docs);
+  // docSnap.forEach((doc) => {
+  //   // doc.data() is never undefined for query doc snapshots
+  //   console.log(doc.id, " => ", doc.data());
+  // });
 
+  return docSnap;
   // const docRef = doc(db, "poolingPosts", "YXDGUBulZ33huc6f2H43");
 
   // const data = await db.collection("poolingPosts").get();
@@ -23,6 +24,6 @@ async function GetAllPoolingPosts() {
   // console.log(JSON.parse(`${docSnap.data()}`));
 }
 
-async function name(params: type) {}
+// async function name(params: type) {}
 
-export { GetAllPoolingPosts };
+// export { GetAllPoolingPosts };

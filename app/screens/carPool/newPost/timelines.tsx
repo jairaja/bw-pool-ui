@@ -3,7 +3,7 @@ import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import { GetChildButtons } from "@/app/common/components/choiceButtons/choiceButtons";
 
 import { ROUTE_INFO } from "@/config";
-import { RiderOwner, TodTom } from "@/app/common/models/types";
+import { RiderOwner, TodTom } from "@/app/common/models/basic";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import LabeledDateTimePicker from "@/app/common/components/labeledDateTimePicker";
 import {
