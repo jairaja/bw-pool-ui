@@ -23,10 +23,6 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
     loadingState: "not-loaded",
   });
 
-  const [allPoolingPostsForTable, setAllPoolingPostsForTable] = useState<
-    iPostDataTableItem[]
-  >([]);
-
   const onModalClose = () => {
     setModalProps({ ...modalProps, visible: false });
   };
@@ -76,11 +72,6 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
       const posts = allPoolingPosts.docs.map(
         (doc) => doc.data() as CarOwnerNewPostValuesType
       );
-      setAllPoolingPostsForTable(getItemsForTable(posts));
-      console.log(JSON.stringify(posts));
-      console.log("########");
-      console.log(JSON.stringify(getItemsForTable(posts)));
-      // setItems({loadingState: 'loaded', data: posts});
       setAllPoolingPosts({ loadingState: "loaded", data: posts });
     } catch (error) {
       // ToDo - show some error message / blocking or Ribbon or something
@@ -185,7 +176,7 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
           <>
             {allPoolingPosts.loadingState === "loaded" ? (
               <DataGrid
-                items={allPoolingPosts.data}
+                items={getItemsForTable(allPoolingPosts.data)}
                 onRowPress={onRowPress}
                 firstColMinWidhtFifty
                 // onLayout={() => console.log(`Items ${items}`)}

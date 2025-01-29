@@ -16,9 +16,9 @@ import {
   Divider as DefaultDivider,
 } from "react-native-paper";
 import React, { useEffect, useState } from "react";
-import { Props as RNPButtonProps } from "react-native-paper/lib/typescript/src/components/Button/Button";
-import { Props as RNPTextInputProps } from "react-native-paper/lib/typescript/src/components/TextInput/TextInput";
-import { Props as RNPDividerProps } from "react-native-paper/lib/typescript/src/components/Divider";
+import { ButtonProps as RNPButtonProps } from "react-native-paper";
+import { TextInputProps as RNPTextInputProps } from "react-native-paper";
+import { DividerProps as RNPDividerProps } from "react-native-paper";
 import { useThemeColor } from "../utils/themeHelper";
 import DefaultSlider, { SliderProps } from "@react-native-community/slider";
 

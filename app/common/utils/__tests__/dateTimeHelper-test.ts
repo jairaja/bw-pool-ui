@@ -1,5 +1,3 @@
-// FILE: dateTimeHelper.test.ts
-
 import {
   FromDateToDisplayTime,
   FromTimeNumberToDisplayTime,

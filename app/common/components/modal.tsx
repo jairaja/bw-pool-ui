@@ -33,34 +33,14 @@ const Modal = ({
       case "CONFIRMCANCEL":
         return (
           <View style={styles.footerButtons}>
-            <ButtonIcon
-              onPress={() => {
-                onClose();
-              }}
-            >
-              Cancel
-            </ButtonIcon>
-            <ButtonIcon
-              onPress={() => {
-                onClose();
-              }}
-            >
-              Confirm
-            </ButtonIcon>
+            <ButtonIcon onPress={onClose}>Cancel</ButtonIcon>
+            <ButtonIcon onPress={onClose}>Confirm</ButtonIcon>
           </View>
         );
       case "YESNO":
         return <Text>yesNo</Text>;
       default:
-        return (
-          <ButtonIcon
-            onPress={() => {
-              onClose();
-            }}
-          >
-            Cancel
-          </ButtonIcon>
-        );
+        return <ButtonIcon onPress={onClose}>Cancel</ButtonIcon>;
     }
   };
 
