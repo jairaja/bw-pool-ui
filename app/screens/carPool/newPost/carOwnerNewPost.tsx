@@ -11,26 +11,17 @@ import { ModalPropsType } from "@/app/common/components/modal";
 import { GetSummary } from "@/app/common/utils/summaryHelper";
 import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
+import { RiderNewPostType, RiderNewPostValuesType } from "./riderNewPost";
 
-export type CarOwnerNewPostValuesType = {
-  from?: string;
-  when?: Date;
+export type CarOwnerNewPostValuesType = RiderNewPostValuesType & {
   startingPoint?: string;
-  pickupPoints?: string[];
-  dropPoints?: string[];
   destination?: string;
   fuelType?: (typeof FUEL_TYPE)[number];
   refueling?: boolean;
-  bootspace?: boolean;
-  luggage?: string;
-  poolShare?: number;
-  notes?: string;
-  communicationMode?: string;
 };
 
-type CarOwnerNewPostType = CarOwnerNewPostValuesType & {
-  actionSummaryModal: ModalPropsType;
-};
+// Remove RiderNewPostValuesType from RiderNewPostType
+type CarOwnerNewPostType = CarOwnerNewPostValuesType & RiderNewPostType;
 
 // Seat cancellation policy...in the form or with every post, as a policy reminder.
 const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
@@ -54,8 +45,8 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
   const [newPost, setNewPost] = useState<CarOwnerNewPostType>(initialState);
 
   const allMandatoryFieldsHaveValues =
-    newPost.from &&
-    IsTimeUpdated(newPost.when) &&
+    newPost.startingFrom &&
+    IsTimeUpdated(newPost.startingWhen) &&
     newPost.startingPoint &&
     newPost.fuelType &&
     newPost.destination &&
@@ -89,6 +80,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
         ...newPost,
       }),
       heading: "Car Owner New Post",
+      // onAction:
     });
   };
 
@@ -106,8 +98,8 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
             <>
               <Timelines
                 forRiderOrOwner="Owner"
-                from={newPost.from}
-                when={newPost.when}
+                startingFrom={newPost.startingFrom}
+                startingWhen={newPost.startingWhen}
                 onChange={update}
               />
               <Divider />

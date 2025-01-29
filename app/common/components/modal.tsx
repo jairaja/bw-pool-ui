@@ -5,9 +5,11 @@ import { ButtonIcon, Divider } from "./themed";
 import { StyleSheet } from "react-native";
 import { Portal, Modal as RNModal } from "react-native-paper";
 
+export type ModalType = "CONTACT" | "INFO" | "CONFIRMCANCEL" | "YESNO";
+
 export type ModalPropsType = {
   visible: boolean;
-  modalType?: "contact" | "info" | "confirmCancel" | "yesNo";
+  modalType?: ModalType;
   componentOrMessage: React.ReactNode;
   heading?: string;
   onClose: () => void;
@@ -24,24 +26,21 @@ const Modal = ({
   //TODO add themed buttons
   const getModalFooter = function (modalType: ModalPropsType["modalType"]) {
     switch (modalType) {
-      case "contact":
+      case "CONTACT":
         return <Text>Contact</Text>;
-      case "info":
+      case "INFO":
         return <Text>OK</Text>;
-      case "confirmCancel":
-        return <Text>confirmCancel</Text>;
-      case "yesNo":
+      case "CONFIRMCANCEL":
+        return (
+          <View style={styles.footerButtons}>
+            <ButtonIcon onPress={onClose}>Cancel</ButtonIcon>
+            <ButtonIcon onPress={onClose}>Confirm</ButtonIcon>
+          </View>
+        );
+      case "YESNO":
         return <Text>yesNo</Text>;
       default:
-        return (
-          <ButtonIcon
-            onPress={() => {
-              onClose();
-            }}
-          >
-            Cancel
-          </ButtonIcon>
-        );
+        return <ButtonIcon onPress={onClose}>Cancel</ButtonIcon>;
     }
   };
 
@@ -64,7 +63,6 @@ const Modal = ({
             componentOrMessage
           )}
         </View>
-
         <Divider />
         <View style={styles.footer}>{getModalFooter(modalType)}</View>
       </RNModal>
@@ -79,8 +77,12 @@ const styles = StyleSheet.create({
     height: "80%",
   },
   footer: {
-    alignItems: "center",
     height: "10%",
+  },
+  footerButtons: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 10,
   },
   header: {
     height: "10%",

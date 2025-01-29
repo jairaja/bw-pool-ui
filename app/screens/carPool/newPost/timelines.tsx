@@ -3,7 +3,7 @@ import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import { GetChildButtons } from "@/app/common/components/choiceButtons/choiceButtons";
 
 import { ROUTE_INFO } from "@/config";
-import { RiderOwner, TodTom } from "@/app/common/models/types";
+import { RiderOwner, TodTom } from "@/app/common/models/basic";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import LabeledDateTimePicker from "@/app/common/components/labeledDateTimePicker";
 import {
@@ -15,22 +15,22 @@ import {
 
 type FromAndWhenPropType = {
   forRiderOrOwner: RiderOwner;
-  from?: string;
-  when?: Date;
+  startingFrom?: string;
+  startingWhen?: Date;
   onChange: (key: string, value: string | number | Date) => void;
 };
 
 const Timelines = function ({
   forRiderOrOwner,
-  from,
-  when,
+  startingFrom,
+  startingWhen,
   onChange,
 }: FromAndWhenPropType) {
   const routeInfoRef = useRef<string[]>([]);
 
   const updateTime = (event: DateTimePickerEvent, date?: Date) => {
     if (date) {
-      onChange("when", date);
+      onChange("startingWhen", date);
     }
   };
 
@@ -59,14 +59,14 @@ const Timelines = function ({
   }
 
   function resetTime() {
-    onChange("when", new Date(when!.setHours(0, 0, 0, 0)));
+    onChange("startingWhen", new Date(startingWhen!.setHours(0, 0, 0, 0)));
   }
 
   function setTodTom(day: TodTom, date?: Date) {
     if (date) {
-      onChange("when", UpdateTodTomDate(day, date));
+      onChange("startingWhen", UpdateTodTomDate(day, date));
     } else {
-      onChange("when", GetTodTomDate(day, true) as Date);
+      onChange("startingWhen", GetTodTomDate(day, true) as Date);
     }
   }
 
@@ -82,10 +82,10 @@ const Timelines = function ({
     <>
       <LabeledChoiceButtons
         label="From:   "
-        value={from ?? ""}
+        value={startingFrom ?? ""}
         mode="inline"
         onValueChange={(value) => {
-          onChange("from", value);
+          onChange("startingFrom", value);
         }}
         buttons={GetChildButtons(routeInfoRef.current)}
         multiSelect={false}
@@ -93,10 +93,10 @@ const Timelines = function ({
 
       <LabeledChoiceButtons
         label="When:   "
-        value={getTodTom(when)}
+        value={getTodTom(startingWhen)}
         mode="inline"
         onValueChange={(value) => {
-          setTodTom(value as TodTom, when);
+          setTodTom(value as TodTom, startingWhen);
         }}
         buttons={GetChildButtons(["Today", "Tomorrow"])}
         multiSelect={false}
@@ -104,12 +104,12 @@ const Timelines = function ({
 
       <LabeledDateTimePicker
         label={forRiderOrOwner === "Rider" ? "Preferred Time: " : "Time:   "}
-        labelLaunchButton={getDisplayTime(when) ?? "Show Time Picker"}
+        labelLaunchButton={getDisplayTime(startingWhen) ?? "Show Time Picker"}
         mode="time"
         resetTime={resetTime}
-        disabled={!when}
+        disabled={!startingWhen}
         onChange={updateTime}
-        value={getTime(when)}
+        value={getTime(startingWhen)}
       />
     </>
   );

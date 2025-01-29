@@ -13,8 +13,8 @@ import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
 
 export type RiderNewPostValuesType = {
-  from?: string;
-  when?: Date;
+  startingFrom?: string;
+  startingWhen?: Date;
   pickupPoints?: string[];
   dropPoints?: string[];
   bootspace?: boolean;
@@ -24,7 +24,7 @@ export type RiderNewPostValuesType = {
   communicationMode?: string;
 };
 
-type RiderNewPostType = RiderNewPostValuesType & {
+export type RiderNewPostType = RiderNewPostValuesType & {
   actionSummaryModal: ModalPropsType;
 };
 
@@ -49,8 +49,8 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
   const [newPost, setNewPost] = useState<RiderNewPostType>(initialState);
 
   const allMandatoryFieldsHaveValues =
-    newPost.from &&
-    IsTimeUpdated(newPost.when) &&
+    newPost.startingFrom &&
+    IsTimeUpdated(newPost.startingWhen) &&
     newPost.pickupPoints &&
     newPost.pickupPoints.length > 0 &&
     newPost.dropPoints &&
@@ -102,8 +102,8 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
             <>
               <Timelines
                 forRiderOrOwner="Rider"
-                from={newPost.from}
-                when={newPost.when}
+                startingFrom={newPost.startingFrom}
+                startingWhen={newPost.startingWhen}
                 onChange={update}
               />
               <Divider />

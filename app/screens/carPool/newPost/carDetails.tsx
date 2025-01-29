@@ -2,7 +2,7 @@ import { GetChildButtons } from "@/app/common/components/choiceButtons/choiceBut
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import LabeledSlider from "@/app/common/components/labeledSlider";
 import LabeledSwitch from "@/app/common/components/labeledSwitch";
-import { RiderOwner } from "@/app/common/models/types";
+import { RiderOwner } from "@/app/common/models/basic";
 
 import { CURRENCY_SYMBOL, FUEL_TYPE, SHARE_PER_SEAT } from "@/config";
 import React, { useEffect, useRef, useState } from "react";

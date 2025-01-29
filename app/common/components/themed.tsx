@@ -16,9 +16,9 @@ import {
   Divider as DefaultDivider,
 } from "react-native-paper";
 import React, { useEffect, useState } from "react";
-import { Props as RNPButtonProps } from "react-native-paper/lib/typescript/src/components/Button/Button";
-import { Props as RNPTextInputProps } from "react-native-paper/lib/typescript/src/components/TextInput/TextInput";
-import { Props as RNPDividerProps } from "react-native-paper/lib/typescript/src/components/Divider";
+import { ButtonProps as RNPButtonProps } from "react-native-paper";
+import { TextInputProps as RNPTextInputProps } from "react-native-paper";
+import { DividerProps as RNPDividerProps } from "react-native-paper";
 import { useThemeColor } from "../utils/themeHelper";
 import DefaultSlider, { SliderProps } from "@react-native-community/slider";
 
@@ -75,6 +75,7 @@ export function Slider({ style, ...otherProps }: SliderProps) {
   );
 }
 
+//TODO - Wrong colors in Dark theme. The text is white on white background. Test for light theme.
 export function Button(props: DefaultButton["props"]) {
   const textThemeColor = useThemeColor("text");
   return <DefaultButton {...props} color={textThemeColor} />;

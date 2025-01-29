@@ -1,4 +1,4 @@
-import { TodTom } from "../models/types";
+import { TodTom } from "../models/basic";
 
 const dayNames = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 const monthNames = [
