@@ -1,6 +1,8 @@
 import LabeledDropDownPicker from "@/app/common/components/labeledDropDownPicker";
 import { View } from "@/app/common/components/themed";
-import { RiderOwner } from "@/app/common/models/basic";
+import { Resource, RiderOwner } from "@/app/common/models/basic";
+import { db } from "@/firebase-config";
+import { collection, getDocs } from "@firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { ItemType, ValueType } from "react-native-dropdown-picker";
 
@@ -28,7 +30,11 @@ const Locations = ({
 
   // const [pickupPointsState, setPickupPointsState] = useState(pickupPoints);
   // const [dropPointsState, setDropPointsState] = useState(dropPoints);
-  const [items, setItems] = useState([]);
+
+  const [locations, setLocations] = useState<
+    Resource<Record<"key", "value">[]>
+  >({ loadingState: "not-loaded" });
+
   const [startingPointDropDownOpen, setStartingPointDropDownOpen] =
     useState(false);
   const [pickupPointsDropDownOpen, setPickupPointsDropDownOpen] =
@@ -36,28 +42,39 @@ const Locations = ({
   const [dropPointsDropDownOpen, setDropPointsDropDownOpen] = useState(false);
   const [destinationDropDownOpen, setDestinationDropDownOpen] = useState(false);
 
+  const GetAllLocations = async () => {
+    const docRef = collection(db, "locations");
+    const docSnap = await getDocs(docRef);
+    return docSnap;
+  };
+
   useEffect(() => {
-    const getData = async function () {
-      const fetchData = await fetch(
-        "https://mocki.io/v1/5759a4f7-b5c7-460e-a78e-e23b7222e029"
-      );
-      const response = await fetchData.json();
+    const getLocationsData = async function () {
       // TODO - seprate lists for starting point and pickup points....and drop points and destination
       // These lists to check for source and destination in "From" field
-      setItems(response);
+      try {
+        setLocations({ loadingState: "loading" });
+
+        const allLocations = await GetAllLocations();
+        const allLocationsData = allLocations.docs.map((doc) => doc.data() as Record<"key", "value">);
+        setLocations({ loadingState: "loaded", data: allLocationsData });
+      } catch (error) {
+        setLocations({ loadingState: "failed",errorMessage: error as string });
+      }
     };
-    getData();
+    getLocationsData();
   }, []);
 
   return (
-    <View>
+    {locations.loadingState !== "loaded" ? <Text>Loading...</Text>:
+  (    <View>
       {forRiderOrOwner === "Owner" && (
         <LabeledDropDownPicker
           label="Starting Point: "
           open={startingPointDropDownOpen}
           setOpen={setStartingPointDropDownOpen}
           value={startingPoint as string}
-          items={items}
+          items={locations}
           onSelectItem={(item) => {
             onChange("startingPoint", item.value as string);
           }}
@@ -75,7 +92,7 @@ const Locations = ({
         setOpen={setPickupPointsDropDownOpen}
         value={pickupPoints as ValueType[]}
         // value={pickupPointsState as ValueType[]}
-        items={items}
+        items={locations}
         // setValue={setPickupPointsState}
         min={0}
         max={5}
@@ -104,7 +121,7 @@ const Locations = ({
         setOpen={setDropPointsDropDownOpen}
         value={dropPoints as ValueType[]}
         // value={dropPointsState as ValueType[]}
-        items={items}
+        items={locations}
         // setValue={setDropPointsState}
         min={0}
         max={5}
@@ -129,7 +146,7 @@ const Locations = ({
           open={destinationDropDownOpen}
           setOpen={setDestinationDropDownOpen}
           value={destination as string}
-          items={items}
+          items={locations}
           onSelectItem={(item: ItemType<ValueType>) => {
             onChange("destination", item.value as string);
           }}
@@ -137,7 +154,7 @@ const Locations = ({
           placeholder="Select your destination"
         />
       )}
-    </View>
+    </View>)}
   );
 };
 

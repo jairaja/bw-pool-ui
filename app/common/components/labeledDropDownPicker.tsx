@@ -13,7 +13,7 @@ type LabeledDropDownPickerPropsType = {
 
 const LabeledDropDownPicker = function ({
   label,
-  searchable,
+  searchable = true,
   ...rest
 }: LabeledDropDownPickerPropsType) {
   const currentTheme = useTheme().dark ? "DARK" : "LIGHT";
@@ -29,7 +29,7 @@ const LabeledDropDownPicker = function ({
           animationType: "slide",
         }}
         {...rest}
-        searchable={searchable ?? true}
+        searchable={searchable}
       />
     </View>
   );

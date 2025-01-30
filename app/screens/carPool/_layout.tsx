@@ -55,18 +55,6 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
   const getPoolingPosts = async function () {
     try {
-      // ToDo - move all network requests to one place
-      // const fetchPosts = await fetch(
-      //   "https://mocki.io/v1/d26edb2f-a288-4574-ab60-17746997c38e",
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       Accept: "application/json",
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-      // const posts = await fetchPosts.json();
       setAllPoolingPosts({ loadingState: "loading" });
       const allPoolingPosts = await GetAllPoolingPosts();
       const posts = allPoolingPosts.docs.map(
