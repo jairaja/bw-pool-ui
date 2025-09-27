@@ -9,6 +9,9 @@
 
 ---
 
+## ✅ Preview
+![screen_grab](https://github.com/jairaja/bw-pool-ui/blob/main/app/assets/screen-20240331-182755.gif)
+
 ## 📌 Overview
 
 **Better World Pool** is a lightweight, mobile-first carpooling solution built with **React Native**, **Expo** and **Firebase**. The goal is to connect commuters, allowing them to share rides efficiently, save fuel, reduce traffic, help the environment and network while travelling together.
@@ -168,7 +171,3 @@ Thanks for checking out **Better World Pool**. We hope this helps you build smar
 
 Let me know if you want this as a downloadable file, or if you'd like a shorter or lighter version (for GitHub or npm package use).
 ```
-
-
-## ✅ Preview
-![screen_grab](https://github.com/jairaja/bw-pool-ui/blob/main/app/assets/screen-20240331-182755.gif)
