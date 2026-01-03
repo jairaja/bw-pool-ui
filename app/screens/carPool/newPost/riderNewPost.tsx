@@ -11,22 +11,24 @@ import { ModalPropsType } from "@/app/common/components/modal";
 import { GetSummary } from "@/app/common/utils/summaryHelper";
 import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
+// import { addNewPost } from "../../../../service/addPostInDB";
+import { FirestoreService } from "../../../../service/service";
 
-export type RiderNewPostValuesType = {
+export type NewPostValuesType = {
+  id?: string;
   startingFrom?: string;
   startingWhen?: Date;
-  pickupPoints?: string[];
-  dropPoints?: string[];
+  pickupPoints: string[];
+  dropPoints: string[];
   bootspace?: boolean;
   luggage?: string;
   poolShare?: number;
   notes?: string;
   communicationMode?: string;
+  actionSummaryModal: ModalPropsType<NewPostValuesType>;
 };
 
-export type RiderNewPostType = RiderNewPostValuesType & {
-  actionSummaryModal: ModalPropsType;
-};
+// export type NewPostValuesType = NewPostValuesType & {};
 
 const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
@@ -38,22 +40,34 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
     });
   };
 
+  const onModalAction = (newPost1: NewPostValuesType) => {
+    // addNewPost(newPost);
+    console.log(JSON.stringify(newPost1));
+    FirestoreService.add("poolingPosts", newPost1);
+    onModalClose();
+    reset();
+  };
+
   const initialState = {
     poolShare: poolShareRef?.current[0],
+    pickupPoints: [],
+    dropPoints: [],
     actionSummaryModal: {
       visible: false,
       componentOrMessage: "",
       onClose: onModalClose,
+      onAction: () => {
+        console.log("Action button pressed", newPost);
+        onModalAction(newPost as NewPostValuesType);
+      },
     },
   };
-  const [newPost, setNewPost] = useState<RiderNewPostType>(initialState);
+  const [newPost, setNewPost] = useState<NewPostValuesType>(initialState);
 
   const allMandatoryFieldsHaveValues =
     newPost.startingFrom &&
     IsTimeUpdated(newPost.startingWhen) &&
-    newPost.pickupPoints &&
     newPost.pickupPoints.length > 0 &&
-    newPost.dropPoints &&
     newPost.dropPoints.length > 0 &&
     newPost.communicationMode &&
     newPost.poolShare;
@@ -62,8 +76,8 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
     key: string,
     value:
       | string
-      | number
       | string[]
+      | number
       | undefined
       | boolean
       | Date

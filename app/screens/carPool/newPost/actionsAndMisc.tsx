@@ -54,7 +54,7 @@ export default function ActionsAndMisc({
         mode="block"
         nullable
         value={communicationMode ?? ""}
-        onValueChange={(newValue) => onChange("communicationMode", newValue)}
+        onValueChange={(newValue: string) => onChange("communicationMode", newValue)}
         multiSelect={false}
       />
 
@@ -70,6 +70,7 @@ export default function ActionsAndMisc({
         visible={actionSummaryModal.visible}
         componentOrMessage={actionSummaryModal.componentOrMessage}
         onClose={actionSummaryModal.onClose}
+        onAction={actionSummaryModal.onAction}
         modalType={"CONFIRMCANCEL"}
         heading={actionSummaryModal.heading}
       />

@@ -11,9 +11,13 @@ import { ModalPropsType } from "@/app/common/components/modal";
 import { GetSummary } from "@/app/common/utils/summaryHelper";
 import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
-import { RiderNewPostType, RiderNewPostValuesType } from "./riderNewPost";
+import { NewPostValuesType } from "./riderNewPost";
+// import { NewPostValuesType, NewPostValuesType } from "./riderNewPost";
+// import { addNewPost } from "./addPostInDB";
+import { FirestoreService } from "../../../../service/service";
 
-export type CarOwnerNewPostValuesType = RiderNewPostValuesType & {
+export type CarOwnerNewPostValuesType = NewPostValuesType & {
+  // id?: string;
   startingPoint?: string;
   destination?: string;
   fuelType?: (typeof FUEL_TYPE)[number];
@@ -21,28 +25,48 @@ export type CarOwnerNewPostValuesType = RiderNewPostValuesType & {
 };
 
 // Remove RiderNewPostValuesType from RiderNewPostType
-type CarOwnerNewPostType = CarOwnerNewPostValuesType & RiderNewPostType;
+// export type CarOwnerNewPostValuesType = CarOwnerNewPostValuesType &
+//   NewPostValuesType;
 
 // Seat cancellation policy...in the form or with every post, as a policy reminder.
 const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
+  // let onModalAction;
 
   const onModalClose = () => {
+    console.log(`******* posting ${JSON.stringify(newPost)}`);
+
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
       visible: false,
     });
+    console.log(`******* posting ${JSON.stringify(newPost)}`);
   };
 
-  const initialState = {
+  const onModalAction = () => {
+    console.log(`******* posting ${JSON.stringify(newPost)}`);
+    // addNewPost(newPost);
+    FirestoreService.add("poolingPosts", newPost);
+    onModalClose();
+    reset();
+  };
+
+  const initialState: CarOwnerNewPostValuesType = {
     poolShare: poolShareRef?.current[0],
+    pickupPoints: [],
+    dropPoints: [],
     actionSummaryModal: {
       visible: false,
+      modalType: "CONFIRMCANCEL",
       componentOrMessage: "",
       onClose: onModalClose,
+      onAction: onModalAction,
+      actionObject: undefined,
     },
   };
-  const [newPost, setNewPost] = useState<CarOwnerNewPostType>(initialState);
+
+  const [newPost, setNewPost] =
+    useState<CarOwnerNewPostValuesType>(initialState);
 
   const allMandatoryFieldsHaveValues =
     newPost.startingFrom &&
@@ -57,9 +81,9 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     key: string,
     value:
       | string
-      | ModalPropsType
-      | number
       | string[]
+      | ModalPropsType<CarOwnerNewPostValuesType>
+      | number
       | undefined
       | boolean
       | Date
@@ -72,6 +96,11 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
   };
 
   const post = function () {
+    // const { actionSummaryModal, ...newPostTemp } = newPost;
+    // console.log(`******* posting ${JSON.stringify(newPost)}`);
+    // console.log(`******* posting ${JSON.stringify(newPostTemp)}`);
+    // addNewPost(newPostTemp);
+
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
       visible: true,
@@ -80,14 +109,22 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
         ...newPost,
       }),
       heading: "Car Owner New Post",
+      // actionOb,
       // onAction:
     });
+    // console.log(`******* posting ${JSON.stringify(newPost)}`);
+    // console.log(`******* posting ${JSON.stringify(newPostTemp)}`);
   };
 
   useEffect(() => {
     if (Array.isArray(SHARE_PER_SEAT)) {
-      poolShareRef.current = [...SHARE_PER_SEAT];
+      poolShareRef.current = SHARE_PER_SEAT;
     }
+    update("actionSummaryModal", {
+      ...newPost.actionSummaryModal,
+      onClose: onModalClose,
+      onAction: onModalAction,
+    });
   }, []);
 
   return (

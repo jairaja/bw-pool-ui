@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { IconButton } from "react-native-paper";
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import type { NavigationProp } from "@react-navigation/native";
-import GetAllPoolingPosts from "../../service/service";
+import { FirestoreService } from "../../../service/service";
 import { Resource } from "@/app/common/models/basic";
 import { CarOwnerNewPostValuesType } from "./newPost/carOwnerNewPost";
 
@@ -33,8 +33,9 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
   const [extended, setExtended] = useState<boolean>(true);
 
-  const [modalProps, setModalProps] = useState<ModalPropsType>({
+  const [modalProps, setModalProps] = useState<ModalPropsType<unknown>>({
     visible: false,
+    modalType: "INFO",
     componentOrMessage: "",
     onClose: onModalClose,
   });
@@ -46,7 +47,7 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
   ): iPostDataTableItem[] => {
     return items.map((item) => {
       return {
-        shortSummary: item.startingFrom ?? "Short Sumary to be fixed",
+        description: item.startingFrom ?? "Short Summary to be fixed",
         sharePp: item.poolShare,
         startTime: item.startingWhen?.toString(),
       };
@@ -56,13 +57,12 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const getPoolingPosts = async function () {
     try {
       setAllPoolingPosts({ loadingState: "loading" });
-      const allPoolingPosts = await GetAllPoolingPosts();
-      const posts = allPoolingPosts.docs.map(
-        (doc) => doc.data() as CarOwnerNewPostValuesType
-      );
-      setAllPoolingPosts({ loadingState: "loaded", data: posts });
+      const posts = await FirestoreService.getAll("poolingPosts");
+      setAllPoolingPosts({
+        loadingState: "loaded",
+        data: posts as CarOwnerNewPostValuesType[],
+      });
     } catch (error) {
-      // ToDo - show some error message / blocking or Ribbon or something
       console.error(error);
       setAllPoolingPosts({
         loadingState: "failed",
@@ -193,12 +193,14 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
           icon={"plus"}
         />
 
-        <Modal
+        <Modal {...modalProps} />
+        {/* <Modal
           visible={modalProps.visible}
+          modalType={modalProps.modalType}
           componentOrMessage={modalProps.componentOrMessage}
           onClose={modalProps.onClose}
           heading={modalProps.heading}
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );

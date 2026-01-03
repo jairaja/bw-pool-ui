@@ -12,6 +12,7 @@ import {
   UpdateTodTomDate,
   IsTimeUpdated,
 } from "@/app/common/utils/dateTimeHelper";
+import { Divider } from "@/app/common/components/themed";
 
 type FromAndWhenPropType = {
   forRiderOrOwner: RiderOwner;
@@ -84,18 +85,18 @@ const Timelines = function ({
         label="From:   "
         value={startingFrom ?? ""}
         mode="inline"
-        onValueChange={(value) => {
+        onValueChange={(value: string) => {
           onChange("startingFrom", value);
         }}
         buttons={GetChildButtons(routeInfoRef.current)}
         multiSelect={false}
       />
-
+      <Divider />
       <LabeledChoiceButtons
         label="When:   "
         value={getTodTom(startingWhen)}
         mode="inline"
-        onValueChange={(value) => {
+        onValueChange={(value: string) => {
           setTodTom(value as TodTom, startingWhen);
         }}
         buttons={GetChildButtons(["Today", "Tomorrow"])}

@@ -4,14 +4,15 @@ import { Resource, RiderOwner } from "@/app/common/models/basic";
 import { db } from "@/firebase-config";
 import { collection, getDocs } from "@firebase/firestore";
 import React, { useState, useEffect } from "react";
+import { ActivityIndicator } from "react-native";
 import { ItemType, ValueType } from "react-native-dropdown-picker";
 
 type LocationsPropsType = {
   onChange: (key: string, value: string | string[]) => void;
   destination?: string;
   startingPoint?: string;
-  pickupPoints?: string[];
-  dropPoints?: string[];
+  pickupPoints: string[];
+  dropPoints: string[];
   forRiderOrOwner: RiderOwner;
 };
 
@@ -28,11 +29,18 @@ const Locations = ({
   // In closed picker, on removing items, on change will be fired only if 'setValue' of the picker has setstate function
   // Same for DropPoints Picker
 
-  // const [pickupPointsState, setPickupPointsState] = useState(pickupPoints);
-  // const [dropPointsState, setDropPointsState] = useState(dropPoints);
+  const [pickupPointsState, setPickupPointsState] =
+    useState<ValueType[]>(pickupPoints);
+  const [dropPointsState, setDropPointsState] =
+    useState<ValueType[]>(dropPoints);
+  const [startingPointState, setstartingPointState] =
+    useState<ValueType | null>(startingPoint ?? null);
+  const [destinationState, setDestinationState] = useState<ValueType | null>(
+    destination ?? null
+  );
 
   const [locations, setLocations] = useState<
-    Resource<Record<"key", "value">[]>
+    Resource<Record<string, string>[]>
   >({ loadingState: "not-loaded" });
 
   const [startingPointDropDownOpen, setStartingPointDropDownOpen] =
@@ -56,105 +64,114 @@ const Locations = ({
         setLocations({ loadingState: "loading" });
 
         const allLocations = await GetAllLocations();
-        const allLocationsData = allLocations.docs.map((doc) => doc.data() as Record<"key", "value">);
+        const allLocationsData = allLocations.docs.map(
+          (doc) => doc.data() as Record<"value", "label">
+        );
         setLocations({ loadingState: "loaded", data: allLocationsData });
       } catch (error) {
-        setLocations({ loadingState: "failed",errorMessage: error as string });
+        setLocations({ loadingState: "failed", errorMessage: error as string });
       }
     };
     getLocationsData();
   }, []);
 
   return (
-    {locations.loadingState !== "loaded" ? <Text>Loading...</Text>:
-  (    <View>
-      {forRiderOrOwner === "Owner" && (
-        <LabeledDropDownPicker
-          label="Starting Point: "
-          open={startingPointDropDownOpen}
-          setOpen={setStartingPointDropDownOpen}
-          value={startingPoint as string}
-          items={locations}
-          onSelectItem={(item) => {
-            onChange("startingPoint", item.value as string);
-          }}
-          multiple={false}
-          placeholder="Select your starting point"
-        />
+    <>
+      {locations.loadingState !== "loaded" ? (
+        <ActivityIndicator />
+      ) : (
+        <View>
+          {forRiderOrOwner === "Owner" && (
+            <LabeledDropDownPicker
+              label="Starting Point: "
+              open={startingPointDropDownOpen}
+              setOpen={setStartingPointDropDownOpen}
+              value={startingPointState}
+              items={locations.data}
+              setValue={setstartingPointState}
+              onSelectItem={(item) => {
+                onChange("startingPoint", item.value as string);
+              }}
+              multiple={false}
+              placeholder="Select your starting point"
+            />
+          )}
+          <LabeledDropDownPicker
+            label={
+              forRiderOrOwner === "Owner"
+                ? "Pickup Points: "
+                : "Preferred Pickup Points: "
+            }
+            open={pickupPointsDropDownOpen}
+            setOpen={setPickupPointsDropDownOpen}
+            value={pickupPointsState}
+            // value={pickupPointsState as ValueType[]}
+            items={locations.data}
+            setValue={setPickupPointsState}
+            min={0}
+            max={5}
+            onSelectItem={(newValues: ItemType<ValueType>[]) => {
+              if (newValues.length <= 5) {
+                onChange(
+                  "pickupPoints",
+                  newValues.map((newValue) => newValue.value) as string[]
+                );
+              }
+            }}
+            // onChangeValue={(newValues) => {
+            //   onChange("pickupPoints", newValues as string[]);
+            // }}
+            placeholder="Select upto 5"
+            multiple
+            mode="BADGE"
+          />
+          <LabeledDropDownPicker
+            label={
+              forRiderOrOwner === "Owner"
+                ? "Drop Points: "
+                : "Preferred Drop Points: "
+            }
+            open={dropPointsDropDownOpen}
+            setOpen={setDropPointsDropDownOpen}
+            value={dropPointsState}
+            // value={dropPointsState as ValueType[]}
+            items={locations.data}
+            setValue={setDropPointsState}
+            min={0}
+            max={5}
+            onSelectItem={(newValues: ItemType<ValueType>[]) => {
+              if (newValues.length <= 5) {
+                onChange(
+                  "dropPoints",
+                  newValues.map((newValue) => newValue.value) as string[]
+                );
+              }
+            }}
+            // onChangeValue={(newValues) => {
+            //   onChange("dropPoints", newValues as string[]);
+            // }}
+            placeholder="Select upto 5"
+            multiple
+            mode="BADGE"
+          />
+          {forRiderOrOwner === "Owner" && (
+            <LabeledDropDownPicker
+              label="Destination: "
+              open={destinationDropDownOpen}
+              setOpen={setDestinationDropDownOpen}
+              value={destinationState}
+              setValue={setDestinationState}
+              items={locations.data}
+              onSelectItem={(item: ItemType<ValueType>) => {
+                onChange("destination", item.value as string);
+              }}
+              multiple={false}
+              placeholder="Select your destination"
+            />
+          )}
+        </View>
       )}
-      <LabeledDropDownPicker
-        label={
-          forRiderOrOwner === "Owner"
-            ? "Pickup Points: "
-            : "Preferred Pickup Points: "
-        }
-        open={pickupPointsDropDownOpen}
-        setOpen={setPickupPointsDropDownOpen}
-        value={pickupPoints as ValueType[]}
-        // value={pickupPointsState as ValueType[]}
-        items={locations}
-        // setValue={setPickupPointsState}
-        min={0}
-        max={5}
-        onSelectItem={(newValues: ItemType<ValueType>[]) => {
-          if (newValues.length <= 5) {
-            onChange(
-              "pickupPoints",
-              newValues.map((newValue) => newValue.value) as string[]
-            );
-          }
-        }}
-        // onChangeValue={(newValues) => {
-        //   onChange("pickupPoints", newValues as string[]);
-        // }}
-        placeholder="Select upto 5"
-        multiple
-        mode="BADGE"
-      />
-      <LabeledDropDownPicker
-        label={
-          forRiderOrOwner === "Owner"
-            ? "Drop Points: "
-            : "Preferred Drop Points: "
-        }
-        open={dropPointsDropDownOpen}
-        setOpen={setDropPointsDropDownOpen}
-        value={dropPoints as ValueType[]}
-        // value={dropPointsState as ValueType[]}
-        items={locations}
-        // setValue={setDropPointsState}
-        min={0}
-        max={5}
-        onSelectItem={(newValues: ItemType<ValueType>[]) => {
-          if (newValues.length <= 5) {
-            onChange(
-              "dropPoints",
-              newValues.map((newValue) => newValue.value) as string[]
-            );
-          }
-        }}
-        // onChangeValue={(newValues) => {
-        //   onChange("dropPoints", newValues as string[]);
-        // }}
-        placeholder="Select upto 5"
-        multiple
-        mode="BADGE"
-      />
-      {forRiderOrOwner === "Owner" && (
-        <LabeledDropDownPicker
-          label="Destination: "
-          open={destinationDropDownOpen}
-          setOpen={setDestinationDropDownOpen}
-          value={destination as string}
-          items={locations}
-          onSelectItem={(item: ItemType<ValueType>) => {
-            onChange("destination", item.value as string);
-          }}
-          multiple={false}
-          placeholder="Select your destination"
-        />
-      )}
-    </View>)}
+    </>
   );
 };
 
