@@ -23,11 +23,11 @@ const COMMUNICATION_MODE = ["WhatsApp", "Call", "Any"];
 
 const FUEL_TYPE = ["Petrol", "Diesel", "CNG", "Electric"];
 
-const SHARE_PER_SEAT = [150, 160, 170, 180, 190, 200];
+const SHARE_PER_SEAT = [10, 15, 20, 25];
 
 const REFUELING_OPTION_REQUIRED = true;
 
-const CURRENCY_SYMBOL = "₹";
+const CURRENCY_SYMBOL = "£";
 
 export {
   SERVER_URL,

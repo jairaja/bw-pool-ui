@@ -3,6 +3,7 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
+import React, { useEffect, useState } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
@@ -14,11 +15,10 @@ import {
   Button as DefaultButtonIcon,
   TextInput as DefaultTextInput,
   Divider as DefaultDivider,
+  ButtonProps as RNPButtonProps,
+  TextInputProps as RNPTextInputProps,
+  DividerProps as RNPDividerProps,
 } from "react-native-paper";
-import React, { useEffect, useState } from "react";
-import { ButtonProps as RNPButtonProps } from "react-native-paper";
-import { TextInputProps as RNPTextInputProps } from "react-native-paper";
-import { DividerProps as RNPDividerProps } from "react-native-paper";
 import { useThemeColor } from "../utils/themeHelper";
 import DefaultSlider, { SliderProps } from "@react-native-community/slider";
 

@@ -20,7 +20,7 @@ const LabeledDropDownPicker = function ({
 
   return (
     <View style={styles.container}>
-      <Text>{label}</Text>
+      <Text style={styles.label}>{label}</Text>
       <DropDownPicker
         theme={currentTheme}
         searchPlaceholder="Search..."
@@ -40,9 +40,11 @@ export default LabeledDropDownPicker;
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    flexDirection: "row",
-    marginBottom: 5,
-    marginTop: 5,
-    width: "75%",
+    flexDirection: "column",
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  label: {
+    marginBottom: 10,
   },
 });

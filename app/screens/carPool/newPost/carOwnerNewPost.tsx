@@ -16,13 +16,13 @@ import { NewPostValuesType } from "./riderNewPost";
 // import { addNewPost } from "./addPostInDB";
 import { FirestoreService } from "../../../../service/service";
 
-export type CarOwnerNewPostValuesType = NewPostValuesType & {
+export type CarOwnerNewPostValuesType = {
   // id?: string;
   startingPoint?: string;
   destination?: string;
   fuelType?: (typeof FUEL_TYPE)[number];
   refueling?: boolean;
-};
+} & NewPostValuesType;
 
 // Remove RiderNewPostValuesType from RiderNewPostType
 // export type CarOwnerNewPostValuesType = CarOwnerNewPostValuesType &
@@ -149,7 +149,6 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
                 dropPoints={newPost.dropPoints}
               />
               <Divider />
-
               <CarDetails
                 forRiderOrOwner="Owner"
                 onChange={update}
@@ -159,7 +158,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
                 luggage={newPost.luggage}
                 poolShare={newPost.poolShare}
               />
-
+              <Divider />
               <ActionsAndMisc
                 onChange={update}
                 notes={newPost.notes}

@@ -27,7 +27,6 @@ const Timelines = function ({
   startingWhen,
   onChange,
 }: FromAndWhenPropType) {
-  const routeInfoRef = useRef<string[]>([]);
 
   const updateTime = (event: DateTimePickerEvent, date?: Date) => {
     if (date) {
@@ -71,38 +70,30 @@ const Timelines = function ({
     }
   }
 
-  useEffect(() => {
-    if (Array.isArray(ROUTE_INFO)) {
-      ROUTE_INFO.forEach((route) => {
-        routeInfoRef.current.push(route);
-      });
-    }
-  }, []);
-
   return (
     <>
       <LabeledChoiceButtons
-        label="From:   "
+        label="From:"
         value={startingFrom ?? ""}
-        mode="inline"
+        // mode="inline"
         onValueChange={(value: string) => {
           onChange("startingFrom", value);
         }}
-        buttons={GetChildButtons(routeInfoRef.current)}
+        buttons={GetChildButtons(ROUTE_INFO)}
         multiSelect={false}
       />
       <Divider />
       <LabeledChoiceButtons
-        label="When:   "
+        label="When:"
         value={getTodTom(startingWhen)}
-        mode="inline"
+        // mode="inline"
         onValueChange={(value: string) => {
           setTodTom(value as TodTom, startingWhen);
         }}
         buttons={GetChildButtons(["Today", "Tomorrow"])}
         multiSelect={false}
       />
-
+      <Divider />
       <LabeledDateTimePicker
         label={forRiderOrOwner === "Rider" ? "Preferred Time: " : "Time:   "}
         labelLaunchButton={getDisplayTime(startingWhen) ?? "Show Time Picker"}

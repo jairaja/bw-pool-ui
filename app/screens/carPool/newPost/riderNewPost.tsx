@@ -2,7 +2,7 @@ import SimpleCard from "@/app/common/components/simpleCard";
 import { IsTimeUpdated } from "@/app/common/utils/dateTimeHelper";
 import { IsIOS } from "@/app/common/utils/helpers";
 import { SHARE_PER_SEAT } from "@/config";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
 import Locations from "./locations";
 import Timelines from "./timelines";
@@ -30,7 +30,7 @@ export type NewPostValuesType = {
 
 // export type NewPostValuesType = NewPostValuesType & {};
 
-const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
+const RiderNewPost: FC = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
 
   const onModalClose = () => {

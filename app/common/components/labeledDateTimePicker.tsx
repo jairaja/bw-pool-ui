@@ -31,9 +31,10 @@ const LabeledDateTimePicker = function ({
 
   return (
     <View style={styles.container}>
-      {label && <Text>{label}</Text>}
+      {label && <Text style={styles.label}>{label}</Text>}
       {!showDateTimePicker && (
         <ButtonIcon
+          style={styles.showDateTimePickerButton}
           onPress={() => {
             setShowDateTimePicker(true);
           }}
@@ -74,8 +75,18 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    marginBottom: 10,
-    marginTop: 10,
+    justifyContent: "space-between",
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  label: {
+    marginRight: 10,
+    //Both working to center text vertically
+    // verticalAlign: "middle",
+    textAlignVertical: "center",
   },
   resetButton: { alignSelf: "auto" },
+  showDateTimePickerButton: {
+    width: "60%",
+  },
 });

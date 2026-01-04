@@ -6,6 +6,7 @@ import { Divider, TextInput } from "@/app/common/components/themed";
 import ActionButtons from "./actionButtons";
 import { COMMUNICATION_MODE } from "@/config";
 import { RiderOwner } from "@/app/common/models/basic";
+import { StyleSheet } from "react-native";
 
 type ActionAndMiscPropType = {
   onChange: (key: string, value: string) => void;
@@ -36,7 +37,19 @@ export default function ActionsAndMisc({
   }, []);
   return (
     <>
+      <LabeledChoiceButtons
+        buttons={GetChildButtons(communicationModeRef.current)}
+        label="Preferred communication mode:"
+        mode="block"
+        nullable
+        value={communicationMode ?? ""}
+        onValueChange={(newValue: string) =>
+          onChange("communicationMode", newValue)
+        }
+        multiSelect={false}
+      />
       <TextInput
+        style={styles.notesInput}
         label="Optional Notes"
         value={notes}
         multiline
@@ -47,19 +60,7 @@ export default function ActionsAndMisc({
         }
         onChangeText={(newNotes) => onChange("notes", newNotes)}
       />
-
-      <LabeledChoiceButtons
-        buttons={GetChildButtons(communicationModeRef.current)}
-        label="Preferred communication mode:"
-        mode="block"
-        nullable
-        value={communicationMode ?? ""}
-        onValueChange={(newValue: string) => onChange("communicationMode", newValue)}
-        multiSelect={false}
-      />
-
       <Divider />
-
       <ActionButtons
         reset={reset}
         post={post}
@@ -77,3 +78,7 @@ export default function ActionsAndMisc({
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  notesInput: { marginBottom: 20, marginTop: 20 },
+});

@@ -60,7 +60,7 @@ export default function CarDetails({
           value={fuelType ?? ""}
           mode="block"
           nullable
-          onValueChange={function (newValue) {
+          onValueChange={function (newValue: string) {
             updateCarFuelType(newValue);
           }}
           buttons={GetChildButtons(fuelTypeButtonsRef.current)}
@@ -89,11 +89,9 @@ export default function CarDetails({
         }}
       />
       <LabeledChoiceButtons
-        label={
-          forRiderOrOwner === "Owner"
-            ? "Space available for (optional):"
-            : "Space required for (optional):"
-        }
+        label={`Space ${
+          forRiderOrOwner === "Owner" ? "available" : "required"
+        } for (optional):`}
         value={luggage ?? ""}
         mode="block"
         nullable
@@ -112,7 +110,7 @@ export default function CarDetails({
         minimumValue={poolShareRef.current[0]}
         maximumValue={poolShareRef.current[poolShareRef.current.length - 1]}
         value={poolShare}
-        step={10}
+        step={5}
         displayValue={`${CURRENCY_SYMBOL ?? ""} ${poolShare}`}
         onValueChange={(newValue) => onChange("poolShare", newValue)}
       />

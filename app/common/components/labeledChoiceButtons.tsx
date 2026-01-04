@@ -22,7 +22,7 @@ const LabeledChoiceButtons = ({
 
   const calculatedLabelStyle = {
     ...styles.label,
-    marginBottom: mode === "inline" ? 0 : 5,
+    marginBottom: mode === "inline" ? 0 : 10,
   };
 
   return (
@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "flex-start",
     display: "flex",
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 20,
+    marginTop: 20,
   },
   label: {
     width: "auto",
