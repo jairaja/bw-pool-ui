@@ -91,3 +91,55 @@ export function GetDayAndDate(date: Date | undefined, separator?: string) {
     return `${day}, ${calculatedDate}${calculatedSeparator}${month}${calculatedSeparator}${year}`;
   }
 }
+
+export function formatToTodayTomorrowOrTime(inputDateNumber: number): string {
+  // Create Date object from input value
+  const inputDate = new Date(inputDateNumber);
+  console.log(typeof inputDate);
+  console.log(inputDate);
+  console.log(JSON.stringify(inputDate));
+
+  // Get today's date and remove time for accurate day comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Get tomorrow's date and remove time for accurate day comparison
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  // Create a date object for the input date with time removed for comparison
+  const inputDateDayOnly = new Date(inputDate);
+  inputDateDayOnly.setHours(0, 0, 0, 0);
+
+  if (inputDateDayOnly.valueOf() === today.valueOf()) {
+    // If the date is today, format as "Today HH:MM AM/PM"
+    return (
+      "Today " +
+      inputDate.toLocaleString("default", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      })
+    );
+  } else if (inputDateDayOnly.valueOf() === tomorrow.valueOf()) {
+    // If the date is tomorrow, format as "Tomorrow HH:MM AM/PM"
+    return (
+      "Tomorrow " +
+      inputDate.toLocaleString("default", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      })
+    );
+  } else {
+    // Otherwise, format as "MMM dd yyyy HH:MM AM/PM"
+    return inputDate.toLocaleString("default", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+  }
+}

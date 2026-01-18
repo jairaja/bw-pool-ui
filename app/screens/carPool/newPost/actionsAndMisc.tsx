@@ -55,7 +55,7 @@ export default function ActionsAndMisc({
         multiline
         placeholder={
           forRiderOrOwner === "Owner"
-            ? "Car make, number, etc.."
+            ? "Car make, number, instructions etc.."
             : "Any question, special request, etc.."
         }
         onChangeText={(newNotes) => onChange("notes", newNotes)}

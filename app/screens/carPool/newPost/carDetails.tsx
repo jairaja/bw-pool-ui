@@ -86,6 +86,9 @@ export default function CarDetails({
         value={bootspace}
         onValueChange={(newValue: boolean) => {
           onChange("bootspace", newValue);
+          if (!newValue) {
+            onChange("luggage", "");
+          }
         }}
       />
       <LabeledChoiceButtons

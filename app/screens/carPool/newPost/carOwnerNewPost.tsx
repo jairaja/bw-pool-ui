@@ -14,7 +14,8 @@ import { Divider } from "@/app/common/components/themed";
 import { NewPostValuesType } from "./riderNewPost";
 // import { NewPostValuesType, NewPostValuesType } from "./riderNewPost";
 // import { addNewPost } from "./addPostInDB";
-import { FirestoreService } from "../../../../service/service";
+import { FirestoreService } from "../../../service/service";
+import { getPoolingPostsFirebaseType, PoolingPostsFirebaseType } from "@/app/common/models/service";
 
 export type CarOwnerNewPostValuesType = {
   // id?: string;
@@ -31,45 +32,92 @@ export type CarOwnerNewPostValuesType = {
 // Seat cancellation policy...in the form or with every post, as a policy reminder.
 const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
-  // let onModalAction;
-
-  const onModalClose = () => {
-    console.log(`******* posting ${JSON.stringify(newPost)}`);
-
-    update("actionSummaryModal", {
-      ...newPost.actionSummaryModal,
-      visible: false,
-    });
-    console.log(`******* posting ${JSON.stringify(newPost)}`);
-  };
-
-  const onModalAction = () => {
-    console.log(`******* posting ${JSON.stringify(newPost)}`);
-    // addNewPost(newPost);
-    FirestoreService.add("poolingPosts", newPost);
-    onModalClose();
-    reset();
-  };
-
   const initialState: CarOwnerNewPostValuesType = {
     poolShare: poolShareRef?.current[0],
     pickupPoints: [],
     dropPoints: [],
+    postedToBackend: false,
     actionSummaryModal: {
       visible: false,
       modalType: "CONFIRMCANCEL",
       componentOrMessage: "",
-      onClose: onModalClose,
-      onAction: onModalAction,
+      onClose: () => {},
+      onAction: () => {},
       actionObject: undefined,
     },
   };
-
   const [newPost, setNewPost] =
     useState<CarOwnerNewPostValuesType>(initialState);
 
+  const reset = () => {
+    setNewPost(initialState);
+  };
+
+  useEffect(() => {
+    if (!newPost.postedToBackend) return;
+    console.log(`******* Firestore ${JSON.stringify(newPost)}`);
+
+    const tempNewPost = getPoolingPostsFirebaseType(newPost,"Owner");
+    // delete tempNewPost.postedToBackend;
+    // delete tempNewPost.actionSummaryModal;
+    // tempNewPost.startingWhen = new Date(tempNewPost.startingWhen).getSeconds();
+    // // tempNewPost.startingWhen = Date.parse(tempNewPost.startingWhen) / 1000;
+    // tempNewPost.riderOwner = "Owner";
+
+    FirestoreService.add("poolingPosts", tempNewPost).catch((e) =>
+      console.error("Failed to add post", e),
+    );
+    reset();
+    navigation?.navigate("Car Pool");
+  }, [newPost.postedToBackend]);
+
+  const onModalClose = () => {
+    update("actionSummaryModal", {
+      ...newPost.actionSummaryModal,
+      visible: false,
+    });
+  };
+
+  const onModalAction = () => {
+    update("postedToBackend", true);
+    onModalClose();
+    // console.log(`++++ Action ${JSON.stringify(newPost)}`);
+    // addNewPost(newPost);
+    // FirestoreService.add("poolingPosts", newPost);
+
+    // reset();
+    // //Navigate to home page after posting
+    // navigation?.navigate("Car Pool");
+    // console.log(`++++ Action ${JSON.stringify(newPost)}`);
+  };
+
+  // const initialState: CarOwnerNewPostValuesType = {
+  //   poolShare: 15,
+  //   pickupPoints: ["hatfield"],
+  //   dropPoints: ["brookmansPark"],
+  //   actionSummaryModal: {
+  //     visible: true,
+  //     modalType: "CONFIRMCANCEL",
+  //     componentOrMessage:
+  //       "Seats Available - from Hatfield to London.\nToday - Sat, 17\\Jan\\2026 - at 6 : 32  pm.\n\nStarting from - welhamGreen.\nPickup points - hatfield.\nDrop points - brookmansPark.\nDestination - hatfield.\n\nCar fuel type is Petrol. Refueling on the way.\nBootspace available - for a Small Bag size bag.\n\nPreferred communication mode - Call.\n\nPool Share - £ 15\n\nAdditional Notes: Test\n\nRegards.",
+  //     heading: "Car Owner New Post",
+  //   },
+  //   startingFrom: "Hatfield to London",
+  //   // startingWhen: "2026-01-17T13:02:00.000Z",
+  //   startingPoint: "welhamGreen",
+  //   destination: "hatfield",
+  //   refueling: true,
+  //   bootspace: true,
+  //   fuelType: "Petrol",
+  //   luggage: "Small Bag",
+  //   communicationMode: "Call",
+  //   notes: "Test\n\nRegards",
+  // };
+
+  // console.log(`++++ New Post State: ${JSON.stringify(newPost)}`);
+
   const allMandatoryFieldsHaveValues =
-    newPost.startingFrom &&
+    newPost.fromTo &&
     IsTimeUpdated(newPost.startingWhen) &&
     newPost.startingPoint &&
     newPost.fuelType &&
@@ -86,13 +134,14 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
       | number
       | undefined
       | boolean
-      | Date
+      | Date,
   ): void {
-    setNewPost((prevState) => ({ ...prevState, [key]: value }));
-  };
+    // console.log(`++++ Updating state ${JSON.stringify(newPost)}`);
+    // console.log(
+    //   `++++ Updated state ${JSON.stringify({ ...newPost, [key]: value })}`,
+    // );
 
-  const reset = function () {
-    setNewPost(initialState);
+    setNewPost((prevState) => ({ ...prevState, [key]: value }));
   };
 
   const post = function () {
@@ -135,7 +184,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
             <>
               <Timelines
                 forRiderOrOwner="Owner"
-                startingFrom={newPost.startingFrom}
+                fromTo={newPost.fromTo}
                 startingWhen={newPost.startingWhen}
                 onChange={update}
               />

@@ -21,7 +21,8 @@ export interface ActionModalPropsType<T> {
   componentOrMessage: React.ReactNode;
   heading?: string;
   onClose: () => void;
-  onAction: (actionObj?: T) => void;
+  // onAction: (actionObj?: T) => void;
+  onAction: () => void;
   actionObject?: T;
 }
 

@@ -1,6 +1,6 @@
 import { db } from "@/firebase-config";
 import { collection, addDoc } from "firebase/firestore";
-import { CarOwnerNewPostValuesType } from "../app/screens/carPool/newPost/carOwnerNewPost";
+import { CarOwnerNewPostValuesType } from "../screens/carPool/newPost/carOwnerNewPost";
 
 const PoolingPostsDB = "poolingPosts";
 
@@ -19,7 +19,7 @@ export const addNewPost = async (
 // Example usage
 const handleAdd = async () => {
   const newPost = {
-    startingFrom: "Starting Point",
+    fromTo: "FromTo",
     startingWhen: new Date(),
     startingPoint: "Point A",
     fuelType: "Petrol",

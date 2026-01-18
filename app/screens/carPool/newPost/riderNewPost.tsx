@@ -1,7 +1,7 @@
 import SimpleCard from "@/app/common/components/simpleCard";
 import { IsTimeUpdated } from "@/app/common/utils/dateTimeHelper";
 import { IsIOS } from "@/app/common/utils/helpers";
-import { SHARE_PER_SEAT } from "@/config";
+import { COMMUNICATION_MODE, ROUTE_INFO, SHARE_PER_SEAT } from "@/config";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
 import Locations from "./locations";
@@ -12,11 +12,12 @@ import { GetSummary } from "@/app/common/utils/summaryHelper";
 import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
 // import { addNewPost } from "../../../../service/addPostInDB";
-import { FirestoreService } from "../../../../service/service";
+import { FirestoreService } from "../../../service/service";
 
 export type NewPostValuesType = {
+  postedToBackend?: boolean;
   id?: string;
-  startingFrom?: string;
+  fromTo?: (typeof ROUTE_INFO)[number];
   startingWhen?: Date;
   pickupPoints: string[];
   dropPoints: string[];
@@ -24,7 +25,7 @@ export type NewPostValuesType = {
   luggage?: string;
   poolShare?: number;
   notes?: string;
-  communicationMode?: string;
+  communicationMode?: (typeof COMMUNICATION_MODE)[number];
   actionSummaryModal: ModalPropsType<NewPostValuesType>;
 };
 
@@ -65,7 +66,7 @@ const RiderNewPost: FC = ({ navigation }) => {
   const [newPost, setNewPost] = useState<NewPostValuesType>(initialState);
 
   const allMandatoryFieldsHaveValues =
-    newPost.startingFrom &&
+    newPost.fromTo &&
     IsTimeUpdated(newPost.startingWhen) &&
     newPost.pickupPoints.length > 0 &&
     newPost.dropPoints.length > 0 &&
@@ -81,7 +82,7 @@ const RiderNewPost: FC = ({ navigation }) => {
       | undefined
       | boolean
       | Date
-      | ModalPropsType
+      | ModalPropsType,
   ): void {
     setNewPost((prevState) => ({ ...prevState, [key]: value }));
   };
@@ -116,7 +117,7 @@ const RiderNewPost: FC = ({ navigation }) => {
             <>
               <Timelines
                 forRiderOrOwner="Rider"
-                startingFrom={newPost.startingFrom}
+                fromTo={newPost.fromTo}
                 startingWhen={newPost.startingWhen}
                 onChange={update}
               />

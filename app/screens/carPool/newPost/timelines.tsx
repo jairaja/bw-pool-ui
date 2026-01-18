@@ -16,18 +16,17 @@ import { Divider } from "@/app/common/components/themed";
 
 type FromAndWhenPropType = {
   forRiderOrOwner: RiderOwner;
-  startingFrom?: string;
+  fromTo?: string;
   startingWhen?: Date;
   onChange: (key: string, value: string | number | Date) => void;
 };
 
 const Timelines = function ({
   forRiderOrOwner,
-  startingFrom,
+  fromTo,
   startingWhen,
   onChange,
 }: FromAndWhenPropType) {
-
   const updateTime = (event: DateTimePickerEvent, date?: Date) => {
     if (date) {
       onChange("startingWhen", date);
@@ -74,15 +73,15 @@ const Timelines = function ({
     <>
       <LabeledChoiceButtons
         label="From:"
-        value={startingFrom ?? ""}
+        value={fromTo ?? ""}
         // mode="inline"
         onValueChange={(value: string) => {
-          onChange("startingFrom", value);
+          onChange("fromTo", value);
         }}
         buttons={GetChildButtons(ROUTE_INFO)}
         multiSelect={false}
       />
-      <Divider />
+      {/* <Divider /> */}
       <LabeledChoiceButtons
         label="When:"
         value={getTodTom(startingWhen)}
@@ -93,7 +92,7 @@ const Timelines = function ({
         buttons={GetChildButtons(["Today", "Tomorrow"])}
         multiSelect={false}
       />
-      <Divider />
+      {/* <Divider /> */}
       <LabeledDateTimePicker
         label={forRiderOrOwner === "Rider" ? "Preferred Time: " : "Time:   "}
         labelLaunchButton={getDisplayTime(startingWhen) ?? "Show Time Picker"}

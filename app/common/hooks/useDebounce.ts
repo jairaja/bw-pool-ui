@@ -9,3 +9,5 @@ export default function useDebounce(fn: () => unknown, timeout: number) {
     };
   }, [fn, timeout]);
 }
+
+//useThrottle can be implemented similarly if needed in future

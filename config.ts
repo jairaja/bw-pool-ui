@@ -21,7 +21,8 @@ const VEHICLE_TYPE_FOR_VEHICLE_OWNER = ["Car"];
 
 const COMMUNICATION_MODE = ["WhatsApp", "Call", "Any"];
 
-const FUEL_TYPE = ["Petrol", "Diesel", "CNG", "Electric"];
+const FUEL_TYPE = ["Petrol", "Diesel", "Electric", "Hybrid"];
+// const FUEL_TYPE = ["Petrol", "Diesel", "CNG", "Electric"];
 
 const SHARE_PER_SEAT = [10, 15, 20, 25];
 
