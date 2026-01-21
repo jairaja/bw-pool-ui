@@ -15,12 +15,15 @@ import { NewPostValuesType } from "./riderNewPost";
 // import { NewPostValuesType, NewPostValuesType } from "./riderNewPost";
 // import { addNewPost } from "./addPostInDB";
 import { FirestoreService } from "../../../service/service";
-import { getPoolingPostsFirebaseType, PoolingPostsFirebaseType } from "@/app/common/models/service";
+import {
+  getPoolingPostsFirebaseType,
+  PoolingPostsFirebaseType,
+} from "@/app/common/models/service";
 
 export type CarOwnerNewPostValuesType = {
   // id?: string;
   startingPoint?: string;
-  destination?: string;
+  destinationPoint?: string;
   fuelType?: (typeof FUEL_TYPE)[number];
   refueling?: boolean;
 } & NewPostValuesType;
@@ -57,12 +60,13 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     if (!newPost.postedToBackend) return;
     console.log(`******* Firestore ${JSON.stringify(newPost)}`);
 
-    const tempNewPost = getPoolingPostsFirebaseType(newPost,"Owner");
+    const tempNewPost = getPoolingPostsFirebaseType(newPost, "Owner");
     // delete tempNewPost.postedToBackend;
     // delete tempNewPost.actionSummaryModal;
     // tempNewPost.startingWhen = new Date(tempNewPost.startingWhen).getSeconds();
     // // tempNewPost.startingWhen = Date.parse(tempNewPost.startingWhen) / 1000;
     // tempNewPost.riderOwner = "Owner";
+    console.log(`******* Firestore ${JSON.stringify(tempNewPost)}`);
 
     FirestoreService.add("poolingPosts", tempNewPost).catch((e) =>
       console.error("Failed to add post", e),
@@ -121,7 +125,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     IsTimeUpdated(newPost.startingWhen) &&
     newPost.startingPoint &&
     newPost.fuelType &&
-    newPost.destination &&
+    newPost.destinationPoint &&
     newPost.communicationMode &&
     newPost.poolShare;
 
@@ -177,8 +181,15 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
   }, []);
 
   return (
-    <KeyboardAvoidingView behavior={IsIOS ? "position" : "padding"}>
-      <ScrollView>
+    <KeyboardAvoidingView
+      behavior={IsIOS ? "padding" : "height"}
+      keyboardVerticalOffset={IsIOS ? 0 : 500}
+      // style={{ flex: 1 }}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ padding: 16 }}
+      >
         <SimpleCard
           componentOrMessage={
             <>
@@ -192,7 +203,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
               <Locations
                 forRiderOrOwner="Owner"
                 onChange={update}
-                destination={newPost.destination}
+                destinationPoint={newPost.destinationPoint}
                 startingPoint={newPost.startingPoint}
                 pickupPoints={newPost.pickupPoints}
                 dropPoints={newPost.dropPoints}

@@ -7,24 +7,23 @@ import { Portal, Modal as RNModal } from "react-native-paper";
 
 export type ModalType = "CONTACT" | "INFO" | "CONFIRMCANCEL" | "YESNO";
 
-export interface NonActionModalPropsType {
+export type BasicModalType = {
   visible: boolean;
-  modalType: "CONTACT" | "INFO" | "YESNO";
   componentOrMessage: React.ReactNode;
   heading?: string;
   onClose: () => void;
 }
 
-export interface ActionModalPropsType<T> {
-  visible: boolean;
+export type NonActionModalPropsType = {
+  modalType: "CONTACT" | "INFO" | "YESNO";
+} & BasicModalType
+
+export type ActionModalPropsType<T> = {
   modalType: "CONFIRMCANCEL";
-  componentOrMessage: React.ReactNode;
-  heading?: string;
-  onClose: () => void;
   // onAction: (actionObj?: T) => void;
   onAction: () => void;
   actionObject?: T;
-}
+} & BasicModalType
 
 export type ModalPropsType<T> =
   | NonActionModalPropsType

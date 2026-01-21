@@ -9,7 +9,7 @@ import { ItemType, ValueType } from "react-native-dropdown-picker";
 
 type LocationsPropsType = {
   onChange: (key: string, value: string | string[]) => void;
-  destination?: string;
+  destinationPoint?: string;
   startingPoint?: string;
   pickupPoints: string[];
   dropPoints: string[];
@@ -21,7 +21,7 @@ const Locations = ({
   startingPoint,
   pickupPoints,
   dropPoints,
-  destination,
+  destinationPoint,
   forRiderOrOwner,
 }: LocationsPropsType) => {
   // Need this state due to a bug in Picker with multiple values. OnChange event is not fired if local state is not set
@@ -35,8 +35,8 @@ const Locations = ({
     useState<ValueType[]>(dropPoints);
   const [startingPointState, setstartingPointState] =
     useState<ValueType | null>(startingPoint ?? null);
-  const [destinationState, setDestinationState] = useState<ValueType | null>(
-    destination ?? null
+  const [destinationPointState, setDestinationPointState] = useState<ValueType | null>(
+    destinationPoint ?? null,
   );
 
   const [locations, setLocations] = useState<
@@ -65,7 +65,7 @@ const Locations = ({
 
         const allLocations = await GetAllLocations();
         const allLocationsData = allLocations.docs.map(
-          (doc) => doc.data() as Record<"value", "label">
+          (doc) => doc.data() as Record<"value", "label">,
         );
         setLocations({ loadingState: "loaded", data: allLocationsData });
       } catch (error) {
@@ -114,7 +114,7 @@ const Locations = ({
               if (newValues.length <= 5) {
                 onChange(
                   "pickupPoints",
-                  newValues.map((newValue) => newValue.value) as string[]
+                  newValues.map((newValue) => newValue.value) as string[],
                 );
               }
             }}
@@ -143,7 +143,7 @@ const Locations = ({
               if (newValues.length <= 5) {
                 onChange(
                   "dropPoints",
-                  newValues.map((newValue) => newValue.value) as string[]
+                  newValues.map((newValue) => newValue.value) as string[],
                 );
               }
             }}
@@ -156,17 +156,17 @@ const Locations = ({
           />
           {forRiderOrOwner === "Owner" && (
             <LabeledDropDownPicker
-              label="Destination: "
+              label="Destination Point: "
               open={destinationDropDownOpen}
               setOpen={setDestinationDropDownOpen}
-              value={destinationState}
-              setValue={setDestinationState}
+              value={destinationPointState}
+              setValue={setDestinationPointState}
               items={locations.data}
               onSelectItem={(item: ItemType<ValueType>) => {
-                onChange("destination", item.value as string);
+                onChange("destinationPoint", item.value as string);
               }}
               multiple={false}
-              placeholder="Select your destination"
+              placeholder="Select your destination point"
             />
           )}
         </View>

@@ -110,7 +110,7 @@ export function GetCarOwnerPostSummary(post: CarOwnerNewPostValuesType) {
     ownerSummary += `\nDrop points - ${dropPoints}.`;
   }
 
-  ownerSummary += `\nDestination - ${post.destination}.`;
+  ownerSummary += `\nDestination - ${post.destinationPoint}.`;
 
   ownerSummary += `\n\nCar fuel type is ${post.fuelType}.`;
 
