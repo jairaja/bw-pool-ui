@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginBottom: 20,
     marginTop: 20,
+    // zIndex: 10,
   },
   label: {
     marginBottom: 10,

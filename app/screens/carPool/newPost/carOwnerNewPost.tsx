@@ -183,11 +183,12 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={IsIOS ? "padding" : "height"}
-      keyboardVerticalOffset={IsIOS ? 0 : 500}
+      keyboardVerticalOffset={IsIOS ? 0 : 50}
       // style={{ flex: 1 }}
     >
       <ScrollView
-        keyboardShouldPersistTaps="handled"
+        keyboardShouldPersistTaps="never"
+        // keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ padding: 16 }}
       >
         <SimpleCard

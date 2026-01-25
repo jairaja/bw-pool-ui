@@ -37,17 +37,6 @@ export default function ActionsAndMisc({
   }, []);
   return (
     <>
-      <LabeledChoiceButtons
-        buttons={GetChildButtons(communicationModeRef.current)}
-        label="Preferred communication mode:"
-        mode="block"
-        nullable
-        value={communicationMode ?? ""}
-        onValueChange={(newValue: string) =>
-          onChange("communicationMode", newValue)
-        }
-        multiSelect={false}
-      />
       <TextInput
         style={styles.notesInput}
         label="Optional Notes"
@@ -59,6 +48,17 @@ export default function ActionsAndMisc({
             : "Any question, special request, etc.."
         }
         onChangeText={(newNotes) => onChange("notes", newNotes)}
+      />
+      <LabeledChoiceButtons
+        buttons={GetChildButtons(communicationModeRef.current)}
+        label="Preferred communication mode:"
+        mode="block"
+        nullable
+        value={communicationMode ?? ""}
+        onValueChange={(newValue: string) =>
+          onChange("communicationMode", newValue)
+        }
+        multiSelect={false}
       />
       <Divider />
       <ActionButtons

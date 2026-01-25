@@ -110,8 +110,16 @@ const RiderNewPost: FC = ({ navigation }) => {
   }, []);
 
   return (
-    <KeyboardAvoidingView behavior={IsIOS ? "position" : "padding"}>
-      <ScrollView>
+    <KeyboardAvoidingView
+      behavior={IsIOS ? "padding" : "height"}
+      keyboardVerticalOffset={IsIOS ? 0 : 50}
+      // style={{ flex: 1 }}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="never"
+        // keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ padding: 16 }}
+      >
         <SimpleCard
           componentOrMessage={
             <>
