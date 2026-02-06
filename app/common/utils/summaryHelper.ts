@@ -1,5 +1,5 @@
 import { CarOwnerNewPostValuesType } from "@/app/screens/carPool/newPost/carOwnerNewPost";
-import { NewPostValuesType } from "@/app/screens/carPool/newPost/riderNewPost";
+import { RiderNewPostValuesType } from "@/app/screens/carPool/newPost/riderNewPost";
 import { RiderOwner } from "../models/basic";
 import {
   FromDateToDisplayTime,
@@ -9,7 +9,7 @@ import {
 import { COMMUNICATION_MODE, CURRENCY_SYMBOL } from "@/config";
 
 export type SummaryType = { riderOwner: RiderOwner } & (
-  | NewPostValuesType
+  | RiderNewPostValuesType
   | CarOwnerNewPostValuesType
 );
 
@@ -19,7 +19,7 @@ export function GetSummary({ riderOwner, ...post }: SummaryType) {
     : `Seats Available - ${GetCarOwnerPostSummary(post)}`;
 }
 
-export function GetRiderPostSummary(post: NewPostValuesType) {
+export function GetRiderPostSummary(post: RiderNewPostValuesType) {
   let riderSummary = `from  ${post.fromTo}.`;
 
   const todTom = GetTodTomFromDate(post.startingWhen) as string;

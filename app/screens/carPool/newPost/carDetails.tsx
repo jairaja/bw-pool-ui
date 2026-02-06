@@ -8,7 +8,7 @@ import { CURRENCY_SYMBOL, FUEL_TYPE, SHARE_PER_SEAT } from "@/config";
 import React, { useEffect, useRef, useState } from "react";
 
 type CarDetailsPropsTypes = {
-  forRiderOrOwner: RiderOwner;
+  riderOwner: RiderOwner;
   onChange: (key: string, value: string | number | boolean) => void;
   fuelType?: string;
   refueling?: boolean;
@@ -18,7 +18,7 @@ type CarDetailsPropsTypes = {
 };
 
 export default function CarDetails({
-  forRiderOrOwner,
+  riderOwner,
   refueling,
   poolShare,
   fuelType,
@@ -54,7 +54,7 @@ export default function CarDetails({
 
   return (
     <>
-      {forRiderOrOwner === "Owner" && (
+      {riderOwner === "Owner" && (
         <LabeledChoiceButtons
           label="Car fuel type:   "
           value={fuelType ?? ""}
@@ -67,7 +67,7 @@ export default function CarDetails({
           multiSelect={false}
         />
       )}
-      {forRiderOrOwner === "Owner" && (
+      {riderOwner === "Owner" && (
         <LabeledSwitch
           label="Refueling on the way: "
           value={refueling}
@@ -79,7 +79,7 @@ export default function CarDetails({
       )}
       <LabeledSwitch
         label={
-          forRiderOrOwner === "Owner"
+          riderOwner === "Owner"
             ? "Bootspace available: "
             : "Bootspace required: "
         }
@@ -93,7 +93,7 @@ export default function CarDetails({
       />
       <LabeledChoiceButtons
         label={`Space ${
-          forRiderOrOwner === "Owner" ? "available" : "required"
+          riderOwner === "Owner" ? "available" : "required"
         } for (optional):`}
         value={luggage ?? ""}
         mode="block"
@@ -107,9 +107,9 @@ export default function CarDetails({
       />
       <LabeledSlider
         //Just for fun
-        label={`${
-          forRiderOrOwner === "Owner" ? "P" : "Preferred p"
-        }ool share per rider: `}
+        label={`${riderOwner === "Owner" ? "P" : "Preferred p"}ool share${
+          riderOwner === "Owner" ? " per rider: " : ":"
+        } `}
         minimumValue={poolShareRef.current[0]}
         maximumValue={poolShareRef.current[poolShareRef.current.length - 1]}
         value={poolShare}

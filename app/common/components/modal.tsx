@@ -1,5 +1,5 @@
 import { Text, View } from "@/app/common/components/themed";
-import React from "react";
+import React, {ReactElement} from "react";
 import { ButtonIcon, Divider } from "./themed";
 
 import { StyleSheet } from "react-native";
@@ -20,8 +20,8 @@ export type NonActionModalPropsType = {
 
 export type ActionModalPropsType<T> = {
   modalType: "CONFIRMCANCEL";
-  // onAction: (actionObj?: T) => void;
-  onAction: () => void;
+  onAction: (actionObj?: T) => void;
+  // onAction: () => void;
   actionObject?: T;
 } & BasicModalType
 
@@ -29,7 +29,7 @@ export type ModalPropsType<T> =
   | NonActionModalPropsType
   | ActionModalPropsType<T>;
 
-const Modal = <T,>(props: ModalPropsType<T>) => {
+const Modal = <T,>(props: ModalPropsType<T>) : ReactElement | undefined => {
   const { visible, modalType, componentOrMessage, heading, onClose } = props;
 
   // const isActionModalPropsType =
@@ -59,7 +59,8 @@ const Modal = <T,>(props: ModalPropsType<T>) => {
             </ButtonIcon>
             <ButtonIcon
               onPress={() => {
-                onAction!(actionObject);
+                // onAction!(actionObject);
+                onAction?.(actionObject);
               }}
             >
               <Text>Confirm</Text>

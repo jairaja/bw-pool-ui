@@ -13,10 +13,15 @@ import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
 // import { addNewPost } from "../../../../service/addPostInDB";
 import { FirestoreService } from "../../../service/service";
+import {
+  getPoolingPostsFirebaseType,
+  type PoolingPostsFirebaseType,
+} from "@/app/common/models/service";
+import { RiderOwner } from "@/app/common/models/basic";
 
-export type NewPostValuesType = {
-  postedToBackend?: boolean;
+export type RiderNewPostValuesType = {
   id?: string;
+  riderOwner: RiderOwner;
   fromTo?: (typeof ROUTE_INFO)[number];
   startingWhen?: Date;
   pickupPoints: string[];
@@ -26,10 +31,8 @@ export type NewPostValuesType = {
   poolShare?: number;
   notes?: string;
   communicationMode?: (typeof COMMUNICATION_MODE)[number];
-  actionSummaryModal: ModalPropsType<NewPostValuesType>;
+  actionSummaryModal: ModalPropsType<PoolingPostsFirebaseType>;
 };
-
-// export type NewPostValuesType = NewPostValuesType & {};
 
 const RiderNewPost: FC = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
@@ -41,29 +44,32 @@ const RiderNewPost: FC = ({ navigation }) => {
     });
   };
 
-  const onModalAction = (newPost1: NewPostValuesType) => {
-    // addNewPost(newPost);
-    console.log(JSON.stringify(newPost1));
-    FirestoreService.add("poolingPosts", newPost1);
+  const onModalAction = (actionObj?: PoolingPostsFirebaseType) => {
+    console.log(JSON.stringify(actionObj));
+    try {
+      FirestoreService.add("poolingPosts", actionObj);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
     onModalClose();
     reset();
+    navigation?.navigate("Car Pool");
   };
 
-  const initialState = {
-    poolShare: poolShareRef?.current[0],
+  const initialState: RiderNewPostValuesType = {
+    riderOwner: "Rider",
+    poolShare: SHARE_PER_SEAT[0],
     pickupPoints: [],
     dropPoints: [],
     actionSummaryModal: {
       visible: false,
+      modalType: "CONFIRMCANCEL",
       componentOrMessage: "",
       onClose: onModalClose,
-      onAction: () => {
-        console.log("Action button pressed", newPost);
-        onModalAction(newPost as NewPostValuesType);
-      },
+      onAction: onModalAction,
     },
   };
-  const [newPost, setNewPost] = useState<NewPostValuesType>(initialState);
+  const [newPost, setNewPost] = useState<RiderNewPostValuesType>(initialState);
 
   const allMandatoryFieldsHaveValues =
     newPost.fromTo &&
@@ -82,7 +88,7 @@ const RiderNewPost: FC = ({ navigation }) => {
       | undefined
       | boolean
       | Date
-      | ModalPropsType,
+      | ModalPropsType<PoolingPostsFirebaseType>,
   ): void {
     setNewPost((prevState) => ({ ...prevState, [key]: value }));
   };
@@ -95,12 +101,10 @@ const RiderNewPost: FC = ({ navigation }) => {
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
       visible: true,
-      componentOrMessage: GetSummary({
-        riderOwner: "Rider",
-        ...newPost,
-      }),
+      componentOrMessage: GetSummary(newPost),
       heading: "Rider New Post",
-    });
+      actionObject: getPoolingPostsFirebaseType(newPost),
+    } as ModalPropsType<PoolingPostsFirebaseType>);
   };
 
   useEffect(() => {
@@ -124,21 +128,21 @@ const RiderNewPost: FC = ({ navigation }) => {
           componentOrMessage={
             <>
               <Timelines
-                forRiderOrOwner="Rider"
+                riderOwner="Rider"
                 fromTo={newPost.fromTo}
                 startingWhen={newPost.startingWhen}
                 onChange={update}
               />
               <Divider />
               <Locations
-                forRiderOrOwner="Rider"
+                riderOwner="Rider"
                 onChange={update}
                 pickupPoints={newPost.pickupPoints}
                 dropPoints={newPost.dropPoints}
               />
               <Divider />
               <CarDetails
-                forRiderOrOwner="Rider"
+                riderOwner="Rider"
                 onChange={update}
                 bootspace={newPost.bootspace}
                 luggage={newPost.luggage}
@@ -148,7 +152,7 @@ const RiderNewPost: FC = ({ navigation }) => {
               <ActionsAndMisc
                 onChange={update}
                 notes={newPost.notes}
-                forRiderOrOwner="Rider"
+                riderOwner="Rider"
                 communicationMode={newPost.communicationMode}
                 reset={reset}
                 post={post}

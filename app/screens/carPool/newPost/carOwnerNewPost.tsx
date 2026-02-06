@@ -1,5 +1,5 @@
 import SimpleCard from "@/app/common/components/simpleCard";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Timelines from "./timelines";
 import Locations from "./locations";
 import { FUEL_TYPE, SHARE_PER_SEAT } from "@/config";
@@ -11,13 +11,13 @@ import { ModalPropsType } from "@/app/common/components/modal";
 import { GetSummary } from "@/app/common/utils/summaryHelper";
 import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
-import { NewPostValuesType } from "./riderNewPost";
+import { RiderNewPostValuesType } from "./riderNewPost";
 // import { NewPostValuesType, NewPostValuesType } from "./riderNewPost";
 // import { addNewPost } from "./addPostInDB";
 import { FirestoreService } from "../../../service/service";
 import {
   getPoolingPostsFirebaseType,
-  PoolingPostsFirebaseType,
+  type PoolingPostsFirebaseType,
 } from "@/app/common/models/service";
 
 export type CarOwnerNewPostValuesType = {
@@ -26,7 +26,7 @@ export type CarOwnerNewPostValuesType = {
   destinationPoint?: string;
   fuelType?: (typeof FUEL_TYPE)[number];
   refueling?: boolean;
-} & NewPostValuesType;
+} & RiderNewPostValuesType;
 
 // Remove RiderNewPostValuesType from RiderNewPostType
 // export type CarOwnerNewPostValuesType = CarOwnerNewPostValuesType &
@@ -34,47 +34,6 @@ export type CarOwnerNewPostValuesType = {
 
 // Seat cancellation policy...in the form or with every post, as a policy reminder.
 const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
-  const poolShareRef = useRef<number[]>([]);
-  const initialState: CarOwnerNewPostValuesType = {
-    poolShare: poolShareRef?.current[0],
-    pickupPoints: [],
-    dropPoints: [],
-    postedToBackend: false,
-    actionSummaryModal: {
-      visible: false,
-      modalType: "CONFIRMCANCEL",
-      componentOrMessage: "",
-      onClose: () => {},
-      onAction: () => {},
-      actionObject: undefined,
-    },
-  };
-  const [newPost, setNewPost] =
-    useState<CarOwnerNewPostValuesType>(initialState);
-
-  const reset = () => {
-    setNewPost(initialState);
-  };
-
-  useEffect(() => {
-    if (!newPost.postedToBackend) return;
-    console.log(`******* Firestore ${JSON.stringify(newPost)}`);
-
-    const tempNewPost = getPoolingPostsFirebaseType(newPost, "Owner");
-    // delete tempNewPost.postedToBackend;
-    // delete tempNewPost.actionSummaryModal;
-    // tempNewPost.startingWhen = new Date(tempNewPost.startingWhen).getSeconds();
-    // // tempNewPost.startingWhen = Date.parse(tempNewPost.startingWhen) / 1000;
-    // tempNewPost.riderOwner = "Owner";
-    console.log(`******* Firestore ${JSON.stringify(tempNewPost)}`);
-
-    FirestoreService.add("poolingPosts", tempNewPost).catch((e) =>
-      console.error("Failed to add post", e),
-    );
-    reset();
-    navigation?.navigate("Car Pool");
-  }, [newPost.postedToBackend]);
-
   const onModalClose = () => {
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
@@ -82,43 +41,37 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     });
   };
 
-  const onModalAction = () => {
-    update("postedToBackend", true);
+  const onModalAction = (actionObj?: PoolingPostsFirebaseType) => {
+    console.log(JSON.stringify(actionObj));
+    FirestoreService.add("poolingPosts", actionObj).catch((e) =>
+      console.error("Failed to add post", e),
+    );
     onModalClose();
-    // console.log(`++++ Action ${JSON.stringify(newPost)}`);
-    // addNewPost(newPost);
-    // FirestoreService.add("poolingPosts", newPost);
-
-    // reset();
-    // //Navigate to home page after posting
-    // navigation?.navigate("Car Pool");
-    // console.log(`++++ Action ${JSON.stringify(newPost)}`);
+    reset();
+    navigation?.navigate("Car Pool");
   };
 
-  // const initialState: CarOwnerNewPostValuesType = {
-  //   poolShare: 15,
-  //   pickupPoints: ["hatfield"],
-  //   dropPoints: ["brookmansPark"],
-  //   actionSummaryModal: {
-  //     visible: true,
-  //     modalType: "CONFIRMCANCEL",
-  //     componentOrMessage:
-  //       "Seats Available - from Hatfield to London.\nToday - Sat, 17\\Jan\\2026 - at 6 : 32  pm.\n\nStarting from - welhamGreen.\nPickup points - hatfield.\nDrop points - brookmansPark.\nDestination - hatfield.\n\nCar fuel type is Petrol. Refueling on the way.\nBootspace available - for a Small Bag size bag.\n\nPreferred communication mode - Call.\n\nPool Share - £ 15\n\nAdditional Notes: Test\n\nRegards.",
-  //     heading: "Car Owner New Post",
-  //   },
-  //   startingFrom: "Hatfield to London",
-  //   // startingWhen: "2026-01-17T13:02:00.000Z",
-  //   startingPoint: "welhamGreen",
-  //   destination: "hatfield",
-  //   refueling: true,
-  //   bootspace: true,
-  //   fuelType: "Petrol",
-  //   luggage: "Small Bag",
-  //   communicationMode: "Call",
-  //   notes: "Test\n\nRegards",
-  // };
+  const initialState: CarOwnerNewPostValuesType = {
+    riderOwner: "Owner",
+    poolShare: SHARE_PER_SEAT[0],
+    pickupPoints: [],
+    dropPoints: [],
+    actionSummaryModal: {
+      visible: false,
+      modalType: "CONFIRMCANCEL",
+      componentOrMessage: "",
+      onClose: onModalClose,
+      onAction: onModalAction,
+      actionObject: {} as PoolingPostsFirebaseType,
+    },
+  };
 
-  // console.log(`++++ New Post State: ${JSON.stringify(newPost)}`);
+  const [newPost, setNewPost] =
+    useState<CarOwnerNewPostValuesType>(initialState);
+
+  const reset = () => {
+    setNewPost(initialState);
+  };
 
   const allMandatoryFieldsHaveValues =
     newPost.fromTo &&
@@ -134,51 +87,24 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     value:
       | string
       | string[]
-      | ModalPropsType<CarOwnerNewPostValuesType>
+      | ModalPropsType<PoolingPostsFirebaseType>
       | number
       | undefined
       | boolean
       | Date,
   ): void {
-    // console.log(`++++ Updating state ${JSON.stringify(newPost)}`);
-    // console.log(
-    //   `++++ Updated state ${JSON.stringify({ ...newPost, [key]: value })}`,
-    // );
-
     setNewPost((prevState) => ({ ...prevState, [key]: value }));
   };
 
   const post = function () {
-    // const { actionSummaryModal, ...newPostTemp } = newPost;
-    // console.log(`******* posting ${JSON.stringify(newPost)}`);
-    // console.log(`******* posting ${JSON.stringify(newPostTemp)}`);
-    // addNewPost(newPostTemp);
-
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
       visible: true,
-      componentOrMessage: GetSummary({
-        riderOwner: "Owner",
-        ...newPost,
-      }),
+      componentOrMessage: GetSummary(newPost),
       heading: "Car Owner New Post",
-      // actionOb,
-      // onAction:
-    });
-    // console.log(`******* posting ${JSON.stringify(newPost)}`);
-    // console.log(`******* posting ${JSON.stringify(newPostTemp)}`);
+      actionObject: getPoolingPostsFirebaseType(newPost),
+    } as ModalPropsType<PoolingPostsFirebaseType>);
   };
-
-  useEffect(() => {
-    if (Array.isArray(SHARE_PER_SEAT)) {
-      poolShareRef.current = SHARE_PER_SEAT;
-    }
-    update("actionSummaryModal", {
-      ...newPost.actionSummaryModal,
-      onClose: onModalClose,
-      onAction: onModalAction,
-    });
-  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -195,14 +121,14 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
           componentOrMessage={
             <>
               <Timelines
-                forRiderOrOwner="Owner"
+                riderOwner="Owner"
                 fromTo={newPost.fromTo}
                 startingWhen={newPost.startingWhen}
                 onChange={update}
               />
               <Divider />
               <Locations
-                forRiderOrOwner="Owner"
+                riderOwner="Owner"
                 onChange={update}
                 destinationPoint={newPost.destinationPoint}
                 startingPoint={newPost.startingPoint}
@@ -211,7 +137,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
               />
               <Divider />
               <CarDetails
-                forRiderOrOwner="Owner"
+                riderOwner="Owner"
                 onChange={update}
                 fuelType={newPost.fuelType}
                 refueling={newPost.refueling}
@@ -223,7 +149,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
               <ActionsAndMisc
                 onChange={update}
                 notes={newPost.notes}
-                forRiderOrOwner="Owner"
+                riderOwner="Owner"
                 communicationMode={newPost.communicationMode}
                 reset={reset}
                 post={post}

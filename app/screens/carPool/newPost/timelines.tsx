@@ -15,14 +15,14 @@ import {
 import { Divider } from "@/app/common/components/themed";
 
 type FromAndWhenPropType = {
-  forRiderOrOwner: RiderOwner;
+  riderOwner: RiderOwner;
   fromTo?: string;
   startingWhen?: Date;
   onChange: (key: string, value: string | number | Date) => void;
 };
 
 const Timelines = function ({
-  forRiderOrOwner,
+  riderOwner,
   fromTo,
   startingWhen,
   onChange,
@@ -94,7 +94,7 @@ const Timelines = function ({
       />
       {/* <Divider /> */}
       <LabeledDateTimePicker
-        label={forRiderOrOwner === "Rider" ? "Preferred Time: " : "Time:   "}
+        label={riderOwner === "Rider" ? "Preferred Time: " : "Time:   "}
         labelLaunchButton={getDisplayTime(startingWhen) ?? "Show Time Picker"}
         mode="time"
         resetTime={resetTime}

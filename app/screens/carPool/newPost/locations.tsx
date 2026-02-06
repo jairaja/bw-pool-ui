@@ -13,7 +13,7 @@ type LocationsPropsType = {
   startingPoint?: string;
   pickupPoints: string[];
   dropPoints: string[];
-  forRiderOrOwner: RiderOwner;
+  riderOwner: RiderOwner;
 };
 
 const Locations = ({
@@ -22,7 +22,7 @@ const Locations = ({
   pickupPoints,
   dropPoints,
   destinationPoint,
-  forRiderOrOwner,
+  riderOwner,
 }: LocationsPropsType) => {
   // Need this state due to a bug in Picker with multiple values. OnChange event is not fired if local state is not set
   // On selection change is fired. But it will take away the functionality of removing selected items in a closed picker
@@ -35,9 +35,8 @@ const Locations = ({
     useState<ValueType[]>(dropPoints);
   const [startingPointState, setstartingPointState] =
     useState<ValueType | null>(startingPoint ?? null);
-  const [destinationPointState, setDestinationPointState] = useState<ValueType | null>(
-    destinationPoint ?? null,
-  );
+  const [destinationPointState, setDestinationPointState] =
+    useState<ValueType | null>(destinationPoint ?? null);
 
   const [locations, setLocations] = useState<
     Resource<Record<string, string>[]>
@@ -81,7 +80,7 @@ const Locations = ({
         <ActivityIndicator />
       ) : (
         <View>
-          {forRiderOrOwner === "Owner" && (
+          {riderOwner === "Owner" && (
             <LabeledDropDownPicker
               label="Starting Point: "
               open={startingPointDropDownOpen}
@@ -98,7 +97,7 @@ const Locations = ({
           )}
           <LabeledDropDownPicker
             label={
-              forRiderOrOwner === "Owner"
+              riderOwner === "Owner"
                 ? "Pickup Points: "
                 : "Preferred Pickup Points: "
             }
@@ -127,7 +126,7 @@ const Locations = ({
           />
           <LabeledDropDownPicker
             label={
-              forRiderOrOwner === "Owner"
+              riderOwner === "Owner"
                 ? "Drop Points: "
                 : "Preferred Drop Points: "
             }
@@ -154,7 +153,7 @@ const Locations = ({
             multiple
             mode="BADGE"
           />
-          {forRiderOrOwner === "Owner" && (
+          {riderOwner === "Owner" && (
             <LabeledDropDownPicker
               label="Destination Point: "
               open={destinationDropDownOpen}

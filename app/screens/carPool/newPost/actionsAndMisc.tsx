@@ -7,16 +7,17 @@ import ActionButtons from "./actionButtons";
 import { COMMUNICATION_MODE } from "@/config";
 import { RiderOwner } from "@/app/common/models/basic";
 import { StyleSheet } from "react-native";
+import { type PoolingPostsFirebaseType } from "@/app/common/models/service";
 
 type ActionAndMiscPropType = {
   onChange: (key: string, value: string) => void;
-  forRiderOrOwner: RiderOwner;
+  riderOwner: RiderOwner;
   notes?: string;
   communicationMode?: string;
   reset: () => void;
   post: () => void;
   postingDisabled?: boolean;
-  actionSummaryModal: ModalPropsType;
+  actionSummaryModal: ModalPropsType<PoolingPostsFirebaseType>;
 };
 
 export default function ActionsAndMisc({
@@ -24,7 +25,7 @@ export default function ActionsAndMisc({
   post,
   reset,
   postingDisabled,
-  forRiderOrOwner,
+  riderOwner,
   notes,
   communicationMode,
   actionSummaryModal,
@@ -35,6 +36,7 @@ export default function ActionsAndMisc({
       communicationModeRef.current = [...COMMUNICATION_MODE];
     }
   }, []);
+
   return (
     <>
       <TextInput
@@ -43,7 +45,7 @@ export default function ActionsAndMisc({
         value={notes}
         multiline
         placeholder={
-          forRiderOrOwner === "Owner"
+          riderOwner === "Owner"
             ? "Car make, number, instructions etc.."
             : "Any question, special request, etc.."
         }
@@ -68,12 +70,7 @@ export default function ActionsAndMisc({
       />
 
       <Modal
-        visible={actionSummaryModal.visible}
-        componentOrMessage={actionSummaryModal.componentOrMessage}
-        onClose={actionSummaryModal.onClose}
-        onAction={actionSummaryModal.onAction}
-        modalType={"CONFIRMCANCEL"}
-        heading={actionSummaryModal.heading}
+        {...actionSummaryModal}
       />
     </>
   );

@@ -1,58 +1,57 @@
 import { CarOwnerNewPostValuesType } from "@/app/screens/carPool/newPost/carOwnerNewPost";
 import { COMMUNICATION_MODE, FUEL_TYPE, ROUTE_INFO } from "@/config";
-
-type OwnerRider = "Owner" | "Rider";
+import { RiderOwner } from "./basic";
 
 export type PoolingPostsFirebaseType = {
-  fromTo: (typeof ROUTE_INFO)[number];
-  destinationPoint: string;
-  fuelType: (typeof FUEL_TYPE)[number];
+  destinationPoint?: string;
+  fuelType?: (typeof FUEL_TYPE)[number];
   refueling: boolean;
   id?: string;
+  startingPoint?: string;
+  fromTo: (typeof ROUTE_INFO)[number];
+  pickupPoints: string[];
+  dropPoints: string[];
   communicationMode: (typeof COMMUNICATION_MODE)[number];
   startingWhen: number;
-  startingPoint: string;
-  notes: string;
-  luggage: string;
-  riderOwner: OwnerRider;
-  pickupPoints: string[];
+  notes: string | null;
+  luggage: string | null
+  riderOwner: RiderOwner;
   poolShare: number;
   bootspace: boolean;
-  dropPoints: string[];
 };
 
 export const getPoolingPostsFirebaseType = (
   post: Partial<CarOwnerNewPostValuesType>,
-  riderOwner: OwnerRider,
 ): PoolingPostsFirebaseType => {
-  console.log(
-    "Post to be sent to firebase:",
-    post.startingWhen?.getUTCSeconds(),
-  );
-  console.log(
-    "Post to be sent to firebase:",
-    post.startingWhen instanceof Date,
-  );
-  //   console.log("Post to be sent to firebase:", new Date(post.startingWhen!));
-  //   console.log(
-  //     "Post to be sent to firebase:",
-  //     Date.parse(post.startingWhen!) / 1000,
-  //   );
-  return {
-    fromTo: post.fromTo!,
-    destinationPoint: post.destinationPoint!,
-    fuelType: post.fuelType!,
-    refueling: post.refueling ?? false,
+  let returnObj : Partial<PoolingPostsFirebaseType> = {
     // id: post.id,
+    fromTo: post.fromTo!,
     communicationMode: post.communicationMode!,
     startingWhen: post.startingWhen!.getTime(),
-    startingPoint: post.startingPoint!,
-    notes: post.notes ?? "",
-    luggage: post.luggage ?? "",
-    riderOwner: riderOwner,
-    pickupPoints: post.pickupPoints ?? [],
+    notes: post.notes ?? null,
+    luggage: post.luggage ?? null,
+    riderOwner: post.riderOwner!,
     poolShare: post.poolShare!,
     bootspace: post.bootspace ?? false,
-    dropPoints: post.dropPoints ?? [],
   };
+
+  if(post.riderOwner === "Owner") {
+    returnObj = {
+      ...returnObj,
+      destinationPoint: post.destinationPoint!,
+      startingPoint: post.startingPoint!,
+      fuelType: post.fuelType!,
+      refueling: post.refueling ?? false,
+      pickupPoints: post.pickupPoints ?? [],
+      dropPoints: post.dropPoints ?? [],
+    };
+  } else if (post.riderOwner === "Rider") {
+    returnObj = {
+      ...returnObj,
+      pickupPoints: post.pickupPoints!,
+      dropPoints: post.dropPoints!,
+    };
+  }
+
+  return returnObj as PoolingPostsFirebaseType;
 };
