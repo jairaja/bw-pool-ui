@@ -3,7 +3,7 @@ import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import RootNavigator from "./navigation/rootNavigator";
 import { Provider as PaperProvider } from "react-native-paper";
 
@@ -56,7 +56,13 @@ function RootLayoutNav() {
   return (
     <PaperProvider>
       <SafeAreaProvider>
-        <RootNavigator />
+        <SafeAreaView
+          style={{ flex: 1 }}
+          // style={{ flex: 1, paddingBottom: 10 }}
+          edges={["top", "bottom"]}
+        >
+          <RootNavigator />
+        </SafeAreaView>
       </SafeAreaProvider>
     </PaperProvider>
   );

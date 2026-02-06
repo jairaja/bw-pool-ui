@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingTop: 10,
+    marginBottom: 20,
+    marginTop: 20,
   },
 });

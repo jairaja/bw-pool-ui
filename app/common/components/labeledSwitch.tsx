@@ -9,8 +9,12 @@ type LabeledSwitchPropsType = {
 const LabeledSwitch = function ({ label, ...rest }: LabeledSwitchPropsType) {
   return (
     <View style={styles.container}>
-      <Text>{label}</Text>
-      <Switch {...rest} />
+      <View style={styles.labelCell}>
+        <Text>{label}</Text>
+      </View>
+      <View style={styles.switchCell}>
+        <Switch {...rest} />
+      </View>
     </View>
   );
 };
@@ -19,10 +23,18 @@ export default LabeledSwitch;
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 5,
-    marginTop: 5,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  labelCell: {
+    alignItems: "flex-start",
+    flex: 1,
+    justifyContent: "center",
+  },
+  switchCell: {
+    alignItems: "flex-start",
+    flex: 1,
+    justifyContent: "center",
   },
 });

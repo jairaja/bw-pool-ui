@@ -1,5 +1,5 @@
 import SimpleCard from "@/app/common/components/simpleCard";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Timelines from "./timelines";
 import Locations from "./locations";
 import { FUEL_TYPE, SHARE_PER_SEAT } from "@/config";
@@ -11,22 +11,29 @@ import { ModalPropsType } from "@/app/common/components/modal";
 import { GetSummary } from "@/app/common/utils/summaryHelper";
 import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
-import { RiderNewPostType, RiderNewPostValuesType } from "./riderNewPost";
+import { RiderNewPostValuesType } from "./riderNewPost";
+// import { NewPostValuesType, NewPostValuesType } from "./riderNewPost";
+// import { addNewPost } from "./addPostInDB";
+import { FirestoreService } from "../../../service/service";
+import {
+  getPoolingPostsFirebaseType,
+  type PoolingPostsFirebaseType,
+} from "@/app/common/models/service";
 
-export type CarOwnerNewPostValuesType = RiderNewPostValuesType & {
+export type CarOwnerNewPostValuesType = {
+  // id?: string;
   startingPoint?: string;
-  destination?: string;
+  destinationPoint?: string;
   fuelType?: (typeof FUEL_TYPE)[number];
   refueling?: boolean;
-};
+} & RiderNewPostValuesType;
 
 // Remove RiderNewPostValuesType from RiderNewPostType
-type CarOwnerNewPostType = CarOwnerNewPostValuesType & RiderNewPostType;
+// export type CarOwnerNewPostValuesType = CarOwnerNewPostValuesType &
+//   NewPostValuesType;
 
 // Seat cancellation policy...in the form or with every post, as a policy reminder.
 const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
-  const poolShareRef = useRef<number[]>([]);
-
   const onModalClose = () => {
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
@@ -34,22 +41,44 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     });
   };
 
-  const initialState = {
-    poolShare: poolShareRef?.current[0],
+  const onModalAction = (actionObj?: PoolingPostsFirebaseType) => {
+    console.log(JSON.stringify(actionObj));
+    FirestoreService.add("poolingPosts", actionObj).catch((e) =>
+      console.error("Failed to add post", e),
+    );
+    onModalClose();
+    reset();
+    navigation?.navigate("Car Pool");
+  };
+
+  const initialState: CarOwnerNewPostValuesType = {
+    riderOwner: "Owner",
+    poolShare: SHARE_PER_SEAT[0],
+    pickupPoints: [],
+    dropPoints: [],
     actionSummaryModal: {
       visible: false,
+      modalType: "CONFIRMCANCEL",
       componentOrMessage: "",
       onClose: onModalClose,
+      onAction: onModalAction,
+      actionObject: {} as PoolingPostsFirebaseType,
     },
   };
-  const [newPost, setNewPost] = useState<CarOwnerNewPostType>(initialState);
+
+  const [newPost, setNewPost] =
+    useState<CarOwnerNewPostValuesType>(initialState);
+
+  const reset = () => {
+    setNewPost(initialState);
+  };
 
   const allMandatoryFieldsHaveValues =
-    newPost.startingFrom &&
+    newPost.fromTo &&
     IsTimeUpdated(newPost.startingWhen) &&
     newPost.startingPoint &&
     newPost.fuelType &&
-    newPost.destination &&
+    newPost.destinationPoint &&
     newPost.communicationMode &&
     newPost.poolShare;
 
@@ -57,64 +86,58 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     key: string,
     value:
       | string
-      | ModalPropsType
-      | number
       | string[]
+      | ModalPropsType<PoolingPostsFirebaseType>
+      | number
       | undefined
       | boolean
-      | Date
+      | Date,
   ): void {
     setNewPost((prevState) => ({ ...prevState, [key]: value }));
-  };
-
-  const reset = function () {
-    setNewPost(initialState);
   };
 
   const post = function () {
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
       visible: true,
-      componentOrMessage: GetSummary({
-        riderOwner: "Owner",
-        ...newPost,
-      }),
+      componentOrMessage: GetSummary(newPost),
       heading: "Car Owner New Post",
-      // onAction:
-    });
+      actionObject: getPoolingPostsFirebaseType(newPost),
+    } as ModalPropsType<PoolingPostsFirebaseType>);
   };
 
-  useEffect(() => {
-    if (Array.isArray(SHARE_PER_SEAT)) {
-      poolShareRef.current = [...SHARE_PER_SEAT];
-    }
-  }, []);
-
   return (
-    <KeyboardAvoidingView behavior={IsIOS ? "position" : "padding"}>
-      <ScrollView>
+    <KeyboardAvoidingView
+      behavior={IsIOS ? "padding" : "height"}
+      keyboardVerticalOffset={IsIOS ? 0 : 50}
+      // style={{ flex: 1 }}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="never"
+        // keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ padding: 16 }}
+      >
         <SimpleCard
           componentOrMessage={
             <>
               <Timelines
-                forRiderOrOwner="Owner"
-                startingFrom={newPost.startingFrom}
+                riderOwner="Owner"
+                fromTo={newPost.fromTo}
                 startingWhen={newPost.startingWhen}
                 onChange={update}
               />
               <Divider />
               <Locations
-                forRiderOrOwner="Owner"
+                riderOwner="Owner"
                 onChange={update}
-                destination={newPost.destination}
+                destinationPoint={newPost.destinationPoint}
                 startingPoint={newPost.startingPoint}
                 pickupPoints={newPost.pickupPoints}
                 dropPoints={newPost.dropPoints}
               />
               <Divider />
-
               <CarDetails
-                forRiderOrOwner="Owner"
+                riderOwner="Owner"
                 onChange={update}
                 fuelType={newPost.fuelType}
                 refueling={newPost.refueling}
@@ -122,11 +145,11 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
                 luggage={newPost.luggage}
                 poolShare={newPost.poolShare}
               />
-
+              <Divider />
               <ActionsAndMisc
                 onChange={update}
                 notes={newPost.notes}
-                forRiderOrOwner="Owner"
+                riderOwner="Owner"
                 communicationMode={newPost.communicationMode}
                 reset={reset}
                 post={post}

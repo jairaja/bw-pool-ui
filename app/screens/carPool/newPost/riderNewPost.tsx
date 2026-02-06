@@ -1,8 +1,8 @@
 import SimpleCard from "@/app/common/components/simpleCard";
 import { IsTimeUpdated } from "@/app/common/utils/dateTimeHelper";
 import { IsIOS } from "@/app/common/utils/helpers";
-import { SHARE_PER_SEAT } from "@/config";
-import React, { useEffect, useRef, useState } from "react";
+import { COMMUNICATION_MODE, ROUTE_INFO, SHARE_PER_SEAT } from "@/config";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
 import Locations from "./locations";
 import Timelines from "./timelines";
@@ -11,24 +11,30 @@ import { ModalPropsType } from "@/app/common/components/modal";
 import { GetSummary } from "@/app/common/utils/summaryHelper";
 import ActionsAndMisc from "./actionsAndMisc";
 import { Divider } from "@/app/common/components/themed";
+// import { addNewPost } from "../../../../service/addPostInDB";
+import { FirestoreService } from "../../../service/service";
+import {
+  getPoolingPostsFirebaseType,
+  type PoolingPostsFirebaseType,
+} from "@/app/common/models/service";
+import { RiderOwner } from "@/app/common/models/basic";
 
 export type RiderNewPostValuesType = {
-  startingFrom?: string;
+  id?: string;
+  riderOwner: RiderOwner;
+  fromTo?: (typeof ROUTE_INFO)[number];
   startingWhen?: Date;
-  pickupPoints?: string[];
-  dropPoints?: string[];
+  pickupPoints: string[];
+  dropPoints: string[];
   bootspace?: boolean;
   luggage?: string;
   poolShare?: number;
   notes?: string;
-  communicationMode?: string;
+  communicationMode?: (typeof COMMUNICATION_MODE)[number];
+  actionSummaryModal: ModalPropsType<PoolingPostsFirebaseType>;
 };
 
-export type RiderNewPostType = RiderNewPostValuesType & {
-  actionSummaryModal: ModalPropsType;
-};
-
-const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
+const RiderNewPost: FC = ({ navigation }) => {
   const poolShareRef = useRef<number[]>([]);
 
   const onModalClose = () => {
@@ -38,22 +44,37 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
     });
   };
 
-  const initialState = {
-    poolShare: poolShareRef?.current[0],
+  const onModalAction = (actionObj?: PoolingPostsFirebaseType) => {
+    console.log(JSON.stringify(actionObj));
+    try {
+      FirestoreService.add("poolingPosts", actionObj);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+    onModalClose();
+    reset();
+    navigation?.navigate("Car Pool");
+  };
+
+  const initialState: RiderNewPostValuesType = {
+    riderOwner: "Rider",
+    poolShare: SHARE_PER_SEAT[0],
+    pickupPoints: [],
+    dropPoints: [],
     actionSummaryModal: {
       visible: false,
+      modalType: "CONFIRMCANCEL",
       componentOrMessage: "",
       onClose: onModalClose,
+      onAction: onModalAction,
     },
   };
-  const [newPost, setNewPost] = useState<RiderNewPostType>(initialState);
+  const [newPost, setNewPost] = useState<RiderNewPostValuesType>(initialState);
 
   const allMandatoryFieldsHaveValues =
-    newPost.startingFrom &&
+    newPost.fromTo &&
     IsTimeUpdated(newPost.startingWhen) &&
-    newPost.pickupPoints &&
     newPost.pickupPoints.length > 0 &&
-    newPost.dropPoints &&
     newPost.dropPoints.length > 0 &&
     newPost.communicationMode &&
     newPost.poolShare;
@@ -62,12 +83,12 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
     key: string,
     value:
       | string
-      | number
       | string[]
+      | number
       | undefined
       | boolean
       | Date
-      | ModalPropsType
+      | ModalPropsType<PoolingPostsFirebaseType>,
   ): void {
     setNewPost((prevState) => ({ ...prevState, [key]: value }));
   };
@@ -80,12 +101,10 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
     update("actionSummaryModal", {
       ...newPost.actionSummaryModal,
       visible: true,
-      componentOrMessage: GetSummary({
-        riderOwner: "Rider",
-        ...newPost,
-      }),
+      componentOrMessage: GetSummary(newPost),
       heading: "Rider New Post",
-    });
+      actionObject: getPoolingPostsFirebaseType(newPost),
+    } as ModalPropsType<PoolingPostsFirebaseType>);
   };
 
   useEffect(() => {
@@ -95,27 +114,35 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
   }, []);
 
   return (
-    <KeyboardAvoidingView behavior={IsIOS ? "position" : "padding"}>
-      <ScrollView>
+    <KeyboardAvoidingView
+      behavior={IsIOS ? "padding" : "height"}
+      keyboardVerticalOffset={IsIOS ? 0 : 50}
+      // style={{ flex: 1 }}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="never"
+        // keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ padding: 16 }}
+      >
         <SimpleCard
           componentOrMessage={
             <>
               <Timelines
-                forRiderOrOwner="Rider"
-                startingFrom={newPost.startingFrom}
+                riderOwner="Rider"
+                fromTo={newPost.fromTo}
                 startingWhen={newPost.startingWhen}
                 onChange={update}
               />
               <Divider />
               <Locations
-                forRiderOrOwner="Rider"
+                riderOwner="Rider"
                 onChange={update}
                 pickupPoints={newPost.pickupPoints}
                 dropPoints={newPost.dropPoints}
               />
               <Divider />
               <CarDetails
-                forRiderOrOwner="Rider"
+                riderOwner="Rider"
                 onChange={update}
                 bootspace={newPost.bootspace}
                 luggage={newPost.luggage}
@@ -125,7 +152,7 @@ const RiderNewPost: React.FunctionComponent = ({ navigation }) => {
               <ActionsAndMisc
                 onChange={update}
                 notes={newPost.notes}
-                forRiderOrOwner="Rider"
+                riderOwner="Rider"
                 communicationMode={newPost.communicationMode}
                 reset={reset}
                 post={post}

@@ -53,10 +53,10 @@ const DataGrid = ({
   onLayout,
 }: DataGridProps) => {
   const [page, setPage] = React.useState<number>(0);
-  const numberOfItemsPerPageList = [4, 8, 12, 16];
-  // const numberOfItemsPerPageList = [5, 10, 15, 20];
+  // const numberOfItemsPerPageList = [4, 8, 12, 16];
+  const numberOfItemsPerPageList = [5, 10, 15, 20];
   const [itemsPerPage, setItemsPerPage] = React.useState(
-    numberOfItemsPerPageList[0]
+    numberOfItemsPerPageList[0],
   );
 
   const from = page * itemsPerPage;

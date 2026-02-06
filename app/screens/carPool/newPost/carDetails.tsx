@@ -8,7 +8,7 @@ import { CURRENCY_SYMBOL, FUEL_TYPE, SHARE_PER_SEAT } from "@/config";
 import React, { useEffect, useRef, useState } from "react";
 
 type CarDetailsPropsTypes = {
-  forRiderOrOwner: RiderOwner;
+  riderOwner: RiderOwner;
   onChange: (key: string, value: string | number | boolean) => void;
   fuelType?: string;
   refueling?: boolean;
@@ -18,7 +18,7 @@ type CarDetailsPropsTypes = {
 };
 
 export default function CarDetails({
-  forRiderOrOwner,
+  riderOwner,
   refueling,
   poolShare,
   fuelType,
@@ -54,20 +54,20 @@ export default function CarDetails({
 
   return (
     <>
-      {forRiderOrOwner === "Owner" && (
+      {riderOwner === "Owner" && (
         <LabeledChoiceButtons
           label="Car fuel type:   "
           value={fuelType ?? ""}
           mode="block"
           nullable
-          onValueChange={function (newValue) {
+          onValueChange={function (newValue: string) {
             updateCarFuelType(newValue);
           }}
           buttons={GetChildButtons(fuelTypeButtonsRef.current)}
           multiSelect={false}
         />
       )}
-      {forRiderOrOwner === "Owner" && (
+      {riderOwner === "Owner" && (
         <LabeledSwitch
           label="Refueling on the way: "
           value={refueling}
@@ -79,21 +79,22 @@ export default function CarDetails({
       )}
       <LabeledSwitch
         label={
-          forRiderOrOwner === "Owner"
+          riderOwner === "Owner"
             ? "Bootspace available: "
             : "Bootspace required: "
         }
         value={bootspace}
         onValueChange={(newValue: boolean) => {
           onChange("bootspace", newValue);
+          if (!newValue) {
+            onChange("luggage", "");
+          }
         }}
       />
       <LabeledChoiceButtons
-        label={
-          forRiderOrOwner === "Owner"
-            ? "Space available for (optional):"
-            : "Space required for (optional):"
-        }
+        label={`Space ${
+          riderOwner === "Owner" ? "available" : "required"
+        } for (optional):`}
         value={luggage ?? ""}
         mode="block"
         nullable
@@ -106,13 +107,13 @@ export default function CarDetails({
       />
       <LabeledSlider
         //Just for fun
-        label={`${
-          forRiderOrOwner === "Owner" ? "P" : "Preferred p"
-        }ool share per rider: `}
+        label={`${riderOwner === "Owner" ? "P" : "Preferred p"}ool share${
+          riderOwner === "Owner" ? " per rider: " : ":"
+        } `}
         minimumValue={poolShareRef.current[0]}
         maximumValue={poolShareRef.current[poolShareRef.current.length - 1]}
         value={poolShare}
-        step={10}
+        step={5}
         displayValue={`${CURRENCY_SYMBOL ?? ""} ${poolShare}`}
         onValueChange={(newValue) => onChange("poolShare", newValue)}
       />

@@ -17,12 +17,9 @@ export default function LabeledSlider({
 }: LabeledSliderPropsType) {
   return (
     <View style={styles.container}>
-      <Text>{label}</Text>
-
-      <Slider
-        {...rest}
-      />
-      <Text>{displayValue}</Text>
+      <Text style={styles.label}>{label}</Text>
+      <Slider {...rest} />
+      <Text style={styles.displayValue}>{displayValue}</Text>
     </View>
   );
 }
@@ -32,7 +29,13 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  displayValue: {
+    verticalAlign: "middle",
+  },
+  label: {
+    verticalAlign: "middle",
   },
 });

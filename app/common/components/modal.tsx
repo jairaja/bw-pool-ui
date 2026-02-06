@@ -1,5 +1,5 @@
 import { Text, View } from "@/app/common/components/themed";
-import React from "react";
+import React, {ReactElement} from "react";
 import { ButtonIcon, Divider } from "./themed";
 
 import { StyleSheet } from "react-native";
@@ -7,24 +7,45 @@ import { Portal, Modal as RNModal } from "react-native-paper";
 
 export type ModalType = "CONTACT" | "INFO" | "CONFIRMCANCEL" | "YESNO";
 
-export type ModalPropsType = {
+export type BasicModalType = {
   visible: boolean;
-  modalType?: ModalType;
   componentOrMessage: React.ReactNode;
   heading?: string;
   onClose: () => void;
-  onAction?: (message?: string) => void;
-};
+}
 
-const Modal = ({
-  visible,
-  modalType,
-  componentOrMessage,
-  heading,
-  onClose,
-}: ModalPropsType) => {
+export type NonActionModalPropsType = {
+  modalType: "CONTACT" | "INFO" | "YESNO";
+} & BasicModalType
+
+export type ActionModalPropsType<T> = {
+  modalType: "CONFIRMCANCEL";
+  onAction: (actionObj?: T) => void;
+  // onAction: () => void;
+  actionObject?: T;
+} & BasicModalType
+
+export type ModalPropsType<T> =
+  | NonActionModalPropsType
+  | ActionModalPropsType<T>;
+
+const Modal = <T,>(props: ModalPropsType<T>) : ReactElement | undefined => {
+  const { visible, modalType, componentOrMessage, heading, onClose } = props;
+
+  // const isActionModalPropsType =
+  //   (props as ActionModalPropsType<T>).onAction !== undefined;
+
+  let onAction: undefined | { (actionObj?: T): void },
+    actionObject: undefined | T;
+
+  if (modalType === "CONFIRMCANCEL") {
+    const actionModalProps = props as ActionModalPropsType<T>;
+    onAction = actionModalProps.onAction;
+    actionObject = actionModalProps.actionObject;
+  }
+
   //TODO add themed buttons
-  const getModalFooter = function (modalType: ModalPropsType["modalType"]) {
+  const getModalFooter = function (modalType: ModalType) {
     switch (modalType) {
       case "CONTACT":
         return <Text>Contact</Text>;
@@ -33,14 +54,27 @@ const Modal = ({
       case "CONFIRMCANCEL":
         return (
           <View style={styles.footerButtons}>
-            <ButtonIcon onPress={onClose}>Cancel</ButtonIcon>
-            <ButtonIcon onPress={onClose}>Confirm</ButtonIcon>
+            <ButtonIcon onPress={onClose}>
+              <Text>Cancel</Text>
+            </ButtonIcon>
+            <ButtonIcon
+              onPress={() => {
+                // onAction!(actionObject);
+                onAction?.(actionObject);
+              }}
+            >
+              <Text>Confirm</Text>
+            </ButtonIcon>
           </View>
         );
       case "YESNO":
         return <Text>yesNo</Text>;
       default:
-        return <ButtonIcon onPress={onClose}>Cancel</ButtonIcon>;
+        return (
+          <ButtonIcon onPress={onClose}>
+            <Text>Cancel</Text>
+          </ButtonIcon>
+        );
     }
   };
 

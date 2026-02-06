@@ -1,4 +1,4 @@
-import { Button, View } from "@/app/common/components/themed";
+import { Button, View, Text } from "@/app/common/components/themed";
 import React, { useState, useEffect } from "react";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { ActivityIndicator, Animated, StyleSheet } from "react-native";
@@ -12,9 +12,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { IconButton } from "react-native-paper";
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import type { NavigationProp } from "@react-navigation/native";
-import GetAllPoolingPosts from "../../service/service";
+import { FirestoreService } from "../../service/service";
 import { Resource } from "@/app/common/models/basic";
 import { CarOwnerNewPostValuesType } from "./newPost/carOwnerNewPost";
+import { formatToTodayTomorrowOrTime } from "@/app/common/utils/dateTimeHelper";
 
 const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const [allPoolingPosts, setAllPoolingPosts] = useState<
@@ -28,13 +29,14 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
   };
 
   const { current: velocity } = React.useRef<Animated.Value>(
-    new Animated.Value(0)
+    new Animated.Value(0),
   );
 
   const [extended, setExtended] = useState<boolean>(true);
 
-  const [modalProps, setModalProps] = useState<ModalPropsType>({
+  const [modalProps, setModalProps] = useState<ModalPropsType<unknown>>({
     visible: false,
+    modalType: "INFO",
     componentOrMessage: "",
     onClose: onModalClose,
   });
@@ -42,39 +44,27 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const [filters, setFilters] = useState<string[]>([]);
 
   const getItemsForTable = (
-    items: CarOwnerNewPostValuesType[]
+    items: CarOwnerNewPostValuesType[],
   ): iPostDataTableItem[] => {
     return items.map((item) => {
       return {
-        shortSummary: item.startingFrom ?? "Short Sumary to be fixed",
+        description: item.fromTo ?? "Short Summary to be fixed",
         sharePp: item.poolShare,
-        startTime: item.startingWhen?.toString(),
+        startTime: formatToTodayTomorrowOrTime(item.startingWhen),
       };
     });
   };
 
   const getPoolingPosts = async function () {
     try {
-      // ToDo - move all network requests to one place
-      // const fetchPosts = await fetch(
-      //   "https://mocki.io/v1/d26edb2f-a288-4574-ab60-17746997c38e",
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       Accept: "application/json",
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-      // const posts = await fetchPosts.json();
       setAllPoolingPosts({ loadingState: "loading" });
-      const allPoolingPosts = await GetAllPoolingPosts();
-      const posts = allPoolingPosts.docs.map(
-        (doc) => doc.data() as CarOwnerNewPostValuesType
-      );
-      setAllPoolingPosts({ loadingState: "loaded", data: posts });
+      const posts = await FirestoreService.getAll("poolingPosts");
+      console.log("Pooling posts fetched:", JSON.stringify(posts));
+      setAllPoolingPosts({
+        loadingState: "loaded",
+        data: posts as CarOwnerNewPostValuesType[],
+      });
     } catch (error) {
-      // ToDo - show some error message / blocking or Ribbon or something
       console.error(error);
       setAllPoolingPosts({
         loadingState: "failed",
@@ -133,7 +123,7 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
     >
       <View style={styles.view}>
         <View style={styles.filters}>
-          <View style={styles.staticFilters}>
+          <View>
             <LabeledChoiceButtons
               label="Filters :   "
               mode="inline"
@@ -169,24 +159,39 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
             }}
           />
         </View>
-
+        {/* <Divider /> */}
         {allPoolingPosts.loadingState === "failed" ? (
           <Button onPress={getPoolingPosts} title="Please try again!" />
         ) : (
           <>
             {allPoolingPosts.loadingState === "loaded" ? (
-              <DataGrid
-                items={getItemsForTable(allPoolingPosts.data)}
-                onRowPress={onRowPress}
-                firstColMinWidhtFifty
-                // onLayout={() => console.log(`Items ${items}`)}
-                columnsDef={[
-                  { title: "Description", key: "description" },
-                  { title: "Share PP", numeric: true, key: "sharePp" },
-                  { title: "Start Time", numeric: true, key: "startTime" },
-                ]}
-                onScroll={onScroll}
-              />
+              allPoolingPosts.data.length > 0 ? (
+                <DataGrid
+                  items={getItemsForTable(allPoolingPosts.data)}
+                  onRowPress={onRowPress}
+                  firstColMinWidhtFifty
+                  // onLayout={() => console.log(`Items ${items}`)}
+                  columnsDef={[
+                    { title: "Description", key: "description" },
+                    { title: "Start Time", numeric: true, key: "startTime" },
+                    {
+                      title: "Share Per Person (£)",
+                      key: "sharePp",
+                      numeric: true,
+                      numberOfLines: 2,
+                    },
+                  ]}
+                  onScroll={onScroll}
+                />
+              ) : (
+                <View>
+                  <Text>No pooling posts yet.</Text>
+                  <Text>
+                    Submit one using the &apos;Post&apos; button on bottom-left
+                    of the screen.
+                  </Text>
+                </View>
+              )
             ) : (
               <ActivityIndicator />
             )}
@@ -205,12 +210,14 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
           icon={"plus"}
         />
 
-        <Modal
+        <Modal {...modalProps} />
+        {/* <Modal
           visible={modalProps.visible}
+          modalType={modalProps.modalType}
           componentOrMessage={modalProps.componentOrMessage}
           onClose={modalProps.onClose}
           heading={modalProps.heading}
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );
@@ -235,10 +242,6 @@ const styles = StyleSheet.create({
   },
   more: {
     marginVertical: 20,
-  },
-  staticFilters: {
-    // backgroundColor: "red",
-    // width: "85%",
   },
   text: {
     padding: 5,

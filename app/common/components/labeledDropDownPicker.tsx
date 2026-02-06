@@ -13,14 +13,14 @@ type LabeledDropDownPickerPropsType = {
 
 const LabeledDropDownPicker = function ({
   label,
-  searchable,
+  searchable = true,
   ...rest
 }: LabeledDropDownPickerPropsType) {
   const currentTheme = useTheme().dark ? "DARK" : "LIGHT";
 
   return (
     <View style={styles.container}>
-      <Text>{label}</Text>
+      <Text style={styles.label}>{label}</Text>
       <DropDownPicker
         theme={currentTheme}
         searchPlaceholder="Search..."
@@ -29,7 +29,7 @@ const LabeledDropDownPicker = function ({
           animationType: "slide",
         }}
         {...rest}
-        searchable={searchable ?? true}
+        searchable={searchable}
       />
     </View>
   );
@@ -40,9 +40,12 @@ export default LabeledDropDownPicker;
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    flexDirection: "row",
-    marginBottom: 5,
-    marginTop: 5,
-    width: "75%",
+    flexDirection: "column",
+    marginBottom: 20,
+    marginTop: 20,
+    // zIndex: 10,
+  },
+  label: {
+    marginBottom: 10,
   },
 });

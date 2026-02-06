@@ -5,11 +5,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   dataGridHeader: {
-    height: 80,
+    height: 60,
   },
   dataGridHeaderText: {
     flex: 1,
     flexWrap: "wrap",
+    fontWeight: "bold",
   },
   dataGridRow: {
     height: 100,

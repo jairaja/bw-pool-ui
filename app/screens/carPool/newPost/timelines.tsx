@@ -12,22 +12,21 @@ import {
   UpdateTodTomDate,
   IsTimeUpdated,
 } from "@/app/common/utils/dateTimeHelper";
+import { Divider } from "@/app/common/components/themed";
 
 type FromAndWhenPropType = {
-  forRiderOrOwner: RiderOwner;
-  startingFrom?: string;
+  riderOwner: RiderOwner;
+  fromTo?: string;
   startingWhen?: Date;
   onChange: (key: string, value: string | number | Date) => void;
 };
 
 const Timelines = function ({
-  forRiderOrOwner,
-  startingFrom,
+  riderOwner,
+  fromTo,
   startingWhen,
   onChange,
 }: FromAndWhenPropType) {
-  const routeInfoRef = useRef<string[]>([]);
-
   const updateTime = (event: DateTimePickerEvent, date?: Date) => {
     if (date) {
       onChange("startingWhen", date);
@@ -70,40 +69,32 @@ const Timelines = function ({
     }
   }
 
-  useEffect(() => {
-    if (Array.isArray(ROUTE_INFO)) {
-      ROUTE_INFO.forEach((route) => {
-        routeInfoRef.current.push(route);
-      });
-    }
-  }, []);
-
   return (
     <>
       <LabeledChoiceButtons
-        label="From:   "
-        value={startingFrom ?? ""}
-        mode="inline"
-        onValueChange={(value) => {
-          onChange("startingFrom", value);
+        label="From:"
+        value={fromTo ?? ""}
+        // mode="inline"
+        onValueChange={(value: string) => {
+          onChange("fromTo", value);
         }}
-        buttons={GetChildButtons(routeInfoRef.current)}
+        buttons={GetChildButtons(ROUTE_INFO)}
         multiSelect={false}
       />
-
+      {/* <Divider /> */}
       <LabeledChoiceButtons
-        label="When:   "
+        label="When:"
         value={getTodTom(startingWhen)}
-        mode="inline"
-        onValueChange={(value) => {
+        // mode="inline"
+        onValueChange={(value: string) => {
           setTodTom(value as TodTom, startingWhen);
         }}
         buttons={GetChildButtons(["Today", "Tomorrow"])}
         multiSelect={false}
       />
-
+      {/* <Divider /> */}
       <LabeledDateTimePicker
-        label={forRiderOrOwner === "Rider" ? "Preferred Time: " : "Time:   "}
+        label={riderOwner === "Rider" ? "Preferred Time: " : "Time:   "}
         labelLaunchButton={getDisplayTime(startingWhen) ?? "Show Time Picker"}
         mode="time"
         resetTime={resetTime}
