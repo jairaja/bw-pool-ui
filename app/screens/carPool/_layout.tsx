@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { IconButton } from "react-native-paper";
 import LabeledChoiceButtons from "@/app/common/components/labeledChoiceButtons";
 import type { NavigationProp } from "@react-navigation/native";
-import { FirestoreService } from "../../service/service";
+import useStore from "@/app/common/state/store";
 import { Resource } from "@/app/common/models/basic";
 import { CarOwnerNewPostValuesType } from "./newPost/carOwnerNewPost";
 import { formatToTodayTomorrowOrTime } from "@/app/common/utils/dateTimeHelper";
@@ -58,8 +58,7 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const getPoolingPosts = async function () {
     try {
       setAllPoolingPosts({ loadingState: "loading" });
-      const posts = await FirestoreService.getAll("poolingPosts");
-      console.log("Pooling posts fetched:", JSON.stringify(posts));
+      const posts = useStore.getState().posts;
       setAllPoolingPosts({
         loadingState: "loaded",
         data: posts as CarOwnerNewPostValuesType[],
@@ -72,6 +71,13 @@ const CarPool = ({ navigation }: { navigation: NavigationProp<any> }) => {
       });
     }
   };
+
+  // Update local resource whenever store posts change
+  const storePosts = useStore((s) => s.posts);
+
+  useEffect(() => {
+    setAllPoolingPosts({ loadingState: "loaded", data: storePosts as CarOwnerNewPostValuesType[] });
+  }, [storePosts]);
 
   useEffect(() => {
     getPoolingPosts();

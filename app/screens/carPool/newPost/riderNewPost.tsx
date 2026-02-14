@@ -51,7 +51,7 @@ const RiderNewPost: FC = ({ navigation }) => {
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-    onModalClose();
+    // onModalClose();
     reset();
     navigation?.navigate("Car Pool");
   };

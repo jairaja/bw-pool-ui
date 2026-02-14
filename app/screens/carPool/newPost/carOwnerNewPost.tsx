@@ -46,7 +46,7 @@ const CarOwnerNewPost: React.FunctionComponent = ({ navigation }) => {
     FirestoreService.add("poolingPosts", actionObj).catch((e) =>
       console.error("Failed to add post", e),
     );
-    onModalClose();
+    // onModalClose();
     reset();
     navigation?.navigate("Car Pool");
   };

@@ -1,20 +1,21 @@
 import { create } from "zustand";
 import { ThemeType } from "../models/themeType";
+import { PoolingPostsFirebaseType } from "../models/service";
 
-export type Post = {
-  id: string;
-  title?: string;
-  content?: string;
-  createdAt: number;
-  authorId?: string;
-};
+// export type Post = {
+//   id: string;
+//   title?: string;
+//   content?: string;
+//   createdAt: number;
+//   authorId?: string;
+// };
 
 type AppState = {
   theme: ThemeType;
   setTheme: (t: ThemeType) => void;
-  posts: Post[];
-  setPosts: (posts: Post[]) => void;
-  addPost: (post: Post) => void;
+  posts: PoolingPostsFirebaseType[];
+  setPosts: (posts: PoolingPostsFirebaseType[]) => void;
+  addPost: (post: PoolingPostsFirebaseType) => void;
   clearPosts: () => void;
 };
 

@@ -6,6 +6,11 @@ import {
   getDoc,
   collection,
   getDocs,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 // import { getFirestore, collection, getDocs, addDoc, doc, setDoc } from "firebase/firestore";
 // import { getDoc, collection, getDocs } from "firebase/firestore";
@@ -27,6 +32,50 @@ export const FirestoreService = {
   async set(collectionName: string, id: string, data: any) {
     const docRef = doc(db, collectionName, id);
     await setDoc(docRef, data);
+  },
+  subscribe(
+    collectionName: string,
+    onChange: (docs: any[]) => void,
+    options?: {
+      where?: [string, string, any];
+      orderBy?: [string, "asc" | "desc"];
+      limit?: number;
+    },
+  ) {
+    const colRef = collection(db, collectionName);
+
+    const constraints: any[] = [];
+    if (options?.where) {
+      const [field, op, value] = options.where;
+      constraints.push(where(field, op as any, value));
+    }
+
+    if (options?.orderBy) {
+      const [field, dir] = options.orderBy;
+      constraints.push(orderBy(field, dir));
+    }
+
+    if (options?.limit && typeof options.limit === "number") {
+      constraints.push(limit(options.limit));
+    }
+
+    const q = constraints.length > 0 ? query(colRef, ...constraints) : colRef;
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const docs = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        onChange(docs);
+      },
+      (err) => {
+        console.error("Firestore subscription error:", err);
+      },
+    );
+
+    return unsubscribe;
   },
 };
 
